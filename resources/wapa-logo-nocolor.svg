@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   sodipodi:docname="wapa-logo-unicolor.svg"
+   inkscape:version="1.0 (4035a4fb49, 2020-05-01)"
+   id="svg8"
+   version="1.1"
+   viewBox="0 0 256 256"
+   height="256mm"
+   width="256mm">
+  <defs
+     id="defs2" />
+  <sodipodi:namedview
+     inkscape:window-maximized="1"
+     inkscape:window-y="31"
+     inkscape:window-x="0"
+     inkscape:window-height="1021"
+     inkscape:window-width="1920"
+     inkscape:object-paths="false"
+     showgrid="false"
+     inkscape:document-rotation="0"
+     inkscape:current-layer="layer1"
+     inkscape:document-units="mm"
+     inkscape:cy="415.52995"
+     inkscape:cx="589.06207"
+     inkscape:zoom="0.70710678"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     borderopacity="1.0"
+     bordercolor="#666666"
+     pagecolor="#ffffff"
+     id="base" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="layer1"
+     inkscape:groupmode="layer"
+     inkscape:label="Warstwa 1">
+    <path
+       d="m 126.38182,65.851866 v -4.215765 l -0.58859,2.137338 z"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:251.026px;line-height:1.25;font-family:'URW Gothic';-inkscape-font-specification:'URW Gothic';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:6.27565"
+       id="path944" />
+    <path
+       d="M 116.48992,97.558455 84.426763,213.99269 39.893047,56.716505 21.22132,58.115904 72.625934,238.08683 H 96.729372 L 125.45475,130.6722 Z"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:251.026px;line-height:1.25;font-family:'URW Gothic';-inkscape-font-specification:'URW Gothic';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:6.27565;stroke-opacity:1"
+       id="path1267" />
+    <path
+       d="m 128.15329,51.055353 -18.59886,1.393714 11.14505,38.834837 33.45843,123.585216 h 2.00866 12.18634 9.65677 2.00866 l 23.46007,-86.65362 h -19.30373 l -15.82177,55.87566 -1.26504,4.46742 z"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:251.026px;line-height:1.25;font-family:'URW Gothic';-inkscape-font-specification:'URW Gothic';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:6.27565"
+       id="path950" />
+    <path
+       id="path1177-6"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:251.026px;line-height:1.25;font-family:'URW Gothic';-inkscape-font-specification:'URW Gothic';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:6.27565"
+       d="m 200.74486,71.064712 -12.58012,44.428808 h 19.30374 l 9.99837,-36.931588 2.1518,-7.49722 z" />
+    <path
+       id="path1198"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:251.026px;line-height:1.25;font-family:'URW Gothic';-inkscape-font-specification:'URW Gothic';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:6.27565"
+       d="m 204.3826,58.063693 h 18.87379 l 11.52229,-40.15052 -19.43966,1.456759 z" />
+  </g>
+</svg>
