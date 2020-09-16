@@ -53,4 +53,5 @@ typedef struct wap_t_applet_info {
 	unsigned int version;
 } wap_t_applet_info;
 
+// TODO: Add handy functions to manipulate applet config struct
 #endif

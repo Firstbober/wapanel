@@ -12,8 +12,6 @@
 
 namespace wapanel::applets {
 
-// FIXME: Applet receives "broken" config with bad memory adresses.
-
 // Specific applet data
 struct applet_info {
 	const char *name;
@@ -26,7 +24,7 @@ struct applet_info {
 	void *dso_handle;
 
 	// Easy-to-access functions
-	GtkWidget *(*new_instance)(wap_t_applet_config *);
+	GtkWidget *(*new_instance)(wap_t_applet_config);
 	void (*event_remove_instances)(void);
 	void (*event_exit)(void);
 };
@@ -49,6 +47,6 @@ auto remove_applets() -> void;
 auto remove_existing_instances() -> void;
 
 // Gets gtk widget for use in panel from applet
-auto applet_get_new_instance(std::string name, wap_t_applet_config *applet_config) -> std::optional<GtkWidget *>;
+auto applet_get_new_instance(std::string name, wap_t_applet_config applet_config) -> std::optional<GtkWidget *>;
 
 }

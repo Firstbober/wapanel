@@ -38,7 +38,7 @@ auto try_loading_applet(const char *path) -> void {
 
 	// Define handy-dandy types for reinterpret_casting
 	typedef _papi_applet_info (*apl_wap_applet_info_t)(void);
-	typedef GtkWidget *(*apl_wap_new_instance_t)(wap_t_applet_config *);
+	typedef GtkWidget *(*apl_wap_new_instance_t)(wap_t_applet_config);
 	typedef void (*apl_wap_event_remove_instances_t)(void);
 	typedef void (*apl_wap_event_exit_t)(void);
 
@@ -115,7 +115,7 @@ auto remove_existing_instances() -> void {
 	}
 }
 
-auto applet_get_new_instance(std::string name, wap_t_applet_config *applet_config) -> std::optional<GtkWidget *> {
+auto applet_get_new_instance(std::string name, wap_t_applet_config applet_config) -> std::optional<GtkWidget *> {
 	if (!applets::applets._applets.contains(name)) return {};
 
 	return applets::applets._applets[name].new_instance(applet_config);

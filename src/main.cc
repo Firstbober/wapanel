@@ -13,20 +13,19 @@ std::vector<wapanel::panel *> panels;
 GtkApplication *app;
 // Basic info
 
-static void app_activate(GtkApplication *app, gpointer config) {
-	log_error("%s", wapanel::conf::config.panels_conf[0].applets_config[0].second.root[0].content.value.string);
+static void app_activate(GtkApplication *_app) {
 	for (size_t i = 0; i < wapanel::conf::config.panels_conf.size(); i++) {
-		// FIXME wapanel::panel *panel = new wapanel::panel(i);
+		wapanel::panel *panel = new wapanel::panel(i);
 
-		// FIXME gtk_application_add_window(app, panel->get_gtk_window());
+		gtk_application_add_window(app, panel->get_gtk_window());
 
 		log_info("displaying panel %i", i);
 
-		// FIXME panels.push_back(panel);
+		panels.push_back(panel);
 	}
 }
 
-auto static app_shutdown(GtkApplication *app) -> void { wapanel::applets::remove_applets(); }
+auto static app_shutdown(GtkApplication *_app) -> void { wapanel::applets::remove_applets(); }
 
 auto static config_changed(GFileMonitor *monitor, GFile *file, GFile *other_file, GFileMonitorEvent event_type,
 						   gpointer user_data) -> void {
@@ -50,13 +49,13 @@ auto static config_changed(GFileMonitor *monitor, GFile *file, GFile *other_file
 		panels.clear();
 
 		// Init all again panels
-		app_activate(app, NULL);
+		app_activate(app);
 		return;
 	}
 
 	// Reconfigure panels
 	for (auto &&panel : panels) {
-		// FIXME panel->configure();
+		panel->configure();
 	}
 }
 
@@ -77,19 +76,11 @@ auto main(int argc, char **argv) -> int {
 	// Searches various paths for applets
 	wapanel::applets::search_for_applets();
 
-	log_error("%s", wapanel::conf::config.panels_conf[0].applets_config[0].second.root[0].content.value.string);
-
 	// Create GTK Application
 	app = gtk_application_new("com.firstbober.wapanel", G_APPLICATION_FLAGS_NONE);
 
-	log_error("%s", wapanel::conf::config.panels_conf[0].applets_config[0].second.root[0].content.value.string);
-
-	wapanel::conf::global_config aaa = wapanel::conf::config;
-
 	g_signal_connect(app, "activate", G_CALLBACK(app_activate), NULL);
 	g_signal_connect(app, "shutdown", G_CALLBACK(app_shutdown), NULL);
-
-	log_error("%s", wapanel::conf::config.panels_conf[0].applets_config[0].second.root[0].content.value.string);
 
 	status = g_application_run(G_APPLICATION(app), argc, argv);
 	g_object_unref(app);

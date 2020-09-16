@@ -21,7 +21,8 @@ sources = [
 	'src/main.cc',
 	'src/panel.cc',
 	'src/config.cc',
-	'src/applets.cc'
+	'src/applets.cc',
+	'src/wap_t_convert.cc'
 ]
 
 subdir('src/applets')

@@ -2,7 +2,7 @@
 #include <vector>
 #include <string>
 
-#include "lib/appletapi.h"
+#include <toml11/toml.hpp>
 
 #define CONFIG_SEARCH_PATHS {"./wapanel.toml", "~/.config/wapanel.toml"}
 
@@ -18,7 +18,7 @@ struct panel_config {
 	panel_position position;
 	unsigned int height;
 
-	std::vector<std::pair<std::string, wap_t_applet_config>> applets_config;
+	std::vector<std::pair<std::string, toml::value>> applets_config;
 };
 
 // General stuff

@@ -5,9 +5,11 @@
 #include <gtk-layer-shell.h>
 #include <gtk/gtk.h>
 
+#include "wap_t_convert.hh"
+
 namespace wapanel {
 
-panel::panel(unsigned int id, conf::global_config *config)
+panel::panel(unsigned int id)
 	: m_id(id) {
 	m_window = GTK_WINDOW(gtk_window_new(GTK_WINDOW_TOPLEVEL));
 
@@ -33,7 +35,7 @@ panel::panel(unsigned int id, conf::global_config *config)
 	gtk_container_add(GTK_CONTAINER(m_window), GTK_WIDGET(m_appletbox));
 
 	// General configuration
-	this->configure(config);
+	this->configure();
 
 	// Show all in window - moved to configure for convince purposes
 }
@@ -41,7 +43,7 @@ panel::~panel() { gtk_widget_destroy(GTK_WIDGET(m_window)); }
 
 auto panel::get_gtk_window() -> GtkWindow * { return m_window; }
 
-auto panel::configure(conf::global_config *config) -> void {
+auto panel::configure() -> void {
 	log_info("configuring panel %i", m_id);
 
 	// Set size of window
@@ -57,7 +59,9 @@ auto panel::configure(conf::global_config *config) -> void {
 	}
 
 	// Make instances of configured applets
-	auto applets_config = config->panels_conf[m_id].applets_config; // conf::config.panels_conf[m_id].applets_config;
+
+	// Remove GtkWidget* instances in panel
+	auto applets_config = conf::config.panels_conf[m_id].applets_config;
 	auto appletbox_children = gtk_container_get_children(GTK_CONTAINER(m_appletbox));
 
 	g_list_foreach(appletbox_children, (GFunc)(+[](GtkWidget *widget, GtkWidget *appletbox) {
@@ -66,14 +70,32 @@ auto panel::configure(conf::global_config *config) -> void {
 				   m_appletbox);
 	log_info("removed last widgets");
 
-	for (auto &&applet_config : applets_config) {
-		auto applet_widget = applets::applet_get_new_instance(applet_config.first, &applet_config.second);
+	// Remove existing configs
+	for (auto &&config_variable : m_last_applet_config_variables) {
+		conv::free_wap_t_config_variable(*config_variable);
+		free(config_variable);
+	}
 
-		log_error("aa: %s", applet_config.second.root[0].content.value.string);
+	m_last_applet_config_variables.clear();
+
+	// Add new applets to panel
+	for (auto &&tm_applet_config : applets_config) {
+		_wap_t_config_variable *config_variable;
+		wap_t_applet_config applet_config;
+
+		// Convert toml to config variable
+		config_variable = conv::convert_toml_to_wap_t_config_variable(tm_applet_config.second);
+		m_last_applet_config_variables.push_back(config_variable);
+
+		// Insert everything into applet config
+		applet_config._size = config_variable->content.table._size;
+		applet_config.root = config_variable->content.table._content;
+
+		auto applet_widget = applets::applet_get_new_instance(tm_applet_config.first, applet_config);
 
 		if (applet_widget) {
 			gtk_container_add(GTK_CONTAINER(m_appletbox), applet_widget.value());
-			log_info("added instance of applet '%s' to panel", applet_config.first.c_str());
+			log_info("added instance of applet '%s' to panel", tm_applet_config.first.c_str());
 		}
 	}
 

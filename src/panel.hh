@@ -1,6 +1,8 @@
 #pragma once
 
 #include "config.hh"
+#include "lib/appletapi.h"
+
 #include <gtk/gtk.h>
 
 namespace wapanel {
@@ -10,18 +12,13 @@ private:
 	GtkBox *m_appletbox;
 
 	unsigned int m_id;
+	std::vector<_wap_t_config_variable *> m_last_applet_config_variables;
 
 public:
-	// !!!! DO NOT USE GLOBAL VALUES FOR YOUR OWN SANITY !!!!
-	panel(unsigned int id, conf::global_config *config);
-	// !!!! END OF TRANSMISSION !!!!
-
+	panel(unsigned int id);
 	~panel();
 
 	auto get_gtk_window() -> GtkWindow *;
-
-	// !!!! DO NOT USE GLOBAL VALUES FOR YOUR OWN SANITY !!!!
-	auto configure(conf::global_config *config) -> void;
-	// !!!! END OF TRANSMISSION !!!!
+	auto configure() -> void;
 };
 }
