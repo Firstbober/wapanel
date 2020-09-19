@@ -8,7 +8,7 @@
 
 namespace wapanel::conf {
 
-// Panel stuff
+// Panel stuff.
 enum class panel_position {
 	TOP,
 	BOTTOM
@@ -21,7 +21,7 @@ struct panel_config {
 	std::vector<std::pair<std::string, toml::value>> applets_config;
 };
 
-// General stuff
+// General stuff.
 struct global_config {
 	std::vector<panel_config> panels_conf;
 	std::string used_config_file;

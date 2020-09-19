@@ -7,7 +7,7 @@ namespace wapanel::conv {
 // Please don't touch unless you know what you doing !_!
 auto recurse_table(toml::table &table) -> std::vector<_wap_t_config_variable>;
 auto resolve_array(toml::array &array) -> std::vector<_wap_t_config_variable> {
-	log_info("resolving array...");
+	log_info("Resolving array...");
 	std::vector<_wap_t_config_variable> _content;
 
 	unsigned int current_index = 0;
@@ -19,27 +19,27 @@ auto resolve_array(toml::array &array) -> std::vector<_wap_t_config_variable> {
 		// Match type and put good value into variable
 		switch (value.type()) {
 		case toml::value_t::string:
-			variable.type == WAP_CONF_VAR_TYPE_STRING;
+			variable.type = WAP_CONF_VAR_TYPE_STRING;
 			variable.content.value.string = value.as_string().str.c_str();
 			break;
 
 		case toml::value_t::integer:
-			variable.type == WAP_CONF_VAR_TYPE_INTEGER;
+			variable.type = WAP_CONF_VAR_TYPE_INTEGER;
 			variable.content.value.integer = value.as_integer();
 			break;
 
 		case toml::value_t::floating:
-			variable.type == WAP_CONF_VAR_TYPE_FLOAT;
+			variable.type = WAP_CONF_VAR_TYPE_FLOAT;
 			variable.content.value.floating = value.as_floating();
 			break;
 
 		case toml::value_t::boolean:
-			variable.type == WAP_CONF_VAR_TYPE_BOOLEAN;
+			variable.type = WAP_CONF_VAR_TYPE_BOOLEAN;
 			variable.content.value.boolean = value.as_boolean();
 			break;
 
 		case toml::value_t::array: {
-			variable.type == WAP_CONF_VAR_TYPE_ARRAY;
+			variable.type = WAP_CONF_VAR_TYPE_ARRAY;
 			toml::array tm_array = value.as_array();
 
 			std::vector<_wap_t_config_variable> var_list = resolve_array(value.as_array());
@@ -60,8 +60,7 @@ auto resolve_array(toml::array &array) -> std::vector<_wap_t_config_variable> {
 		}
 
 		case toml::value_t::table: {
-			variable.type == WAP_CONF_VAR_TYPE_TABLE;
-			variable.content.table.name = std::to_string(current_index).c_str();
+			variable.type = WAP_CONF_VAR_TYPE_TABLE;
 
 			std::vector<_wap_t_config_variable> var_list = recurse_table(value.as_table());
 			if (var_list.size() > 0) {
@@ -91,7 +90,7 @@ auto resolve_array(toml::array &array) -> std::vector<_wap_t_config_variable> {
 	return _content;
 }
 auto recurse_table(toml::table &table) -> std::vector<_wap_t_config_variable> {
-	log_info("reccurenting table...");
+	log_info("Reccurenting table...");
 	std::vector<_wap_t_config_variable> _content;
 
 	for (auto &&val_pair : table) {
@@ -101,27 +100,27 @@ auto recurse_table(toml::table &table) -> std::vector<_wap_t_config_variable> {
 		// Match type and put good value into variable
 		switch (val_pair.second.type()) {
 		case toml::value_t::string:
-			variable.type == WAP_CONF_VAR_TYPE_STRING;
+			variable.type = WAP_CONF_VAR_TYPE_STRING;
 			variable.content.value.string = val_pair.second.as_string().str.c_str();
 			break;
 
 		case toml::value_t::integer:
-			variable.type == WAP_CONF_VAR_TYPE_INTEGER;
+			variable.type = WAP_CONF_VAR_TYPE_INTEGER;
 			variable.content.value.integer = val_pair.second.as_integer();
 			break;
 
 		case toml::value_t::floating:
-			variable.type == WAP_CONF_VAR_TYPE_FLOAT;
+			variable.type = WAP_CONF_VAR_TYPE_FLOAT;
 			variable.content.value.floating = val_pair.second.as_floating();
 			break;
 
 		case toml::value_t::boolean:
-			variable.type == WAP_CONF_VAR_TYPE_BOOLEAN;
+			variable.type = WAP_CONF_VAR_TYPE_BOOLEAN;
 			variable.content.value.boolean = val_pair.second.as_boolean();
 			break;
 
 		case toml::value_t::array: {
-			variable.type == WAP_CONF_VAR_TYPE_ARRAY;
+			variable.type = WAP_CONF_VAR_TYPE_ARRAY;
 			toml::array tm_array = val_pair.second.as_array();
 
 			std::vector<_wap_t_config_variable> var_list = resolve_array(val_pair.second.as_array());
@@ -142,8 +141,7 @@ auto recurse_table(toml::table &table) -> std::vector<_wap_t_config_variable> {
 		}
 
 		case toml::value_t::table: {
-			variable.type == WAP_CONF_VAR_TYPE_TABLE;
-			variable.content.table.name = val_pair.first.c_str();
+			variable.type = WAP_CONF_VAR_TYPE_TABLE;
 
 			std::vector<_wap_t_config_variable> var_list = recurse_table(val_pair.second.as_table());
 			if (var_list.size() > 0) {
@@ -180,7 +178,6 @@ auto convert_toml_to_wap_t_config_variable(toml::value &value) -> _wap_t_config_
 	tm_table = value.as_table();
 
 	config_variable->type = WAP_CONF_VAR_TYPE_TABLE;
-	config_variable->content.table.name = "";
 
 	std::vector<_wap_t_config_variable> var_list = recurse_table(tm_table);
 	if (var_list.size() > 0) {
@@ -219,7 +216,6 @@ auto free_wap_t_config_variable(_wap_t_config_variable variable) -> void {
 			free(variable.content.table._content);
 			variable.content.table._content = NULL;
 			variable.content.table._size = 0;
-			variable.content.table.name = NULL;
 		}
 
 		break;
