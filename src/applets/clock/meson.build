@@ -1,4 +1,8 @@
-library('wapanel-applet-clock', 'clock.cc',
+library('wapanel-applet-clock',
+	[
+		'main.cc',
+		'clock.cc'
+	],
 	dependencies: [
 		dependency('gtk+-3.0')
 	],

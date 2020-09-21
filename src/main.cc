@@ -88,6 +88,9 @@ auto static app_activate(GtkApplication *_app) -> void {
 
 auto static app_shutdown(GtkApplication *_app) -> void { wapanel::applets::remove_applets(); }
 
+// TODO: Add commandline with listing avaiable applets etc.
+// TODO: Remove applet info function for increased security.
+
 auto main(int argc, char **argv) -> int {
 	int status;
 
