@@ -7,8 +7,8 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   sodipodi:docname="wapa-logo-unicolor.svg"
-   inkscape:version="1.0 (4035a4fb49, 2020-05-01)"
+   sodipodi:docname="wapa-logo-nocolor.svg"
+   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)"
    id="svg8"
    version="1.1"
    viewBox="0 0 256 256"
@@ -27,15 +27,16 @@
      inkscape:document-rotation="0"
      inkscape:current-layer="layer1"
      inkscape:document-units="mm"
-     inkscape:cy="415.52995"
-     inkscape:cx="589.06207"
-     inkscape:zoom="0.70710678"
+     inkscape:cy="749.39633"
+     inkscape:cx="107.57856"
+     inkscape:zoom="0.33928499"
      inkscape:pageshadow="2"
      inkscape:pageopacity="0.0"
      borderopacity="1.0"
      bordercolor="#666666"
      pagecolor="#ffffff"
-     id="base" />
+     id="base"
+     showguides="false" />
   <metadata
      id="metadata5">
     <rdf:RDF>
@@ -44,7 +45,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -53,24 +54,9 @@
      inkscape:groupmode="layer"
      inkscape:label="Warstwa 1">
     <path
-       d="m 126.38182,65.851866 v -4.215765 l -0.58859,2.137338 z"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:251.026px;line-height:1.25;font-family:'URW Gothic';-inkscape-font-specification:'URW Gothic';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:6.27565"
-       id="path944" />
-    <path
-       d="M 116.48992,97.558455 84.426763,213.99269 39.893047,56.716505 21.22132,58.115904 72.625934,238.08683 H 96.729372 L 125.45475,130.6722 Z"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:251.026px;line-height:1.25;font-family:'URW Gothic';-inkscape-font-specification:'URW Gothic';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:6.27565;stroke-opacity:1"
-       id="path1267" />
-    <path
-       d="m 128.15329,51.055353 -18.59886,1.393714 11.14505,38.834837 33.45843,123.585216 h 2.00866 12.18634 9.65677 2.00866 l 23.46007,-86.65362 h -19.30373 l -15.82177,55.87566 -1.26504,4.46742 z"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:251.026px;line-height:1.25;font-family:'URW Gothic';-inkscape-font-specification:'URW Gothic';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:6.27565"
-       id="path950" />
-    <path
-       id="path1177-6"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:251.026px;line-height:1.25;font-family:'URW Gothic';-inkscape-font-specification:'URW Gothic';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:6.27565"
-       d="m 200.74486,71.064712 -12.58012,44.428808 h 19.30374 l 9.99837,-36.931588 2.1518,-7.49722 z" />
-    <path
-       id="path1198"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:251.026px;line-height:1.25;font-family:'URW Gothic';-inkscape-font-specification:'URW Gothic';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:6.27565"
-       d="m 204.3826,58.063693 h 18.87379 l 11.52229,-40.15052 -19.43966,1.456759 z" />
+       id="rect835"
+       style="fill:#000003;fill-opacity:1;stroke-width:188.976;stroke-linecap:square;paint-order:markers stroke fill"
+       d="M 134.13477 0 C 59.824579 0 0 59.824579 0 134.13477 L 0 833.42578 C 0 907.73598 59.824579 967.55859 134.13477 967.55859 L 833.42578 967.55859 C 907.73598 967.55859 967.55859 907.73598 967.55859 833.42578 L 967.55859 134.13477 C 967.55859 59.824579 907.73598 0 833.42578 0 L 134.13477 0 z M 825.00977 131.97656 L 788.1875 260.28516 L 727.87305 260.28516 L 762.88672 136.63281 L 825.00977 131.97656 z M 484.26953 237.88867 L 608.69141 677.30469 L 612.73438 663.0293 L 663.29492 484.46875 L 724.98438 484.46875 L 650.01367 761.38477 L 643.59375 761.38477 L 612.73438 761.38477 L 573.79102 761.38477 L 567.37109 761.38477 L 460.44922 366.44727 L 424.83398 242.34375 L 484.26953 237.88867 z M 202.21875 255.98047 L 344.5332 758.58398 L 446.99609 386.49805 L 475.64648 492.31836 L 383.84961 835.58203 L 306.82227 835.58203 L 142.54883 260.45312 L 202.21875 255.98047 z M 716.24805 301.83203 L 776.5625 301.83203 L 769.6875 325.79102 L 737.73438 443.8125 L 676.04688 443.8125 L 716.24805 301.83203 z "
+       transform="scale(0.26458333)" />
   </g>
 </svg>

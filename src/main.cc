@@ -22,6 +22,30 @@ GFileMonitor *config_monitor;
 #define __inter_verstr(verstr)	#verstr
 #define VERSION_STRING(version) __inter_verstr(version)
 
+// Command line things
+
+auto static cmd_list_available_applets() -> void {
+	wapanel::applets::search_for_applets();
+
+	printf("==========================\n\n");
+	printf("Available applets (by name usable in config):\n\n");
+
+	for (auto &&applet : wapanel::applets::applets._applets) {
+		printf("\t%s\n", applet.second.name);
+	}
+
+	printf("\n==========================\n");
+
+	exit(0);
+}
+
+static GOptionEntry cmd_entries[]
+	= { { "list-available-applets", 'l', G_OPTION_FLAG_NO_ARG, G_OPTION_ARG_CALLBACK,
+		  (GOptionArgFunc *)(cmd_list_available_applets), "Shows all available applets to use.", NULL },
+		{ NULL } };
+
+// App and config stuff
+
 auto static app_activate(GtkApplication *_app) -> void;
 auto static config_changed(GFileMonitor *monitor, GFile *file, GFile *other_file, GFileMonitorEvent event_type,
 						   gpointer user_data) -> void {
@@ -80,7 +104,7 @@ auto static app_activate(GtkApplication *_app) -> void {
 
 		gtk_application_add_window(_app, panel->get_gtk_window());
 
-		log_info("Displaying panel %i", i);
+		log_info("Displaying panel %zu", i);
 
 		panels.push_back(panel);
 	}
@@ -88,8 +112,7 @@ auto static app_activate(GtkApplication *_app) -> void {
 
 auto static app_shutdown(GtkApplication *_app) -> void { wapanel::applets::remove_applets(); }
 
-// TODO: Add commandline with listing avaiable applets etc.
-// TODO: Remove applet info function for increased security.
+// Main function
 
 auto main(int argc, char **argv) -> int {
 	int status;
@@ -100,6 +123,8 @@ auto main(int argc, char **argv) -> int {
 
 	// Create GTK Application.
 	app = gtk_application_new("com.firstbober.wapanel", G_APPLICATION_FLAGS_NONE);
+
+	g_application_add_main_option_entries(G_APPLICATION(app), cmd_entries);
 
 	g_signal_connect(app, "startup", G_CALLBACK(app_startup), NULL);
 	g_signal_connect(app, "activate", G_CALLBACK(app_activate), NULL);

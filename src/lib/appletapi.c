@@ -8,7 +8,7 @@ wap_t_error_type _wap_errno = -1;
 
 bool wapi_error() { return _wap_errno != -1; }
 
-const char *wapi_error_print() {
+void wapi_error_print() {
 	switch (_wap_errno) {
 	case WAP_ERR_VARIABLE_IS_NOT_TABLE:
 		log_error("Specified variable is not a table.");
@@ -60,7 +60,6 @@ bool wapi_index_exists(_wap_t_config_variable *array, size_t index) {
 		return false;
 	}
 
-	_wap_t_config_variable var;
 	for (size_t i = 0; i < array->content.array._size; i++) {
 		if (index == i) return true;
 	}
@@ -94,7 +93,6 @@ _wap_t_config_variable *wapi_get_var_from_array(_wap_t_config_variable *array, s
 		return NULL;
 	}
 
-	_wap_t_config_variable var;
 	for (size_t i = 0; i < array->content.array._size; i++) {
 		if (index == i) return &array->content.array._content[i];
 	}

@@ -2,14 +2,18 @@
 
 namespace wapanel::applet {
 
-// TODO: Add MAN and Sphinx documentation for panel and applets
-
 auto resolve_font_config(wap_t_applet_config applet_config) -> PangoAttrList * {
 	auto attr_list = pango_attr_list_new();
 	_wap_t_config_variable *font_table;
 	_wap_t_config_variable *operated_on;
 
-	if (!wapi_key_exists(&applet_config.root, "font")) { return attr_list; }
+	if (!wapi_key_exists(&applet_config.root, "font")) {
+		pango_attr_list_insert(attr_list, pango_attr_family_new(""));
+		pango_attr_list_insert(attr_list, pango_attr_style_new(PANGO_STYLE_NORMAL));
+		pango_attr_list_insert(attr_list, pango_attr_weight_new(PANGO_WEIGHT_BOLD));
+
+		return attr_list;
+	}
 
 	font_table = wapi_get_var_from_table(&applet_config.root, "font");
 
@@ -22,6 +26,8 @@ auto resolve_font_config(wap_t_applet_config applet_config) -> PangoAttrList * {
 
 			pango_attr_list_insert(attr_list, pango_attr_family_new(family));
 		}
+	} else {
+		pango_attr_list_insert(attr_list, pango_attr_family_new(""));
 	}
 
 	if (wapi_key_exists(font_table, "style")) {
@@ -89,7 +95,7 @@ auto resolve_font_config(wap_t_applet_config applet_config) -> PangoAttrList * {
 		if (operated_on->type == WAP_CONF_VAR_TYPE_INTEGER) {
 			size = wapi_var_as_integer(operated_on);
 
-			if (size != -1) { pango_attr_list_insert(attr_list, pango_attr_size_new_absolute(size * PANGO_SCALE)); }
+			if (size > -1) { pango_attr_list_insert(attr_list, pango_attr_size_new_absolute(size * PANGO_SCALE)); }
 		}
 	}
 
@@ -143,7 +149,7 @@ auto resolve_font_config(wap_t_applet_config applet_config) -> PangoAttrList * {
 		if (operated_on->type == WAP_CONF_VAR_TYPE_INTEGER) {
 			letter_spacing = wapi_var_as_integer(operated_on);
 
-			if (letter_spacing != -1) {
+			if (letter_spacing > -1) {
 				pango_attr_list_insert(attr_list, pango_attr_letter_spacing_new(letter_spacing * PANGO_SCALE));
 			}
 		}
@@ -171,6 +177,9 @@ clock::clock(wap_t_applet_config applet_config) {
 			m_time_format = reinterpret_cast<char *>(malloc(sizeof(format) + 16));
 			strcpy(m_time_format, format);
 		}
+	} else {
+		m_time_format = reinterpret_cast<char *>(malloc(sizeof("%X") + 1));
+		strcpy(m_time_format, "%X");
 	}
 
 	// Pre-call to callback making label "visible".
@@ -233,7 +242,7 @@ auto clock::on_clicked() -> void {
 	m_time_conv = localtime(&m_unixtime);
 
 	gtk_calendar_select_day(m_calendar, m_time_conv->tm_mday);
-	gtk_calendar_select_month(m_calendar, m_time_conv->tm_mon, m_time_conv->tm_year+1900);
+	gtk_calendar_select_month(m_calendar, m_time_conv->tm_mon, m_time_conv->tm_year + 1900);
 
 	gtk_popover_popup(m_calendar_popover);
 	gtk_widget_show_all(GTK_WIDGET(m_calendar_popover));

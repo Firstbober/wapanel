@@ -8,7 +8,7 @@
 #include "lib/appletapi.h"
 
 #define APPLET_SEARCH_PATHS                                                                                            \
-	{ "", "./lib", "/usr/lib/wapanel/applets" }
+	{ "", "./wapanel/applets", "/usr/lib/wapanel/applets", "~/.local/share/wapanel/applets" }
 
 namespace wapanel::applets {
 

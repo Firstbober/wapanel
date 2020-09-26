@@ -14,11 +14,11 @@
 	format = ""
 	[panel.applet.font]
 		family = ""
-		style = ""
-		weight = ""
+		style = "normal"
+		weight = "bold"
 		size = -1
 		strikethrough = false
-		underline = ""
+		underline = "none"
 		letter_spacing = -1
 */
 

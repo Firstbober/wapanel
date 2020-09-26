@@ -7,7 +7,7 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   sodipodi:docname="wapa-logo-color.svg"
+   sodipodi:docname="wapa-logo-bw.svg"
    inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)"
    id="svg8"
    version="1.1"
@@ -27,9 +27,9 @@
      inkscape:document-rotation="0"
      inkscape:current-layer="layer1"
      inkscape:document-units="mm"
-     inkscape:cy="237.88953"
-     inkscape:cx="484.06445"
-     inkscape:zoom="7.677143"
+     inkscape:cy="472.47447"
+     inkscape:cx="400.55762"
+     inkscape:zoom="0.47982143"
      inkscape:pageshadow="2"
      inkscape:pageopacity="0.0"
      borderopacity="1.0"
@@ -54,7 +54,7 @@
      inkscape:groupmode="layer"
      inkscape:label="Warstwa 1">
     <rect
-       style="fill:#3f51b5;stroke-width:49.9999;stroke-linecap:square;paint-order:markers stroke fill;fill-opacity:1"
+       style="fill:#000000;stroke-width:49.9999;stroke-linecap:square;paint-order:markers stroke fill;fill-opacity:1"
        id="rect835"
        width="256"
        height="256"
@@ -71,11 +71,11 @@
        id="path950" />
     <path
        id="path1177-6"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:251.026px;line-height:1.25;font-family:'URW Gothic';-inkscape-font-specification:'URW Gothic';letter-spacing:0px;word-spacing:0px;fill:#ff9400;fill-opacity:1;stroke:none;stroke-width:5.30621"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:251.026px;line-height:1.25;font-family:'URW Gothic';-inkscape-font-specification:'URW Gothic';letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:5.30621"
        d="m 189.50746,79.859904 -10.63679,37.565586 h 16.32177 l 8.45384,-31.226513 1.81939,-6.339073 z" />
     <path
        id="path1198"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:251.026px;line-height:1.25;font-family:'URW Gothic';-inkscape-font-specification:'URW Gothic';letter-spacing:0px;word-spacing:0px;fill:#ffbc00;fill-opacity:1;stroke:none;stroke-width:5.30621"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:251.026px;line-height:1.25;font-family:'URW Gothic';-inkscape-font-specification:'URW Gothic';letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:5.30621"
        d="m 192.58325,68.867244 h 15.95822 l 9.74236,-33.948189 -16.43668,1.231724 z" />
   </g>
 </svg>

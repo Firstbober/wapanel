@@ -4,6 +4,9 @@
 #include "log.hh"
 
 #include <dlfcn.h>
+#include <pwd.h>
+#include <sys/types.h>
+#include <unistd.h>
 
 namespace wapanel::applets {
 namespace fs = std::filesystem;
@@ -88,12 +91,20 @@ auto try_loading_applet(const char *path) -> void {
 
 auto search_for_applets() -> void {
 	std::string applet_paths[] = APPLET_SEARCH_PATHS;
+	const char *home_dir;
 
 #ifndef RELEASE
 	applet_paths[0] = "../lib/wapanel/applets";
 #endif
 
+	// Check if enviroment variable 'HOME' exists
+	// then use it as home directory and if this env-var
+	// doesn't exist then use user database entry and extract home dir.
+	if ((home_dir = getenv("HOME")) == NULL) { home_dir = getpwuid(getuid())->pw_dir; }
+
 	for (auto &&path : applet_paths) {
+		if (path[0] == '~') { path.replace(0, 1, std::string(home_dir)); }
+
 		if (!fs::exists(path)) continue;
 
 		for (auto &&dir_entry : fs::directory_iterator(path)) {
