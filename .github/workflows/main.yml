@@ -13,8 +13,8 @@ jobs:
         run: |
           sudo apt-get install -y doxygen
           sudo apt-get install -y python3-sphinx
-          sudo pip install sphinx-rtd-theme
-          sudo pip install breathe
+          pip3 install sphinx-rtd-theme
+          pip3 install breathe
     
       - name: Build documentation 📕
         run: |
