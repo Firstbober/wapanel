@@ -31,7 +31,6 @@ author = 'Firstbober'
 extensions = [
 	'sphinx_rtd_theme',
 	'breathe',
-	'githubpages',
 ]
 
 breathe_projects = {
