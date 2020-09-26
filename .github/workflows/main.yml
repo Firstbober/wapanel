@@ -1,0 +1,35 @@
+name: Build and deploy documentation
+on: [push]
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v2.3.1
+        with:
+          persist-credentials: false
+      
+      - name: Install deps
+        run: |
+          sudo apt-get install -y doxygen
+          sudo apt-get install -y python3-sphinx
+          pip3 install sphinx-rtd-theme
+          pip3 install breathe
+    
+      - name: Build documentation 📕
+        run: |
+          cd docs
+          doxygen
+          make html
+          cd _build/html
+          touch .nojekyll
+
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@3.6.1
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: docs
+          FOLDER: docs/_build/html
+          CLEAN: true
+          SINGLE_COMMIT: true
+
