@@ -31,4 +31,5 @@ jobs:
           BRANCH: docs
           FOLDER: docs/_build/html
           CLEAN: true
+          SINGLE_COMMIT: true
 
