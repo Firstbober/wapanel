@@ -9,17 +9,17 @@
 	For more docs go to
 	https://developer.gnome.org/pango/stable/pango-Text-Attributes.html
 
-[[panel.applet]]
-	name = "clock"
-	format = ""
-	[panel.applet.font]
-		family = ""
-		style = "normal"
-		weight = "bold"
-		size = -1
-		strikethrough = false
-		underline = "none"
-		letter_spacing = -1
+	[[panel.applet]]
+		name = "clock"
+		format = ""
+		[panel.applet.font]
+			family = ""
+			style = "normal"
+			weight = "bold"
+			size = -1
+			strikethrough = false
+			underline = "none"
+			letter_spacing = -1
 */
 
 namespace wapanel::applet {
