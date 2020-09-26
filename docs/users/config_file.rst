@@ -97,3 +97,19 @@ font.strikethrough	You know what that means.														true or false
 font.underline		Underline.																		none, single, double, low, error, single_line, double_line, error_line
 font.letter_spacing	Spacing between letters															Any positive integer or -1 for default value
 =================== =============================================================================== ======================================
+
+---------
+Separator
+---------
+
+.. code-block:: toml
+
+	[[panel.applet]]
+	name = "separator"
+	stretch = true
+	margin_start = 0
+	margin_end = 0
+
+This is the default config of **separator** applet.
+All you need to know is, `stretch` extends applet to fill all of the panel,
+`margin_start` and `margin_end` changes margins of applet.
