@@ -1,4 +1,4 @@
-name: Build and Deploy
+name: Build and deploy documentation
 on: [push]
 jobs:
   build-and-deploy:
@@ -21,6 +21,7 @@ jobs:
           cd docs
           doxygen
           make html
+          touch .nojekyll
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@3.6.1
