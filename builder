@@ -45,7 +45,7 @@ function format_files {
 
 function run () {
 	if [ -z $1 ]; then
-		exef=$(meson introspect "$BUILD_FILES_DIRECTORY" --targets | grep -Po '"name":.*?[^\\]",' | awk -F':' '{print $2}' | cut -d "\"" -f 2 | head -n 3 | tail -1);
+		exef=$(meson introspect "$BUILD_FILES_DIRECTORY" --targets | grep -Po '"name":.*?[^\\]",' | awk -F':' '{print $2}' | cut -d "\"" -f 2 | tail -1);
 	else exef=$1; fi
     cd "$RUNTIME_OUTPUT_DIRECTORY/bin" && ./"$exef" "${@:2}"
 }
@@ -54,7 +54,7 @@ function run_tests { cd "$BUILD_FILES_DIRECTORY" && ninja test; }
 
 function run_valgrind () {
 	if [ -z $1 ]; then
-		exef=$(meson introspect "$BUILD_FILES_DIRECTORY" --targets | grep -Po '"name":.*?[^\\]",' | awk -F':' '{print $2}' | cut -d "\"" -f 2 | head -n 3 | tail -1);
+		exef=$(meson introspect "$BUILD_FILES_DIRECTORY" --targets | grep -Po '"name":.*?[^\\]",' | awk -F':' '{print $2}' | cut -d "\"" -f 2 | tail -1);
 	else exef=$1; fi
 	echo $exef
     cd "$RUNTIME_OUTPUT_DIRECTORY/bin" && valgrind --leak-check=full -v ./"$exef" "${@:2}";
