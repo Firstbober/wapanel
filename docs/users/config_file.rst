@@ -94,6 +94,6 @@ font.style			Style of the font                                                  
 font.weight			Weight of the font																thin, ultrathin, semilight, book, normal, medium, semibold, bold, ultrabold, heavy, ultraheavy
 font.size			Size of the font																Any positive integer or -1 for default value
 font.strikethrough	You know what that means.														true or false
-font.underline		Underline.																		none, single, double, low, error, single_line, double_line, error_line
+font.underline		Underline.																		none, single, double, low, error
 font.letter_spacing	Spacing between letters															Any positive integer or -1 for default value
 =================== =============================================================================== ======================================

@@ -128,12 +128,6 @@ auto resolve_font_config(wap_t_applet_config applet_config) -> PangoAttrList * {
 				attribute = pango_attr_underline_new(PANGO_UNDERLINE_LOW);
 			} else if (!strcmp(underline, "error")) {
 				attribute = pango_attr_underline_new(PANGO_UNDERLINE_ERROR);
-			} else if (!strcmp(underline, "single_line")) {
-				attribute = pango_attr_underline_new(PANGO_UNDERLINE_SINGLE_LINE);
-			} else if (!strcmp(underline, "double_line")) {
-				attribute = pango_attr_underline_new(PANGO_UNDERLINE_DOUBLE_LINE);
-			} else if (!strcmp(underline, "error_line")) {
-				attribute = pango_attr_underline_new(PANGO_UNDERLINE_ERROR_LINE);
 			} else {
 				attribute = pango_attr_underline_new(PANGO_UNDERLINE_NONE);
 			}
