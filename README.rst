@@ -22,7 +22,7 @@ Applets
 =======
 
 - ☑ Clock
-- ☐ Separator
+- ☑ Separator
 - ☐ System tray (Freedesktop StatusNotifierItem implementation)
 - ☐ Volume control (PulseAudio, PipeWire in future)
 - ☐ Task switcher
