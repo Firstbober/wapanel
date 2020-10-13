@@ -31,9 +31,11 @@ function build {
 	if [ ! -f "$BUILD_FILES_DIRECTORY"/build.ninja ]; then
 		meson ""$BUILD_FILES_DIRECTORY"" --buildtype=$BUILD_MODE;
 		meson configure "$BUILD_FILES_DIRECTORY" -Dprefix=$RUNTIME_OUTPUT_DIRECTORY;
+
+		ln -s "$BUILD_FILES_DIRECTORY"/compile_commands.json .;
 	fi
 
-	cd "$BUILD_FILES_DIRECTORY" && ninja && ninja install ;
+	cd "$BUILD_FILES_DIRECTORY" && ninja && ninja install;
 }
 
 function del_build { cd "$BUILD_FILES_DIRECTORY" && rm -rf * ; }
