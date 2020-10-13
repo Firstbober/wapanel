@@ -37,7 +37,7 @@ private:
 	char m_str_time[256];
 	char *m_time_format;
 	time_t m_unixtime;
-	struct tm *m_time_conv;
+	struct tm m_time_conv;
 
 public:
 	clock(wap_t_applet_config applet_config);
