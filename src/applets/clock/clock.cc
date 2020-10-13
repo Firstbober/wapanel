@@ -1,4 +1,5 @@
 #include "clock.hh"
+#include "../../log.hh"
 
 namespace wapanel::applet {
 
@@ -158,6 +159,9 @@ clock::clock(wap_t_applet_config applet_config) {
 	m_clock_label = GTK_LABEL(gtk_label_new(""));
 	m_gtk_timeout = g_timeout_add(1000, G_SOURCE_FUNC(m_timeout_callback), this);
 
+	log_info("Created gtk_timeout and necessary variables");
+	log_info("Checking for existing time formatting in config");
+
 	// Configure time formatting
 	if (wapi_key_exists(&applet_config.root, "format")) {
 		_wap_t_config_variable *operated = wapi_get_var_from_table(&applet_config.root, "format");
@@ -175,6 +179,8 @@ clock::clock(wap_t_applet_config applet_config) {
 		m_time_format = reinterpret_cast<char *>(malloc(sizeof("%X") + 1));
 		strcpy(m_time_format, "%X");
 	}
+
+	log_info("First clock update call");
 
 	// Pre-call to callback making label "visible".
 	on_timeout();
@@ -207,6 +213,8 @@ clock::clock(wap_t_applet_config applet_config) {
 
 	gtk_container_add(GTK_CONTAINER(m_calendar_popover), GTK_WIDGET(m_calendar));
 
+	log_info("Spawned and added calendar");
+
 	// Configure and add label to button.
 	m_label_attr = resolve_font_config(applet_config);
 	gtk_label_set_attributes(m_clock_label, m_label_attr);
@@ -224,19 +232,25 @@ clock::~clock() {
 auto clock::get_widget() -> GtkWidget * { return GTK_WIDGET(m_clock_button); }
 
 auto clock::on_timeout() -> void {
-	m_unixtime = time(0);
-	m_time_conv = localtime(&m_unixtime);
+	m_unixtime = time(NULL);
+	if (localtime_r(&m_unixtime, &m_time_conv) == NULL) {
+		log_error("Error in localtime_r");
+		return;
+	}
 
-	strftime(m_str_time, sizeof(m_str_time), m_time_format, m_time_conv);
+	strftime(m_str_time, sizeof(m_str_time), m_time_format, &m_time_conv);
 	gtk_label_set_text(m_clock_label, m_str_time);
 }
 
 auto clock::on_clicked() -> void {
-	m_unixtime = time(0);
-	m_time_conv = localtime(&m_unixtime);
+	m_unixtime = time(NULL);
+	if (localtime_r(&m_unixtime, &m_time_conv) == NULL) {
+		log_error("Error in localtime_r");
+		return;
+	}
 
-	gtk_calendar_select_day(m_calendar, m_time_conv->tm_mday);
-	gtk_calendar_select_month(m_calendar, m_time_conv->tm_mon, m_time_conv->tm_year + 1900);
+	gtk_calendar_select_day(m_calendar, m_time_conv.tm_mday);
+	gtk_calendar_select_month(m_calendar, m_time_conv.tm_mon, m_time_conv.tm_year + 1900);
 
 	gtk_popover_popup(m_calendar_popover);
 	gtk_widget_show_all(GTK_WIDGET(m_calendar_popover));
