@@ -37,6 +37,8 @@ pkgconfig.generate(appletapi_lib)
 
 subdir('src/applets')
 
+install_data('3TH_PARTY_LICENSES', install_dir : get_option('datadir') / 'wapanel')
+
 executable(
 	'wapanel',
 	sources,
