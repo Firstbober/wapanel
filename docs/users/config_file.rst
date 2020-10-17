@@ -86,7 +86,7 @@ Clock
 -1 or "" means the default setting. Basically all of this is setted to default and applet will be alive without this config.
 
 =================== =============================================================================== ======================================
-**Parameter**       **Description**																    Content
+**Parameter**       **Description**																    **Content**
 ------------------- ------------------------------------------------------------------------------- --------------------------------------
 format              `strftime <https://www.cplusplus.com/reference/ctime/strftime/>`_ format string Any strftime-compliant string
 font.family         A font familiy                                                                  Any font in your pc e.g. 'Comic Sans'
