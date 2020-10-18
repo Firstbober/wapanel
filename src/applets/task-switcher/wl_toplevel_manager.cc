@@ -72,6 +72,8 @@ auto toplevel_manager::try_to_initialize() -> void {
 auto toplevel_manager::clean() -> void {
 	m_on_toplevel_new_callback.clear();
 	m_on_toplevel_finished_callback.clear();
+
+	log_info("Cleaned toplevel_manager");
 }
 
 auto toplevel_manager::event_toplevel_new(zwlr_foreign_toplevel_handle_v1 *tl_handle) -> void {
@@ -80,6 +82,8 @@ auto toplevel_manager::event_toplevel_new(zwlr_foreign_toplevel_handle_v1 *tl_ha
 	for (auto callback : m_on_toplevel_new_callback) {
 		callback(toplevels[tl_handle]);
 	}
+
+	log_info("Adding new wl_toplevel");
 }
 auto toplevel_manager::event_toplevel_finished(zwlr_foreign_toplevel_handle_v1 *tl_handle) -> void {
 	for (auto callback : m_on_toplevel_finished_callback) {
@@ -96,10 +100,12 @@ auto toplevel_manager::receive_toplevel_manager(zwlr_foreign_toplevel_manager_v1
 
 auto toplevel_manager::on_toplevel_new(std::function<void(toplevel *)> callback) -> void {
 	m_on_toplevel_new_callback.push_back(callback);
+	log_info("Registred new callback for event `toplevel_new`");
 }
 
 auto toplevel_manager::on_toplevel_finished(std::function<void(toplevel *)> callback) -> void {
 	m_on_toplevel_finished_callback.push_back(callback);
+	log_info("Registred new callback for event `toplevel_finished`");
 }
 
 }

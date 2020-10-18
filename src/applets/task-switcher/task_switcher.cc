@@ -24,7 +24,11 @@ task_switcher::task_switcher(wap_t_applet_config applet_config) {
 
 		delete m_buttons[wl_toplevel->mgid];
 		m_buttons.erase(wl_toplevel->mgid);
+
+		log_info("Removed window_button");
 	});
+
+	log_info("Created handles for wl_toplevel_manager events");
 
 	// Basic variable initialization
 
@@ -43,10 +47,14 @@ task_switcher::task_switcher(wap_t_applet_config applet_config) {
 	gtk_container_add(GTK_CONTAINER(m_scroll_window), GTK_WIDGET(m_window_button_container));
 	gtk_scrolled_window_set_overlay_scrolling(m_scroll_window, false);
 
-	// Config resolving
+	log_info("Spawned variables for task_switcher");
 
+	// Config resolving
+	/*
 	_wap_t_config_variable *var = wapi_get_var_from_table(&applet_config.root, "__panel_height");
 	int64_t __panel_height = wapi_var_as_integer(var);
+	*/
+	log_info("Initialized config variables");
 }
 task_switcher::~task_switcher() {}
 
@@ -142,8 +150,12 @@ window_button::window_button(wl::toplevel *wl_toplevel, task_switcher *task_swit
 					 }),
 					 m_button_click_event_data);
 
+	log_info("Connected m_button events");
+
 	gtk_container_add(GTK_CONTAINER(m_button), GTK_WIDGET(m_aligment_box));
 	gtk_container_add(GTK_CONTAINER(m_flow_box_child), GTK_WIDGET(m_button));
+
+	log_info("Created window_button");
 }
 window_button::~window_button() {
 	delete this->m_button_toggled_data;
@@ -164,9 +176,13 @@ auto window_button::toplevel_event_handler(wl::toplevel_event event) -> void {
 				rendered_icon = gtk_icon_theme_load_icon(default_icon_theme, m_toplevel->app_id.c_str(), icon_height,
 														 GTK_ICON_LOOKUP_FORCE_REGULAR, NULL);
 			} else {
+				log_warn("app_id is not matching any icon in icon theme, searching in system paths");
 				std::string icon_name = search_for_icon(m_toplevel->app_id.c_str());
 
-				if (!gtk_icon_theme_has_icon(default_icon_theme, icon_name.c_str())) { icon_name = DEFAULT_APP_ICON; }
+				if (!gtk_icon_theme_has_icon(default_icon_theme, icon_name.c_str())) {
+					log_warn("app_id doesn't have any defined icon available in icon theme, setting default icon");
+					icon_name = DEFAULT_APP_ICON;
+				}
 
 				rendered_icon = gtk_icon_theme_load_icon(default_icon_theme, icon_name.c_str(), icon_height,
 														 GTK_ICON_LOOKUP_FORCE_REGULAR, NULL);
@@ -246,7 +262,10 @@ auto window_button::search_for_icon(std::string app_id) -> std::string {
 		}
 	}
 
-	if (icon_name.length() == 0) { icon_name = DEFAULT_APP_ICON; }
+	if (icon_name.length() == 0) {
+		log_warn("app_id is not matching aby .desktop file, setting default icon");
+		icon_name = DEFAULT_APP_ICON;
+	}
 
 	return icon_name;
 }

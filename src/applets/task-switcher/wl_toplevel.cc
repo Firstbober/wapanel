@@ -81,11 +81,12 @@ static struct zwlr_foreign_toplevel_handle_v1_listener toplevel_handle_listeners
 
 namespace wapanel::applet::wl {
 
-toplevel::toplevel(zwlr_foreign_toplevel_handle_v1 *handle, unsigned int id, struct wl_seat* seat) {
+toplevel::toplevel(zwlr_foreign_toplevel_handle_v1 *handle, unsigned int id, struct wl_seat *seat) {
 	this->m_handle = handle;
 	this->mgid = id;
 	this->m_seat = seat;
 	zwlr_foreign_toplevel_handle_v1_add_listener(handle, &toplevel_handle_listeners, this);
+	log_info("Initialized wl_toplevel");
 }
 toplevel::~toplevel() {}
 
@@ -96,34 +97,24 @@ auto toplevel::event_output_leave(wl_output *output) -> void {
 	if (m_callback != NULL) m_callback(toplevel_event::OUTPUT_LEAVE);
 }
 auto toplevel::event_done() -> void {
-	if(this->state == toplevel_state::ACTIVATED)
-		applet_wl::toplevel_manager::get().current_window = this->mgid;
+	if (this->state == toplevel_state::ACTIVATED) applet_wl::toplevel_manager::get().current_window = this->mgid;
 
 	if (m_callback != NULL) m_callback(toplevel_event::DONE);
 }
 
-auto toplevel::on_event(std::function<void(toplevel_event)> callback) -> void { m_callback = callback; }
-
-auto toplevel::set_maximized() -> void {
-	zwlr_foreign_toplevel_handle_v1_set_maximized(m_handle);
-}
-auto toplevel::unset_maximized() -> void {
-	zwlr_foreign_toplevel_handle_v1_unset_maximized(m_handle);
+auto toplevel::on_event(std::function<void(toplevel_event)> callback) -> void {
+	m_callback = callback;
+	log_info("Registred new event listener in wl_toplevel");
 }
 
-auto toplevel::set_minimized() -> void {
-	zwlr_foreign_toplevel_handle_v1_set_minimized(m_handle);
-}
-auto toplevel::unset_minimized() -> void {
-	zwlr_foreign_toplevel_handle_v1_unset_minimized(m_handle);
-}
+auto toplevel::set_maximized() -> void { zwlr_foreign_toplevel_handle_v1_set_maximized(m_handle); }
+auto toplevel::unset_maximized() -> void { zwlr_foreign_toplevel_handle_v1_unset_maximized(m_handle); }
 
-auto toplevel::set_activated() -> void {
-	zwlr_foreign_toplevel_handle_v1_activate(m_handle, m_seat);
-}
+auto toplevel::set_minimized() -> void { zwlr_foreign_toplevel_handle_v1_set_minimized(m_handle); }
+auto toplevel::unset_minimized() -> void { zwlr_foreign_toplevel_handle_v1_unset_minimized(m_handle); }
 
-auto toplevel::close() -> void {
-	zwlr_foreign_toplevel_handle_v1_close(m_handle);
-}
+auto toplevel::set_activated() -> void { zwlr_foreign_toplevel_handle_v1_activate(m_handle, m_seat); }
+
+auto toplevel::close() -> void { zwlr_foreign_toplevel_handle_v1_close(m_handle); }
 
 }
