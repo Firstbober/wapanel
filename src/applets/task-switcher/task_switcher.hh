@@ -28,7 +28,7 @@ private:
 	} * m_button_toggled_data;
 
 	auto toplevel_event_handler(wl::toplevel_event event) -> void;
-	auto search_for_icon(std::string app_id) -> GdkPixbuf *;
+	auto search_for_icon(std::string app_id) -> std::string;
 
 public:
 	window_button(wl::toplevel *wl_toplevel, task_switcher *task_switcher);
