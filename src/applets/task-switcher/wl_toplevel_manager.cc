@@ -49,6 +49,9 @@ auto toplevel_manager::try_to_initialize() -> void {
 	auto gdk_display = gdk_display_get_default();
 	auto display = gdk_wayland_display_get_wl_display(gdk_display);
 
+	GdkSeat* seat = gdk_display_get_default_seat(gdk_display);
+	m_seat = gdk_wayland_seat_get_wl_seat(seat);
+
 	wl_registry *registry = wl_display_get_registry(display);
 	wl_registry_add_listener(registry, &toplevel_registry_listeners, NULL);
 	wl_display_roundtrip(display);
@@ -66,20 +69,37 @@ auto toplevel_manager::try_to_initialize() -> void {
 	m_initialized = true;
 }
 
-auto toplevel_manager::event_toplevel_new(zwlr_foreign_toplevel_handle_v1 *tl_handle) -> void {
-	m_toplevels[tl_handle] = new toplevel(tl_handle);
+auto toplevel_manager::clean() -> void {
+	m_on_toplevel_new_callback.clear();
+	m_on_toplevel_finished_callback.clear();
+}
 
-	log_warn("Created toplevel");
+auto toplevel_manager::event_toplevel_new(zwlr_foreign_toplevel_handle_v1 *tl_handle) -> void {
+	toplevels[tl_handle] = new toplevel(tl_handle, toplevels.size(), m_seat);
+
+	for (auto callback : m_on_toplevel_new_callback) {
+		callback(toplevels[tl_handle]);
+	}
 }
 auto toplevel_manager::event_toplevel_finished(zwlr_foreign_toplevel_handle_v1 *tl_handle) -> void {
-	delete m_toplevels[tl_handle];
-	m_toplevels.erase(tl_handle);
+	for (auto callback : m_on_toplevel_finished_callback) {
+		callback(toplevels[tl_handle]);
+	}
 
-	log_error("Removed toplevel");
+	delete toplevels[tl_handle];
+	toplevels.erase(tl_handle);
 }
 
 auto toplevel_manager::receive_toplevel_manager(zwlr_foreign_toplevel_manager_v1 *tl_manager) -> void {
 	m_manager = tl_manager;
+}
+
+auto toplevel_manager::on_toplevel_new(std::function<void(toplevel *)> callback) -> void {
+	m_on_toplevel_new_callback.push_back(callback);
+}
+
+auto toplevel_manager::on_toplevel_finished(std::function<void(toplevel *)> callback) -> void {
+	m_on_toplevel_finished_callback.push_back(callback);
 }
 
 }

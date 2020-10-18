@@ -45,7 +45,9 @@ library('wapanel-applet-task-switcher',
 		'main.cc',
 
 		'wl_toplevel_manager.cc',
-		'wl_toplevel.cc'
+		'wl_toplevel.cc',
+
+		'task_switcher.cc'
 	],
 	dependencies: [
 		dependency('gtk+-3.0'),

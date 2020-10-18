@@ -1,6 +1,8 @@
 #include "wl_toplevel.hh"
 #include "../../log.hh"
 #include "wl_toplevel_manager.hh"
+#include "wlr-foreign-toplevel-management-unstable-v1-client-protocol.h"
+#include <wayland-client-protocol.h>
 
 // waylandpp - see 3TH_PARTY_LICENSES
 #define wl_array_for_each_cpp(pos, array)                                                                              \
@@ -17,7 +19,7 @@ auto static zwlr_toplevel_data_title(void *data, zwlr_foreign_toplevel_handle_v1
 	auto wl_toplevel = static_cast<applet_wl::toplevel *>(data);
 	wl_toplevel->title = title;
 
-	log_error("title: %s", wl_toplevel->title.c_str());
+	if (wl_toplevel->m_callback != NULL) wl_toplevel->m_callback(applet_wl::toplevel_event::TITLE_CHANGE);
 }
 
 auto static zwlr_toplevel_data_app_id(void *data, zwlr_foreign_toplevel_handle_v1 *handle, const char *app_id) -> void {
@@ -79,20 +81,49 @@ static struct zwlr_foreign_toplevel_handle_v1_listener toplevel_handle_listeners
 
 namespace wapanel::applet::wl {
 
-toplevel::toplevel(zwlr_foreign_toplevel_handle_v1 *handle) {
+toplevel::toplevel(zwlr_foreign_toplevel_handle_v1 *handle, unsigned int id, struct wl_seat* seat) {
 	this->m_handle = handle;
+	this->mgid = id;
+	this->m_seat = seat;
 	zwlr_foreign_toplevel_handle_v1_add_listener(handle, &toplevel_handle_listeners, this);
 }
 toplevel::~toplevel() {}
 
 auto toplevel::event_output_enter(wl_output *output) -> void {
-	// Maybe will be helpful later
+	if (m_callback != NULL) m_callback(toplevel_event::OUTPUT_ENTER);
 }
 auto toplevel::event_output_leave(wl_output *output) -> void {
-	// Maybe will be helpful later
+	if (m_callback != NULL) m_callback(toplevel_event::OUTPUT_LEAVE);
 }
 auto toplevel::event_done() -> void {
-	// This will come handy too
+	if(this->state == toplevel_state::ACTIVATED)
+		applet_wl::toplevel_manager::get().current_window = this->mgid;
+
+	if (m_callback != NULL) m_callback(toplevel_event::DONE);
+}
+
+auto toplevel::on_event(std::function<void(toplevel_event)> callback) -> void { m_callback = callback; }
+
+auto toplevel::set_maximized() -> void {
+	zwlr_foreign_toplevel_handle_v1_set_maximized(m_handle);
+}
+auto toplevel::unset_maximized() -> void {
+	zwlr_foreign_toplevel_handle_v1_unset_maximized(m_handle);
+}
+
+auto toplevel::set_minimized() -> void {
+	zwlr_foreign_toplevel_handle_v1_set_minimized(m_handle);
+}
+auto toplevel::unset_minimized() -> void {
+	zwlr_foreign_toplevel_handle_v1_unset_minimized(m_handle);
+}
+
+auto toplevel::set_activated() -> void {
+	zwlr_foreign_toplevel_handle_v1_activate(m_handle, m_seat);
+}
+
+auto toplevel::close() -> void {
+	zwlr_foreign_toplevel_handle_v1_close(m_handle);
 }
 
 }
