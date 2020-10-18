@@ -4,8 +4,10 @@
 #include "wl_toplevel_manager.hh"
 #include "wlr-foreign-toplevel-management-unstable-v1-client-protocol.h"
 #include <filesystem>
-#include <stdexcept>
 #include <gio/gdesktopappinfo.h>
+#include <stdexcept>
+
+#define DEFAULT_APP_ICON "application-x-executable"
 
 namespace wapanel::applet {
 
@@ -105,8 +107,15 @@ auto window_button::toplevel_event_handler(wl::toplevel_event event) -> void {
 				rendered_icon = gtk_icon_theme_load_icon(default_icon_theme, m_toplevel->app_id.c_str(), icon_height,
 														 GTK_ICON_LOOKUP_FORCE_REGULAR, NULL);
 			} else {
-				rendered_icon = gtk_icon_theme_load_icon(default_icon_theme, search_for_icon(m_toplevel->app_id.c_str()).c_str(), icon_height,
-														 GTK_ICON_LOOKUP_FORCE_REGULAR, NULL);
+				std::string icon_name = search_for_icon(m_toplevel->app_id.c_str());
+
+				if (!gtk_icon_theme_has_icon(default_icon_theme, icon_name.c_str())) {
+					icon_name = DEFAULT_APP_ICON;
+				}
+
+				rendered_icon
+					= gtk_icon_theme_load_icon(default_icon_theme, icon_name.c_str(),
+											   icon_height, GTK_ICON_LOOKUP_FORCE_REGULAR, NULL);
 			}
 
 			m_icon = GTK_IMAGE(gtk_image_new_from_pixbuf(rendered_icon));
@@ -149,23 +158,41 @@ auto window_button::toplevel_event_handler(wl::toplevel_event event) -> void {
 }
 
 auto window_button::search_for_icon(std::string app_id) -> std::string {
-	std::string icon_name;
+	std::string icon_name = "";
+
+	std::string app_id_lowercase = app_id;
+	std::transform(app_id_lowercase.begin(), app_id_lowercase.end(), app_id_lowercase.begin(), ::toupper);
 
 	for (auto &&directory_path : { "/usr/share/applications/", "/usr/local/share/applications/" }) {
-		if(icon_name.length() > 0) {
-			break;
-		}
+		if (icon_name.length() > 0) { break; }
 
-		for(auto &&directory_entry : std::filesystem::directory_iterator(directory_path)) {
+		for (auto &&directory_entry : std::filesystem::directory_iterator(directory_path)) {
 			if (!directory_entry.is_regular_file()) continue;
 
-			if(directory_entry.path().stem() == app_id) {
-				GDesktopAppInfo* app_info = g_desktop_app_info_new_from_filename(directory_entry.path().c_str());
+			if (directory_entry.path().stem() == app_id || directory_entry.path().stem() == app_id_lowercase) {
+				GDesktopAppInfo *app_info = g_desktop_app_info_new_from_filename(directory_entry.path().c_str());
 				icon_name = g_desktop_app_info_get_string(app_info, "Icon");
 				break;
 			}
+
+			if (directory_entry.path().stem().has_extension()) {
+				std::string app_name_ext = directory_entry.path().stem().extension().stem();
+				std::string app_name_ext_lowercase = app_name_ext;
+
+				std::transform(app_name_ext_lowercase.begin(), app_name_ext_lowercase.end(),
+							   app_name_ext_lowercase.begin(), ::toupper);
+
+				if (app_name_ext == "." + app_id || app_name_ext_lowercase == "." + app_id
+					|| app_name_ext_lowercase == "." + app_id_lowercase) {
+					GDesktopAppInfo *app_info = g_desktop_app_info_new_from_filename(directory_entry.path().c_str());
+					icon_name = g_desktop_app_info_get_string(app_info, "Icon");
+					break;
+				}
+			}
 		}
 	}
+
+	if (icon_name.length() == 0) { icon_name = DEFAULT_APP_ICON; }
 
 	return icon_name;
 }
