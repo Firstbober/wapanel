@@ -1,5 +1,7 @@
 #include "task_switcher.hh"
 #include "../../log.hh"
+#include "gio/gmenu.h"
+#include "gmodule.h"
 #include "wl_toplevel.hh"
 #include "wl_toplevel_manager.hh"
 #include "wlr-foreign-toplevel-management-unstable-v1-client-protocol.h"
@@ -54,6 +56,48 @@ auto task_switcher::window_button_ready(wl::toplevel *wl_toplevel) -> void {
 	gtk_widget_show_all(GTK_WIDGET(m_window_button_container));
 }
 
+auto task_switcher::window_button_click_event(GdkEvent *event, wl::toplevel *toplevel) -> void {
+	GdkEventButton *event_button;
+	if (event->type == GDK_BUTTON_PRESS) {
+		event_button = (GdkEventButton *)event;
+		if (event_button->button == GDK_BUTTON_SECONDARY) {
+			m_context_menu = GTK_MENU(gtk_menu_new());
+			GtkWidget *item;
+
+			auto on_minimize = +[](GtkMenuItem *menu_item, wl::toplevel *toplevel) { toplevel->set_minimized(); };
+			auto on_maximize = +[](GtkMenuItem *menu_item, wl::toplevel *toplevel) { toplevel->set_maximized(); };
+			auto on_unminimize = +[](GtkMenuItem *menu_item, wl::toplevel *toplevel) { toplevel->unset_minimized(); };
+			auto on_unmaximize = +[](GtkMenuItem *menu_item, wl::toplevel *toplevel) { toplevel->unset_maximized(); };
+			auto on_close = +[](GtkMenuItem *menu_item, wl::toplevel *toplevel) { toplevel->close(); };
+			auto on_show = +[](GtkMenuItem *menu_item, wl::toplevel *toplevel) { toplevel->set_activated(); };
+
+			if (toplevel->mgid == wl::toplevel_manager::get().current_window) {
+				item = gtk_menu_item_new_with_label("Minimize");
+				g_signal_connect(item, "activate", G_CALLBACK(on_minimize), toplevel);
+				gtk_container_add(GTK_CONTAINER(m_context_menu), item);
+
+				item = gtk_menu_item_new_with_label("Maximize");
+				g_signal_connect(item, "activate", G_CALLBACK(on_maximize), toplevel);
+				gtk_container_add(GTK_CONTAINER(m_context_menu), item);
+			} else if (toplevel->state == wl::toplevel_state::MINIMIZED) {
+				item = gtk_menu_item_new_with_label("Unminimize");
+				g_signal_connect(item, "activate", G_CALLBACK(on_unminimize), toplevel);
+				gtk_container_add(GTK_CONTAINER(m_context_menu), item);
+			}
+
+			item = gtk_separator_menu_item_new();
+			gtk_container_add(GTK_CONTAINER(m_context_menu), item);
+
+			item = gtk_menu_item_new_with_label("Close");
+			g_signal_connect(item, "activate", G_CALLBACK(on_close), toplevel);
+			gtk_container_add(GTK_CONTAINER(m_context_menu), item);
+
+			gtk_widget_show_all(GTK_WIDGET(m_context_menu));
+			gtk_menu_popup_at_pointer(GTK_MENU(m_context_menu), event);
+		}
+	}
+}
+
 // Window button
 
 window_button::window_button(wl::toplevel *wl_toplevel, task_switcher *task_switcher) {
@@ -88,10 +132,22 @@ window_button::window_button(wl::toplevel *wl_toplevel, task_switcher *task_swit
 		}),
 		m_button_toggled_data);
 
+	m_button_click_event_data = new button_click_event_data { this->m_toplevel, this->m_task_switcher };
+
+	g_signal_connect(m_button, "button_press_event",
+					 G_CALLBACK(+[](GtkWidget *widget, GdkEvent *event, button_click_event_data *data) {
+						 data->task_switcher->window_button_click_event(event, data->toplevel);
+						 return false;
+					 }),
+					 m_button_click_event_data);
+
 	gtk_container_add(GTK_CONTAINER(m_button), GTK_WIDGET(m_aligment_box));
 	gtk_container_add(GTK_CONTAINER(m_flow_box_child), GTK_WIDGET(m_button));
 }
-window_button::~window_button() { delete this->m_button_toggled_data; }
+window_button::~window_button() {
+	delete this->m_button_toggled_data;
+	delete this->m_button_click_event_data;
+}
 
 auto window_button::get_widget() -> GtkWidget * { return GTK_WIDGET(m_flow_box_child); }
 
@@ -109,13 +165,10 @@ auto window_button::toplevel_event_handler(wl::toplevel_event event) -> void {
 			} else {
 				std::string icon_name = search_for_icon(m_toplevel->app_id.c_str());
 
-				if (!gtk_icon_theme_has_icon(default_icon_theme, icon_name.c_str())) {
-					icon_name = DEFAULT_APP_ICON;
-				}
+				if (!gtk_icon_theme_has_icon(default_icon_theme, icon_name.c_str())) { icon_name = DEFAULT_APP_ICON; }
 
-				rendered_icon
-					= gtk_icon_theme_load_icon(default_icon_theme, icon_name.c_str(),
-											   icon_height, GTK_ICON_LOOKUP_FORCE_REGULAR, NULL);
+				rendered_icon = gtk_icon_theme_load_icon(default_icon_theme, icon_name.c_str(), icon_height,
+														 GTK_ICON_LOOKUP_FORCE_REGULAR, NULL);
 			}
 
 			m_icon = GTK_IMAGE(gtk_image_new_from_pixbuf(rendered_icon));
@@ -196,5 +249,4 @@ auto window_button::search_for_icon(std::string app_id) -> std::string {
 
 	return icon_name;
 }
-
 }
