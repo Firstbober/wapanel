@@ -41,6 +41,7 @@ task_switcher::task_switcher(wap_t_applet_config applet_config) {
 	gtk_flow_box_set_selection_mode(m_window_button_container, GTK_SELECTION_NONE);
 
 	gtk_container_add(GTK_CONTAINER(m_scroll_window), GTK_WIDGET(m_window_button_container));
+	gtk_scrolled_window_set_overlay_scrolling(m_scroll_window, false);
 
 	// Config resolving
 
