@@ -113,3 +113,38 @@ Separator
 This is the default config of **separator** applet.
 All you need to know is, `stretch` extends applet to fill all of the panel,
 `margin_start` and `margin_end` changes margins of applet.
+
+-------------
+Task switcher
+-------------
+
+.. code-block:: toml
+
+	[[panel.applet]]
+	name = "task-switcher"
+		[panel.applet.mode.scroll]
+		fallback_icon = "application-x-executable"
+		expand = true
+		minimum_windows_per_row = 6
+		maximum_windows_per_row = 12
+			[panel.applet.mode.scroll.button]
+			icon_only = false
+			gap = 8
+			flat = false
+			icon_height = -1
+
+This text above is default settings. You can ommit all of this but `name` must be present.
+-1 means automatic option.
+
+=================================== ========================================================== ===========
+**Parameter**                       **Description**											   **Content**
+----------------------------------- ---------------------------------------------------------- -----------
+mode.scroll.fallback_icon           Fallback icon if applet can't find any.					   Text
+mode.scroll.expand                  If applet should expand to fill as much space as possible. true/false
+mode.scroll.minimum_windows_per_row Minimum window buttons per task bar row.                   Integer
+mode.scroll.maximum_windows_per_row Maximum window buttons per task bar row.                   Integer
+mode.scroll.button.icon_only        If only icon should be presented on button.                true/false
+mode.scroll.button.gap				Gap between icon and window title.                         Integer
+mode.scroll.button.flat             If button should be without shadows.                       true/false
+mode.scroll.button.icon_height      Height of icon.                                            Integer
+=================================== ========================================================== ===========
