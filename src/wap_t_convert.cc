@@ -1,5 +1,6 @@
 #include "wap_t_convert.hh"
 #include "log.hh"
+#include "toml11/toml/types.hpp"
 
 namespace wapanel::conv {
 
@@ -176,7 +177,7 @@ auto convert_toml_to_wap_t_config_variable(toml::value &value, unsigned int pane
 	toml::table tm_table;
 
 	tm_table = value.as_table();
-	tm_table["__panel_height"] = panel_height;
+	tm_table["__panel_height"] = toml::integer(panel_height);
 
 	config_variable->type = WAP_CONF_VAR_TYPE_TABLE;
 

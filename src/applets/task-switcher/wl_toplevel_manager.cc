@@ -73,6 +73,10 @@ auto toplevel_manager::clean() -> void {
 	m_on_toplevel_new_callback.clear();
 	m_on_toplevel_finished_callback.clear();
 
+	for(auto &&[key, val] : toplevels) {
+		val->clean();
+	}
+
 	log_info("Cleaned toplevel_manager");
 }
 

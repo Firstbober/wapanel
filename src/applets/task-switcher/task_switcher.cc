@@ -1,5 +1,6 @@
 #include "task_switcher.hh"
 #include "../../log.hh"
+#include "appletapi.h"
 #include "gio/gmenu.h"
 #include "gmodule.h"
 #include "wl_toplevel.hh"
@@ -8,8 +9,6 @@
 #include <filesystem>
 #include <gio/gdesktopappinfo.h>
 #include <stdexcept>
-
-#define DEFAULT_APP_ICON "application-x-executable"
 
 namespace wapanel::applet {
 
@@ -30,6 +29,83 @@ task_switcher::task_switcher(wap_t_applet_config applet_config) {
 
 	log_info("Created handles for wl_toplevel_manager events");
 
+	// Config resolving
+
+	if (wapi_key_exists(&applet_config.root, "__panel_height")) {
+		_wap_t_config_variable *var = wapi_get_var_from_table(&applet_config.root, "__panel_height");
+		this->config.__panel_height = wapi_var_as_integer(var);
+	}
+
+	_wap_t_config_variable *mode_tb = NULL;
+	_wap_t_config_variable *mode_scroll_tb = NULL;
+	_wap_t_config_variable *mode_scroll_button_tb = NULL;
+
+	if (wapi_key_exists(&applet_config.root, "mode")) {
+		mode_tb = wapi_get_var_from_table(&applet_config.root, "mode");
+	}
+
+	if (mode_tb != NULL && wapi_key_exists(mode_tb, "scroll")) {
+		mode_scroll_tb = wapi_get_var_from_table(mode_tb, "scroll");
+	}
+
+	if (mode_scroll_tb != NULL) {
+		_wap_t_config_variable *var = NULL;
+
+		if (wapi_key_exists(mode_scroll_tb, "fallback_icon")) {
+			var = wapi_get_var_from_table(mode_scroll_tb, "fallback_icon");
+			if (var->type == WAP_CONF_VAR_TYPE_STRING) this->config.scroll.fallback_icon = wapi_var_as_string(var);
+		}
+
+		if (wapi_key_exists(mode_scroll_tb, "expand")) {
+			var = wapi_get_var_from_table(mode_scroll_tb, "expand");
+			if (var->type == WAP_CONF_VAR_TYPE_BOOLEAN) this->config.scroll.expand = wapi_var_as_boolean(var);
+		}
+
+		if (wapi_key_exists(mode_scroll_tb, "minimum_windows_per_row")) {
+			var = wapi_get_var_from_table(mode_scroll_tb, "inimum_windows_per_row");
+			if (var->type == WAP_CONF_VAR_TYPE_INTEGER)
+				this->config.scroll.minimum_windows_per_row = wapi_var_as_integer(var);
+		}
+
+		if (wapi_key_exists(mode_scroll_tb, "maximum_windows_per_row")) {
+			var = wapi_get_var_from_table(mode_scroll_tb, "maximum_windows_per_row");
+			if (var->type == WAP_CONF_VAR_TYPE_INTEGER)
+				this->config.scroll.minimum_windows_per_row = wapi_var_as_integer(var);
+		}
+
+		if (wapi_key_exists(mode_scroll_tb, "button")) {
+			mode_scroll_button_tb = wapi_get_var_from_table(mode_scroll_tb, "button");
+			if (mode_scroll_button_tb->type != WAP_CONF_VAR_TYPE_TABLE) mode_scroll_button_tb = NULL;
+		}
+	}
+
+	if (mode_scroll_button_tb != NULL) {
+		_wap_t_config_variable *var = NULL;
+
+		if (wapi_key_exists(mode_scroll_button_tb, "icon_only")) {
+			var = wapi_get_var_from_table(mode_scroll_button_tb, "icon_only");
+			if (var->type == WAP_CONF_VAR_TYPE_BOOLEAN) this->config.scroll.button.icon_only = wapi_var_as_boolean(var);
+		}
+
+		if (wapi_key_exists(mode_scroll_button_tb, "gap")) {
+			var = wapi_get_var_from_table(mode_scroll_button_tb, "gap");
+			if (var->type == WAP_CONF_VAR_TYPE_INTEGER) this->config.scroll.button.gap = wapi_var_as_integer(var);
+		}
+
+		if (wapi_key_exists(mode_scroll_button_tb, "flat")) {
+			var = wapi_get_var_from_table(mode_scroll_button_tb, "flat");
+			if (var->type == WAP_CONF_VAR_TYPE_BOOLEAN) this->config.scroll.button.flat = wapi_var_as_boolean(var);
+		}
+
+		if (wapi_key_exists(mode_scroll_button_tb, "icon_height")) {
+			var = wapi_get_var_from_table(mode_scroll_button_tb, "icon_height");
+			if (var->type == WAP_CONF_VAR_TYPE_INTEGER)
+				this->config.scroll.button.icon_height = wapi_var_as_integer(var);
+		}
+	}
+
+	log_info("Initialized config variables");
+
 	// Basic variable initialization
 
 	m_scroll_window = GTK_SCROLLED_WINDOW(gtk_scrolled_window_new(NULL, NULL));
@@ -39,9 +115,12 @@ task_switcher::task_switcher(wap_t_applet_config applet_config) {
 	gtk_scrolled_window_set_propagate_natural_width(m_scroll_window, false);
 	gtk_scrolled_window_set_propagate_natural_height(m_scroll_window, false);
 
+	gtk_widget_set_hexpand(GTK_WIDGET(m_scroll_window), this->config.scroll.expand);
+
 	m_window_button_container = GTK_FLOW_BOX(gtk_flow_box_new());
 	gtk_flow_box_set_homogeneous(m_window_button_container, true);
-	gtk_flow_box_set_min_children_per_line(m_window_button_container, 12);
+	gtk_flow_box_set_min_children_per_line(m_window_button_container, this->config.scroll.minimum_windows_per_row);
+	gtk_flow_box_set_max_children_per_line(m_window_button_container, this->config.scroll.maximum_windows_per_row);
 	gtk_flow_box_set_selection_mode(m_window_button_container, GTK_SELECTION_NONE);
 
 	gtk_container_add(GTK_CONTAINER(m_scroll_window), GTK_WIDGET(m_window_button_container));
@@ -49,12 +128,14 @@ task_switcher::task_switcher(wap_t_applet_config applet_config) {
 
 	log_info("Spawned variables for task_switcher");
 
-	// Config resolving
-	/*
-	_wap_t_config_variable *var = wapi_get_var_from_table(&applet_config.root, "__panel_height");
-	int64_t __panel_height = wapi_var_as_integer(var);
-	*/
-	log_info("Initialized config variables");
+	for (auto &&[key, val] : wl::toplevel_manager::get().toplevels) {
+		if (!this->m_buttons.contains(val->mgid)) {
+			m_buttons[val->mgid] = new window_button(val, this);
+			m_buttons[val->mgid]->toplevel_event_handler(wl::toplevel_event::DONE);
+		}
+	}
+
+	log_info("Updated m_buttons");
 }
 task_switcher::~task_switcher() {}
 
@@ -116,14 +197,26 @@ window_button::window_button(wl::toplevel *wl_toplevel, task_switcher *task_swit
 	m_toplevel->on_event([&](wl::toplevel_event event) { this->toplevel_event_handler(event); });
 
 	m_flow_box_child = GTK_FLOW_BOX_CHILD(gtk_flow_box_child_new());
-	gtk_widget_set_hexpand(GTK_WIDGET(m_flow_box_child), true);
+
+	if (m_task_switcher->config.scroll.button.icon_only) {
+		gtk_widget_set_hexpand(GTK_WIDGET(m_flow_box_child), false);
+	} else {
+		gtk_widget_set_hexpand(GTK_WIDGET(m_flow_box_child), true);
+	}
+
 	gtk_widget_set_halign(GTK_WIDGET(m_flow_box_child), GTK_ALIGN_FILL);
 	gtk_widget_set_valign(GTK_WIDGET(m_flow_box_child), GTK_ALIGN_CENTER);
 
 	m_button = GTK_TOGGLE_BUTTON(gtk_toggle_button_new());
-	m_aligment_box = GTK_BOX(gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 8));
+	if (m_task_switcher->config.scroll.button.icon_only) {
+		m_aligment_box = GTK_BOX(gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0));
+	} else {
+		m_aligment_box = GTK_BOX(gtk_box_new(GTK_ORIENTATION_HORIZONTAL, m_task_switcher->config.scroll.button.gap));
+	}
 
 	gtk_widget_set_focus_on_click(GTK_WIDGET(m_button), false);
+
+	if (m_task_switcher->config.scroll.button.flat) { gtk_button_set_relief(GTK_BUTTON(m_button), GTK_RELIEF_NONE); }
 
 	m_button_toggled_data = new button_toggled_data { this->m_toplevel, &wl::toplevel_manager::get() };
 
@@ -170,7 +263,13 @@ auto window_button::toplevel_event_handler(wl::toplevel_event event) -> void {
 		if (!m_button_initialized) {
 			GtkIconTheme *default_icon_theme = gtk_icon_theme_get_default();
 			GdkPixbuf *rendered_icon = NULL;
-			int icon_height = 24;
+			int icon_height;
+
+			if (m_task_switcher->config.scroll.button.icon_height != -1) {
+				icon_height = m_task_switcher->config.scroll.button.icon_height;
+			} else {
+				icon_height = m_task_switcher->config.__panel_height * 1.5;
+			}
 
 			if (gtk_icon_theme_has_icon(default_icon_theme, m_toplevel->app_id.c_str())) {
 				rendered_icon = gtk_icon_theme_load_icon(default_icon_theme, m_toplevel->app_id.c_str(), icon_height,
@@ -181,7 +280,7 @@ auto window_button::toplevel_event_handler(wl::toplevel_event event) -> void {
 
 				if (!gtk_icon_theme_has_icon(default_icon_theme, icon_name.c_str())) {
 					log_warn("app_id doesn't have any defined icon available in icon theme, setting default icon");
-					icon_name = DEFAULT_APP_ICON;
+					icon_name = m_task_switcher->config.scroll.fallback_icon;
 				}
 
 				rendered_icon = gtk_icon_theme_load_icon(default_icon_theme, icon_name.c_str(), icon_height,
@@ -195,8 +294,12 @@ auto window_button::toplevel_event_handler(wl::toplevel_event event) -> void {
 			gtk_label_set_line_wrap_mode(m_title, PANGO_WRAP_CHAR);
 			gtk_label_set_ellipsize(m_title, PANGO_ELLIPSIZE_END);
 
-			gtk_box_pack_start(m_aligment_box, GTK_WIDGET(m_icon), false, true, 0);
-			gtk_box_pack_start(m_aligment_box, GTK_WIDGET(m_title), false, true, 0);
+			if (!m_task_switcher->config.scroll.button.icon_only) {
+				gtk_box_pack_start(m_aligment_box, GTK_WIDGET(m_icon), false, true, 0);
+				gtk_box_pack_start(m_aligment_box, GTK_WIDGET(m_title), false, true, 0);
+			} else {
+				gtk_box_pack_start(m_aligment_box, GTK_WIDGET(m_icon), true, false, 0);
+			}
 
 			this->m_task_switcher->window_button_ready(this->m_toplevel);
 			m_button_initialized = true;
@@ -264,7 +367,7 @@ auto window_button::search_for_icon(std::string app_id) -> std::string {
 
 	if (icon_name.length() == 0) {
 		log_warn("app_id is not matching aby .desktop file, setting default icon");
-		icon_name = DEFAULT_APP_ICON;
+		icon_name = m_task_switcher->config.scroll.fallback_icon;
 	}
 
 	return icon_name;

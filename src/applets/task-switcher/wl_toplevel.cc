@@ -19,7 +19,8 @@ auto static zwlr_toplevel_data_title(void *data, zwlr_foreign_toplevel_handle_v1
 	auto wl_toplevel = static_cast<applet_wl::toplevel *>(data);
 	wl_toplevel->title = title;
 
-	if (wl_toplevel->m_callback != NULL) wl_toplevel->m_callback(applet_wl::toplevel_event::TITLE_CHANGE);
+	for(auto &&callback : wl_toplevel->callbacks)
+		callback(applet_wl::toplevel_event::TITLE_CHANGE);
 }
 
 auto static zwlr_toplevel_data_app_id(void *data, zwlr_foreign_toplevel_handle_v1 *handle, const char *app_id) -> void {
@@ -90,20 +91,27 @@ toplevel::toplevel(zwlr_foreign_toplevel_handle_v1 *handle, unsigned int id, str
 }
 toplevel::~toplevel() {}
 
+auto toplevel::clean() -> void {
+	this->callbacks.clear();
+}
+
 auto toplevel::event_output_enter(wl_output *output) -> void {
-	if (m_callback != NULL) m_callback(toplevel_event::OUTPUT_ENTER);
+	for(auto &&callback : callbacks)
+		callback(toplevel_event::OUTPUT_ENTER);
 }
 auto toplevel::event_output_leave(wl_output *output) -> void {
-	if (m_callback != NULL) m_callback(toplevel_event::OUTPUT_LEAVE);
+	for(auto &&callback : callbacks)
+		callback(toplevel_event::OUTPUT_LEAVE);
 }
 auto toplevel::event_done() -> void {
 	if (this->state == toplevel_state::ACTIVATED) applet_wl::toplevel_manager::get().current_window = this->mgid;
 
-	if (m_callback != NULL) m_callback(toplevel_event::DONE);
+	for(auto &&callback : callbacks)
+		callback(toplevel_event::DONE);
 }
 
 auto toplevel::on_event(std::function<void(toplevel_event)> callback) -> void {
-	m_callback = callback;
+	this->callbacks.push_back(callback);
 	log_info("Registred new event listener in wl_toplevel");
 }
 

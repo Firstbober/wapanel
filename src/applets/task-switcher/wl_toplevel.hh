@@ -3,6 +3,7 @@
 #include <string>
 #include <wlr-foreign-toplevel-management-unstable-v1-client-protocol.h>
 #include <functional>
+#include <vector>
 
 namespace wapanel::applet::wl {
 
@@ -15,10 +16,12 @@ struct toplevel {
 	toplevel_state state;
 	unsigned int mgid;
 
-	std::function<void(toplevel_event)> m_callback;
+	std::vector<std::function<void(toplevel_event)>> callbacks;
 
 	toplevel(zwlr_foreign_toplevel_handle_v1 *handle, unsigned int id, struct wl_seat* seat);
 	~toplevel();
+
+	auto clean() -> void;
 
 	auto event_output_enter(wl_output *output) -> void;
 	auto event_output_leave(wl_output *output) -> void;

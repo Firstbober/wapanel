@@ -6,6 +6,23 @@
 #include <gtk/gtk.h>
 #include <unordered_map>
 
+/*
+	Standard configuration
+
+	[[panel.applet]]
+	name = "task-switcher"
+	[panel.applet.mode.scroll]
+		fallback_icon = "application-x-executable"
+		expand = true
+		minimum_windows_per_row = 6
+		maximum_windows_per_row = 12
+		[panel.applet.mode.scroll.button]
+			icon_only = false
+			gap = 8
+			flat = false
+			icon_height = -1
+*/
+
 namespace wapanel::applet {
 
 class task_switcher;
@@ -34,7 +51,6 @@ private:
 		class task_switcher *task_switcher;
 	} * m_button_click_event_data;
 
-	auto toplevel_event_handler(wl::toplevel_event event) -> void;
 	auto search_for_icon(std::string app_id) -> std::string;
 
 public:
@@ -42,6 +58,7 @@ public:
 	~window_button();
 
 	auto get_widget() -> GtkWidget *;
+	auto toplevel_event_handler(wl::toplevel_event event) -> void;
 };
 
 class task_switcher {
@@ -49,7 +66,7 @@ private:
 	GtkFlowBox *m_window_button_container;
 	GtkScrolledWindow *m_scroll_window;
 
-	GtkMenu* m_context_menu = NULL;
+	GtkMenu *m_context_menu = NULL;
 
 	std::unordered_map<unsigned int, window_button *> m_buttons;
 
@@ -61,6 +78,24 @@ public:
 
 	auto window_button_ready(wl::toplevel *wl_toplevel) -> void;
 	auto window_button_click_event(GdkEvent *event, wl::toplevel *toplevel) -> void;
+
+	struct config {
+		unsigned int __panel_height = 16;
+
+		struct scroll {
+			std::string fallback_icon = "application-x-executable";
+			bool expand = true;
+			unsigned int minimum_windows_per_row = 6;
+			unsigned int maximum_windows_per_row = 12;
+
+			struct button {
+				bool icon_only = false;
+				unsigned int gap = 8;
+				bool flat = false;
+				int icon_height = -1;
+			} button;
+		} scroll;
+	} config;
 };
 
 }
