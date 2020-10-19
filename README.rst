@@ -25,7 +25,7 @@ Applets
 - ☑ Separator
 - ☐ System tray (Freedesktop StatusNotifierItem implementation)
 - ☐ Volume control (PulseAudio, PipeWire in future)
-- ☐ Task switcher
+- ☑ Task switcher
 - ☐ Activator
 - ☐ App finder
 

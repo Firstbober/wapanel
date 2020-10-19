@@ -1,5 +1,6 @@
 #include "wap_t_convert.hh"
 #include "log.hh"
+#include "toml11/toml/types.hpp"
 
 namespace wapanel::conv {
 
@@ -170,12 +171,13 @@ auto recurse_table(toml::table &table) -> std::vector<_wap_t_config_variable> {
 	return _content;
 }
 
-auto convert_toml_to_wap_t_config_variable(toml::value &value) -> _wap_t_config_variable* {
+auto convert_toml_to_wap_t_config_variable(toml::value &value, unsigned int panel_height) -> _wap_t_config_variable* {
 	_wap_t_config_variable *config_variable
 		= reinterpret_cast<_wap_t_config_variable *>(malloc(sizeof(_wap_t_config_variable)));
 	toml::table tm_table;
 
 	tm_table = value.as_table();
+	tm_table["__panel_height"] = toml::integer(panel_height);
 
 	config_variable->type = WAP_CONF_VAR_TYPE_TABLE;
 
