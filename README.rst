@@ -7,13 +7,13 @@ Wapanel
 =======
 
 The panel all you need.
-Probably first non-tiling-targeted panel for Wayland with decent XFCE-like applets. Until we get port of some lightweight DE to Wayland :)
+Simple panel for Wayland with decent XFCE-like applets. Made for my needs but maybe it will fill your needs too.
 
 Features
 ========
 
 - Decent configurability
-- Useful applets like task switcher or app finder
+- Commonly used applets like task switcher or app finder
 - Config hot reloading
 - Wayland compatible
 - Exposed API for writing custom applets
@@ -46,7 +46,7 @@ Dependencies
 Building from source
 --------------------
 
-Be sure you have all listed dependencies and enter:
+Be sure you have installed all listed dependencies and enter:
 
 .. code-block:: sh
 
