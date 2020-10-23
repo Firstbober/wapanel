@@ -16,12 +16,12 @@ function build {
 
 	if [ "$1" == '-r' ] || [ "$1" == "--release" ]; then
 		BUILD_MODE="release"
-		meson setup "$BUILD_FILES_DIRECTORY" --wipe;
-		meson "$BUILD_FILES_DIRECTORY" --buildtype=$BUILD_MODE;
+		meson configure "$BUILD_FILES_DIRECTORY" -Dprefix=$RUNTIME_OUTPUT_DIRECTORY -Dbuildtype=$BUILD_MODE;
+		meson "$BUILD_FILES_DIRECTORY" -Dbuildtype=$BUILD_MODE;
 	elif [ "$1" == "-d" ] || [ "$1" == "--debug" ]; then
 		BUILD_MODE="debug"
-		meson setup "$BUILD_FILES_DIRECTORY" --wipe;
-		meson "$BUILD_FILES_DIRECTORY" --buildtype=$BUILD_MODE;
+		meson configure "$BUILD_FILES_DIRECTORY" -Dprefix=$RUNTIME_OUTPUT_DIRECTORY -Dbuildtype=$BUILD_MODE;
+		meson "$BUILD_FILES_DIRECTORY" -Dbuildtype=$BUILD_MODE;
 	fi
 
 	if [ "$1" == '-t' ] || [ "$1" == "--tests" ]; then
@@ -29,8 +29,8 @@ function build {
 	fi
 
 	if [ ! -f "$BUILD_FILES_DIRECTORY"/build.ninja ]; then
-		meson ""$BUILD_FILES_DIRECTORY"" --buildtype=$BUILD_MODE;
-		meson configure "$BUILD_FILES_DIRECTORY" -Dprefix=$RUNTIME_OUTPUT_DIRECTORY;
+		meson configure "$BUILD_FILES_DIRECTORY" -Dprefix=$RUNTIME_OUTPUT_DIRECTORY -Dbuildtype=$BUILD_MODE;
+		meson ""$BUILD_FILES_DIRECTORY"" -Dbuildtype=$BUILD_MODE;
 
 		ln -s "$BUILD_FILES_DIRECTORY"/compile_commands.json .;
 	fi
