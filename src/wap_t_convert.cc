@@ -17,6 +17,7 @@ auto resolve_array(toml::array &array) -> std::vector<_wap_t_config_variable> {
 	for (auto &&value : array) {
 		_wap_t_config_variable variable = {};
 		variable.key.number = current_index;
+		variable.key.string = NULL;
 
 		// Match type and put good value into variable
 		switch (value.type()) {
@@ -102,14 +103,18 @@ auto recurse_table(toml::table &table) -> std::vector<_wap_t_config_variable> {
 
 	for (auto &&val_pair : table) {
 		_wap_t_config_variable variable = {};
-		variable.key.string = val_pair.first.c_str();
+
+		char *temp_str = (char *)malloc(val_pair.first.length() + 1);
+		memcpy(temp_str, val_pair.first.c_str(), val_pair.first.length() + 1);
+
+		variable.key.string = temp_str;
 
 		// Match type and put good value into variable
 		switch (val_pair.second.type()) {
 		case toml::value_t::string: {
 			variable.type = WAP_CONF_VAR_TYPE_STRING;
 
-			char *temp_str = (char *)malloc(val_pair.second.as_string().str.length() + 1);
+			temp_str = (char *)malloc(val_pair.second.as_string().str.length() + 1);
 			memcpy(temp_str, val_pair.second.as_string().str.c_str(), val_pair.second.as_string().str.length() + 1);
 
 			variable.content.value.string = temp_str;
@@ -242,6 +247,8 @@ auto free_wap_t_config_variable(_wap_t_config_variable variable) -> void {
 	default:
 		break;
 	}
+
+	if (variable.key.string != NULL) { free((void *)variable.key.string); }
 }
 
 }
