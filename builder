@@ -33,7 +33,6 @@ EXECUTABLE_OUTPUT = "output"
 
 __version__ = "1.6.0"
 
-
 class BuildBackend(ABC):
     TriggerFile = ""
 
@@ -127,8 +126,13 @@ class Meson(BuildBackend):
                         if no_call:
                             return [exec_path, '/'.join(target["install_filename"][0].split("/")[:-1])]
                         else:
-                            subprocess.call(
+                            proc = subprocess.Popen(
                                 exec_path, cwd='/'.join(target["install_filename"][0].split("/")[:-1]))
+                            out, err = proc.communicate()
+                            print("Output: ", out, "\nError: ", err, "\nReturn code: ", proc.returncode)
+                            if len(RETURN_CODES) >= abs(proc.returncode):
+                                print("Message: ", RETURN_CODES[abs(proc.returncode)-1])
+
                     else:
                         exec_path = [os.getcwd() + "/" + EXECUTABLE_OUTPUT + "/" +
                                      requested_binary_type + "/bin/" +
@@ -141,9 +145,13 @@ class Meson(BuildBackend):
                             return [exec_path, os.getcwd() + "/" + EXECUTABLE_OUTPUT + "/" +
                                     requested_binary_type + "/bin/"]
                         else:
-                            subprocess.call(
+                            proc = subprocess.Popen(
                                 exec_path, cwd=os.getcwd() + "/" + EXECUTABLE_OUTPUT + "/" +
                                 requested_binary_type + "/bin/")
+                            out, err = proc.communicate()
+                            print("Output: ", out, "\nError: ", err, "\nReturn code: ", proc.returncode)
+                            if len(RETURN_CODES) >= abs(proc.returncode):
+                                print("Message: ", RETURN_CODES[abs(proc.returncode)-1])
         else:
             print("Project is not compiled yet!")
 
@@ -193,6 +201,24 @@ def format_files(directory, extensions):
 
 def keyboard_interrupt_handler(signal, frame):
     exit(0)
+
+RETURN_CODES = [
+    "1 (SIGHUP) [Hangup detected on controlling terminal or death of controlling process]",
+    "2 (SIGINT) [Interrupt from keyboard]",
+    "3 (SIGQUIT)[Quit from keyboard]",
+    "4 (SIGILL) [Illegal Instruction]",
+    "5 (SIGTRAP)[]",
+    "6 (SIGABRT)[Abort signal from abort(3)]",
+    "7 (SIGBUS) []",
+    "8 (SIGFPE) [Floating point exception]",
+    "9 (SIGKILL)[Kill signal]",
+    "10 (SIGUSR1) []",
+    "11 (SIGEGV)  [Invalid memory reference]",
+    "12 (SIGUSR2) []",
+    "13 (SIGPIPE) [Broken pipe: write to pipe with no readers]",
+    "14 (SIGALRM) [Timer signal from alarm(2)]",
+    "15 (SIGTERM) [Termination signal]",
+]
 
 if __name__ == "__main__":
     signal.signal(signal.SIGINT, keyboard_interrupt_handler)
