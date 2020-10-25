@@ -1,109 +1,307 @@
-#!/bin/bash
+#!/bin/python
 
-BUILD_FILES_DIRECTORY="$(pwd)"/build
-DOCS_DIRECTORY="$(pwd)"/docs
-RUNTIME_OUTPUT_DIRECTORY="$(pwd)"/bin
+from abc import ABC, abstractmethod
+import os
+import subprocess
+import argparse
+import json
+import shutil
+import glob
+import signal
 
-export PKG_CONFIG_PATH=$(pwd)/bin/lib/pkgconfig
+# Modify this if you need
+# defaults will be enough for most people
+BUILD_DIRECTORY = "build"
+EXECUTABLE_OUTPUT = "output"
 
-function build {
-	if [ "$1" == '-f' ] || [ "$1" == "--force" ]; then
-		del_build && cd ../ ;
-	fi
 
-    BUILD_MODE="plain"
-	BUILD_TESTS=false
+# builder.py
+# Copyright 2020 Firstbober
+#
+# Permission to use, copy, modify,
+# and/or distribute this software for any purpose with or without fee is hereby granted,
+# provided that the above copyright notice and this permission notice appear in all copies.
+#
+# THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL
+# WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED
+# WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL
+# THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR
+# CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+# LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT,
+# NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN
+# CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
-	if [ "$1" == '-r' ] || [ "$1" == "--release" ]; then
-		BUILD_MODE="release"
-		meson configure "$BUILD_FILES_DIRECTORY" -Dprefix=$RUNTIME_OUTPUT_DIRECTORY -Dbuildtype=$BUILD_MODE;
-		meson "$BUILD_FILES_DIRECTORY" -Dbuildtype=$BUILD_MODE;
-	elif [ "$1" == "-d" ] || [ "$1" == "--debug" ]; then
-		BUILD_MODE="debug"
-		meson configure "$BUILD_FILES_DIRECTORY" -Dprefix=$RUNTIME_OUTPUT_DIRECTORY -Dbuildtype=$BUILD_MODE;
-		meson "$BUILD_FILES_DIRECTORY" -Dbuildtype=$BUILD_MODE;
-	fi
+__version__ = "1.6.0"
 
-	if [ "$1" == '-t' ] || [ "$1" == "--tests" ]; then
-		BUILD_TESTS=true
-	fi
 
-	if [ ! -f "$BUILD_FILES_DIRECTORY"/build.ninja ]; then
-		meson configure "$BUILD_FILES_DIRECTORY" -Dprefix=$RUNTIME_OUTPUT_DIRECTORY -Dbuildtype=$BUILD_MODE;
-		meson ""$BUILD_FILES_DIRECTORY"" -Dbuildtype=$BUILD_MODE;
+class BuildBackend(ABC):
+    TriggerFile = ""
 
-		ln -s "$BUILD_FILES_DIRECTORY"/compile_commands.json .;
-	fi
+    def build(self, opts):
+        pass
 
-	cd "$BUILD_FILES_DIRECTORY" && ninja && ninja install;
-}
+    def run(self, opts, args):
+        pass
 
-function del_build { cd "$BUILD_FILES_DIRECTORY" && rm -rf * ; }
+    def valgrind(self, opts, args):
+        pass
 
-function format_files {
-	hash clang-format 2>/dev/null || { echo >&2 "'clang-format' is required but not found"; exit 1; }
-	clang-format -i $(find ./src -type f \( -name '*.hpp' -o -name '*.cpp' \));
-}
+    def test(self, opts):
+        pass
 
-function run () {
-	if [ -z $1 ]; then
-		exef=$(meson introspect "$BUILD_FILES_DIRECTORY" --targets | grep -Po '"name":.*?[^\\]",' | awk -F':' '{print $2}' | cut -d "\"" -f 2 | tail -1);
-	else exef=$1; fi
-    cd "$RUNTIME_OUTPUT_DIRECTORY/bin" && ./"$exef" "${@:2}"
-}
+    def clean(self):
+        pass
 
-function run_tests { cd "$BUILD_FILES_DIRECTORY" && ninja test; }
 
-function run_valgrind () {
-	if [ -z $1 ]; then
-		exef=$(meson introspect "$BUILD_FILES_DIRECTORY" --targets | grep -Po '"name":.*?[^\\]",' | awk -F':' '{print $2}' | cut -d "\"" -f 2 | tail -1);
-	else exef=$1; fi
-	echo $exef
-    cd "$RUNTIME_OUTPUT_DIRECTORY/bin" && valgrind --leak-check=full -v ./"$exef" "${@:2}";
-}
+class Meson(BuildBackend):
+    TriggerFile = "meson.build"
 
-function show_help {
-	printf "builder.sh version 1.5.0
-Usage:
-	%s [COMMAND] [FLAGS | FILE]
+    def build(self, opts):
+        build_type = "plain"
 
-Commands:
-    build          Build entire source code
-    run            Run compiled executable
-    test           Execute project tests
-    valgrind       Run valgrind on project executable
+        if len(opts) > 0:
+            if opts[0] == "build_release":
+                build_type = "release"
+            elif opts[0] == "build_debug":
+                build_type = "debug"
+            elif opts[0] == "build_plain":
+                build_type = "plain"
 
-    clean          Clean project build files and generated documentation
-    fmt            Format all project source code using 'clang-format'
+            if opts[0] != "build_force" and len(opts) > 1:
+                if opts[1] == "build_force":
+                    self.clean()
+            elif opts[0] == "build_force":
+                self.clean()
 
-    br             Build and run
-    brd            Create debug build and execute it
-    brf            Force rebuild project
-    brr            Create release build and execute it
-    bv             Build project and run valgrind on generated executable
+        meson_out = os.popen("meson introspect " +
+                             BUILD_DIRECTORY + " --buildoptions").read()
 
-Flags:
-    -r, --release             Release switch for build command
-    -d, --debug               Debug switch for build command
-" $0
-}
+        if meson_out.startswith("Cu"):
+            os.system("meson setup " + BUILD_DIRECTORY + " . --buildtype " +
+                      build_type + " --prefix " + os.getcwd() + "/" + EXECUTABLE_OUTPUT + "/" + build_type)
 
-case "$1" in
-	"build")    build "$2" ;;
-	"run")      run "${@:2}" ;;
-	"valgrind") run_valgrind "${@:2}" ;;
-	"test")     build "-t" && run_tests ;;
+        if meson_out.startswith("["):
+            meson_build_options = json.loads(meson_out)
 
-	"fmt")      format_files ;;
-	"clean")    del_build ;;
+            for option in meson_build_options:
+                if option["name"] == "buildtype":
+                    if option["value"] != build_type:
+                        os.system("meson configure " + BUILD_DIRECTORY + " --buildtype " +
+                                  build_type + " --prefix " + os.getcwd() + "/" + EXECUTABLE_OUTPUT + "/" + build_type)
 
-	"br")       build && run "${@:2}" ;;
-	"bv")       build && run_valgrind "${@:2}" ;;
-	"brd")      build "-d" && run "${@:2}" ;;
-	"brr")      build "-r" && run "${@:2}" ;;
-	"brf")      build "-f" && run "${@:2}" ;;
+        os.system("meson compile -C " + BUILD_DIRECTORY)
+        os.system("meson install -C " + BUILD_DIRECTORY)
 
-	"help") show_help ;;
+        pass
 
-	*) echo "Invalid argument! Use help!" ;;
-esac
+    def run(self, opts, args):
+        meson_out = os.popen("meson introspect " +
+                             BUILD_DIRECTORY + " --targets").read()
+
+        requested_binary_type = ""
+        no_call = False
+
+        if len(opts) > 0:
+            if opts[0] == "build_release":
+                requested_binary_type = "release"
+            elif opts[0] == "build_debug":
+                requested_binary_type = "debug"
+            elif opts[0] == "build_plain":
+                requested_binary_type = "plain"
+
+            for opt in opts:
+                if opt == "__no_call":
+                    no_call = True
+
+        if meson_out.startswith("["):
+            meson_targets = json.loads(meson_out)
+
+            for target in meson_targets:
+                if target["type"] == "executable":
+                    if requested_binary_type == "":
+                        exec_path = [target["install_filename"][0]]
+
+                        if len(args) > 0:
+                            exec_path += args
+
+                        if no_call:
+                            return [exec_path, '/'.join(target["install_filename"][0].split("/")[:-1])]
+                        else:
+                            subprocess.call(
+                                exec_path, cwd='/'.join(target["install_filename"][0].split("/")[:-1]))
+                    else:
+                        exec_path = [os.getcwd() + "/" + EXECUTABLE_OUTPUT + "/" +
+                                     requested_binary_type + "/bin/" +
+                                     target["install_filename"][0].split("/")[-1]]
+
+                        if len(args) > 0:
+                            exec_path += args
+
+                        if no_call:
+                            return [exec_path, os.getcwd() + "/" + EXECUTABLE_OUTPUT + "/" +
+                                    requested_binary_type + "/bin/"]
+                        else:
+                            subprocess.call(
+                                exec_path, cwd=os.getcwd() + "/" + EXECUTABLE_OUTPUT + "/" +
+                                requested_binary_type + "/bin/")
+        else:
+            print("Project is not compiled yet!")
+
+        pass
+
+    def valgrind(self, opts, args):
+        opts.append("__no_call")
+        exec_info = self.run(opts, args)
+
+        subprocess.call(["valgrind"]+exec_info[0], cwd=exec_info[1])
+        pass
+
+    def test(self, opts):
+        os.system("meson test -C " + BUILD_DIRECTORY)
+        pass
+
+    def clean(self):
+        if os.path.exists(BUILD_DIRECTORY) and os.path.isdir(BUILD_DIRECTORY):
+            shutil.rmtree(BUILD_DIRECTORY)
+
+        print("Removed build directory")
+
+
+_build_backend_registry = [
+    Meson()
+]
+
+
+def find_build_backend():
+    for entry in os.scandir("."):
+        for build_backend in _build_backend_registry:
+            if entry.name == build_backend.TriggerFile:
+                return build_backend
+    return False
+
+
+def format_files(directory, extensions):
+    files = []
+
+    for extension in extensions:
+        for name in glob.glob(directory + "/**/*." + extension, recursive=True):
+            files.append(name)
+
+    os.system("clang-format -i " + ' '.join(files))
+
+    pass
+
+def keyboard_interrupt_handler(signal, frame):
+    exit(0)
+
+if __name__ == "__main__":
+    signal.signal(signal.SIGINT, keyboard_interrupt_handler)
+
+    build_backend = find_build_backend()
+
+    if build_backend == False:
+        print("Cannot find supported build backend!")
+
+    parser = argparse.ArgumentParser(
+        description="builder, version " + __version__)
+
+    parser.add_argument(
+        "-b", "--build", help="build entire source code", action="store_true")
+    parser.add_argument(
+        "-r", "--run", help="run compiled executable", action="store_true")
+    parser.add_argument(
+        "-t", "--test", help="execute project tests", action="store_true")
+    parser.add_argument(
+        "-vg", "--valgrind", help="run valgrind on project executable", action="store_true")
+
+    parser.add_argument(
+        "-c", "--clean", help="clean project build files and generated documentation", action="store_true")
+
+    parser.add_argument(
+        "-f", "--format", help="format all project source code using 'clang-format'", action="store_true")
+
+    parser.add_argument(
+        "-br", "--buildrun", help="build and run", action="store_true")
+    parser.add_argument(
+        "-bv", "--buildvalgrind", help="build project and run valgrind on generated executable", action="store_true")
+
+    parser.add_argument(
+        "--release", help="release switch for building", action="store_true")
+    parser.add_argument(
+        "--debug", help="debug switch for building", action="store_true")
+    parser.add_argument(
+        "--plain", help="plain switch for building", action="store_true")
+    parser.add_argument(
+        "--force", help="force rebuilding", action="store_true")
+
+    parser.add_argument(
+        "--args", help="specify args for executable to be passed", nargs=argparse.REMAINDER)
+
+    parser.add_argument(
+        "--directory", help="directory to format by clang-format")
+    parser.add_argument(
+        "--extensions", help="list of extensions to be formatted")
+
+    parser.add_argument('-v', "--version",
+                        action='version', version=__version__)
+
+    parsed_opts = parser.parse_args()
+
+    if (parsed_opts.build == False
+        and parsed_opts.buildrun == False
+        and parsed_opts.buildvalgrind == False
+        and parsed_opts.clean == False
+        and parsed_opts.format == False
+        and parsed_opts.run == False
+        and parsed_opts.test == False
+            and parsed_opts.valgrind == False):
+
+        print("Use --help to see available actions")
+        exit(0)
+
+    build_system_opts = []
+    addional_args = []
+
+    if parsed_opts.release == True:
+        build_system_opts.append("build_release")
+    elif parsed_opts.debug == True:
+        build_system_opts.append("build_debug")
+    elif parsed_opts.plain == True:
+        build_system_opts.append("build_plain")
+
+    if parsed_opts.force == True:
+        build_system_opts.append("build_force")
+
+    if parsed_opts.args != None:
+        addional_args = parsed_opts.args
+
+    if parsed_opts.build == True:
+        build_backend.build(build_system_opts)
+    elif parsed_opts.run == True:
+        build_backend.run(build_system_opts, addional_args)
+    elif parsed_opts.test == True:
+        build_backend.test(build_system_opts)
+    elif parsed_opts.valgrind == True:
+        build_backend.valgrind(build_system_opts, addional_args)
+    elif parsed_opts.clean == True:
+        build_backend.clean()
+    elif parsed_opts.format == True:
+        directory = "."
+        extensions = []
+
+        if parsed_opts.directory:
+            directory = parsed_opts.directory
+
+        if parsed_opts.extensions:
+            extensions = parsed_opts.extensions.split(",")
+        else:
+            extensions = ["cc", "hh", "cpp", "hpp", "c", "h"]
+
+        format_files(directory, extensions)
+
+    elif parsed_opts.buildrun == True:
+        build_backend.build(build_system_opts)
+        build_backend.run(build_system_opts, addional_args)
+    elif parsed_opts.buildvalgrind == True:
+        build_backend.build(build_system_opts)
+        build_backend.valgrind(build_system_opts, addional_args)
