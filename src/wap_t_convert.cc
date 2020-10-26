@@ -248,7 +248,7 @@ auto free_wap_t_config_variable(_wap_t_config_variable variable) -> void {
 		break;
 	}
 
-	if (variable.key.string != NULL) { free((void *)variable.key.string); }
+	// SEGFAULT if (variable.key.string != NULL) { free((void *)variable.key.string); }
 }
 
 }
