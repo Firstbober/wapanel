@@ -1,6 +1,7 @@
 library('wapanel-applet-activator',
 	[
-		'main.cc'
+		'main.cc',
+		'activator.cc'
 	],
 	dependencies: [
 		dependency('gtk+-3.0')

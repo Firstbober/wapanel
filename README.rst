@@ -40,6 +40,7 @@ Dependencies
 - GTK+3 with Wayland support
 - gtk-layer-shell
 - pkg-config
+- xdg-utils (for Activator applet)
 - C and C++ compiler
 
 --------------------
