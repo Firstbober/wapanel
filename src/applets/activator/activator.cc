@@ -119,6 +119,8 @@ auto activator::create_activator_button(config::activator activator, bool is_lis
 
 		g_signal_connect(activator_button, "clicked", G_CALLBACK(+[](GtkButton *button, struct clicked_data *data) {
 							 if (double_fork() == 0) {
+								 chdir(data->v1);
+
 								 system(data->v2);
 								 exit(0);
 							 }
