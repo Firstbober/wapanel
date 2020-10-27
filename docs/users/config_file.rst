@@ -148,3 +148,50 @@ mode.scroll.button.gap				Gap between icon and window title.                    
 mode.scroll.button.flat             If button should be without shadows.                       true/false
 mode.scroll.button.icon_height      Height of icon.                                            Integer
 =================================== ========================================================== ===========
+
+---------
+Activator
+---------
+
+.. code-block:: toml
+
+	[[panel.applet]]
+		name = "activator"
+		flat = false
+		icon_height = -1
+
+		[[panel.applet.activator]]
+			type = "application"
+
+			name = "Screenshooter"
+			description = "You know what this means"
+			icon = "application-x-executable"
+
+			command = "<SOME SCREENSHOOTER APP>"
+			working_directory = ""
+
+		[[panel.applet.activator]]
+			type = "hypertext"
+
+			name = "Wapanel repository"
+			description = "Shortcut to wapanel's repository"
+			icon = "application-x-executable"
+
+			url = "https://github.com/firstbober/wapanel"
+
+This text above is default settings. You can ommit all of this but root `name` must be present.
+-1 means automatic option.
+
+=========================== ====================================== ===========================
+**Parameter**               **Description**				           **Content**
+--------------------------- -------------------------------------- ---------------------------
+flat                        Should activator buttons be flat.      true/false
+icon_height                 Height of the icon in activator.       Integer
+activator.type              Type of activator.                     Text(application/hypertext)
+activator.name              Name of activator.                     Text
+activator.description       Description of activator.              Text
+activator.icon              Icon of activator.                     Text
+activator.command           Command that activator should execute. Text
+activator.working_directory Working directory of executed command. Text
+activator.url               URL of website.                        Text
+=========================== ====================================== ===========================
