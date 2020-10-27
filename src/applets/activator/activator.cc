@@ -58,9 +58,7 @@ auto activator::create_activator_button(config::activator activator, bool is_lis
 
 	GtkImage *image = GTK_IMAGE(gtk_image_new_from_pixbuf(pixbuf));
 
-	if(m_config.is_flat) {
-		gtk_button_set_relief(activator_button, GTK_RELIEF_NONE);
-	}
+	if (m_config.is_flat) { gtk_button_set_relief(activator_button, GTK_RELIEF_NONE); }
 
 	if (is_listed) {
 		GtkBox *container = GTK_BOX(gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6));
@@ -120,7 +118,10 @@ auto activator::create_activator_button(config::activator activator, bool is_lis
 		m_clicked_data.push_back(data);
 
 		g_signal_connect(activator_button, "clicked", G_CALLBACK(+[](GtkButton *button, struct clicked_data *data) {
-							 if (double_fork() == 0) { system(data->v2); }
+							 if (double_fork() == 0) {
+								 system(data->v2);
+								 exit(0);
+							 }
 
 							 return true;
 						 }),
@@ -278,8 +279,7 @@ activator::activator(wap_t_applet_config &applet_config) {
 
 	if (m_config.activators.size() == 0) { return; }
 
-	gtk_container_add(GTK_CONTAINER(m_container),
-					  GTK_WIDGET(create_activator_button(m_config.activators[0])));
+	gtk_container_add(GTK_CONTAINER(m_container), GTK_WIDGET(create_activator_button(m_config.activators[0])));
 
 	if (m_config.activators.size() == 1) { return; }
 
@@ -287,9 +287,7 @@ activator::activator(wap_t_applet_config &applet_config) {
 	m_menu_popover = GTK_POPOVER(gtk_popover_new(GTK_WIDGET(m_menu_button)));
 	m_menu_popover_container = GTK_BOX(gtk_box_new(GTK_ORIENTATION_VERTICAL, 2));
 
-	if(m_config.is_flat) {
-		gtk_button_set_relief(GTK_BUTTON(m_menu_button), GTK_RELIEF_NONE);
-	}
+	if (m_config.is_flat) { gtk_button_set_relief(GTK_BUTTON(m_menu_button), GTK_RELIEF_NONE); }
 
 	for (size_t i = 1; i < m_config.activators.size(); i++) {
 		GtkButton *button = create_activator_button(m_config.activators[i], true);
