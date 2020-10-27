@@ -62,7 +62,7 @@ task_switcher::task_switcher(wap_t_applet_config applet_config) {
 		}
 
 		if (wapi_key_exists(mode_scroll_tb, "minimum_windows_per_row")) {
-			var = wapi_get_var_from_table(mode_scroll_tb, "inimum_windows_per_row");
+			var = wapi_get_var_from_table(mode_scroll_tb, "minimum_windows_per_row");
 			if (var->type == WAP_CONF_VAR_TYPE_INTEGER)
 				this->config.scroll.minimum_windows_per_row = wapi_var_as_integer(var);
 		}

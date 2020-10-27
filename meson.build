@@ -45,5 +45,5 @@ executable(
 	dependencies: deps,
 	install: true,
 	include_directories : include_directories('thirdparty'),
-	cpp_args: '-DVERSION="@0@"'.format(meson.project_version())
+	cpp_args: ['-DVERSION="@0@"'.format(meson.project_version())]
 )

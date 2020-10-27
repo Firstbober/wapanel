@@ -1,5 +1,6 @@
 #include "wap_t_convert.hh"
 #include "log.hh"
+#include "src/lib/appletapi.h"
 #include "toml11/toml/types.hpp"
 
 namespace wapanel::conv {
@@ -16,13 +17,19 @@ auto resolve_array(toml::array &array) -> std::vector<_wap_t_config_variable> {
 	for (auto &&value : array) {
 		_wap_t_config_variable variable = {};
 		variable.key.number = current_index;
+		variable.key.string = NULL;
 
 		// Match type and put good value into variable
 		switch (value.type()) {
-		case toml::value_t::string:
+		case toml::value_t::string: {
 			variable.type = WAP_CONF_VAR_TYPE_STRING;
-			variable.content.value.string = value.as_string().str.c_str();
+
+			char *temp_str = (char *)malloc(value.as_string().str.length() + 1);
+			memcpy(temp_str, value.as_string().str.c_str(), value.as_string().str.length() + 1);
+
+			variable.content.value.string = temp_str;
 			break;
+		}
 
 		case toml::value_t::integer:
 			variable.type = WAP_CONF_VAR_TYPE_INTEGER;
@@ -96,14 +103,23 @@ auto recurse_table(toml::table &table) -> std::vector<_wap_t_config_variable> {
 
 	for (auto &&val_pair : table) {
 		_wap_t_config_variable variable = {};
-		variable.key.string = val_pair.first.c_str();
+
+		char *temp_str = (char *)malloc(val_pair.first.length() + 1);
+		memcpy(temp_str, val_pair.first.c_str(), val_pair.first.length() + 1);
+
+		variable.key.string = temp_str;
 
 		// Match type and put good value into variable
 		switch (val_pair.second.type()) {
-		case toml::value_t::string:
+		case toml::value_t::string: {
 			variable.type = WAP_CONF_VAR_TYPE_STRING;
-			variable.content.value.string = val_pair.second.as_string().str.c_str();
+
+			temp_str = (char *)malloc(val_pair.second.as_string().str.length() + 1);
+			memcpy(temp_str, val_pair.second.as_string().str.c_str(), val_pair.second.as_string().str.length() + 1);
+
+			variable.content.value.string = temp_str;
 			break;
+		}
 
 		case toml::value_t::integer:
 			variable.type = WAP_CONF_VAR_TYPE_INTEGER;
@@ -171,7 +187,7 @@ auto recurse_table(toml::table &table) -> std::vector<_wap_t_config_variable> {
 	return _content;
 }
 
-auto convert_toml_to_wap_t_config_variable(toml::value &value, unsigned int panel_height) -> _wap_t_config_variable* {
+auto convert_toml_to_wap_t_config_variable(toml::value &value, unsigned int panel_height) -> _wap_t_config_variable * {
 	_wap_t_config_variable *config_variable
 		= reinterpret_cast<_wap_t_config_variable *>(malloc(sizeof(_wap_t_config_variable)));
 	toml::table tm_table;
@@ -222,9 +238,17 @@ auto free_wap_t_config_variable(_wap_t_config_variable variable) -> void {
 
 		break;
 
+	case WAP_CONF_VAR_TYPE_STRING:
+		free((void *)variable.content.value.string);
+		variable.content.value.string = NULL;
+
+		break;
+
 	default:
 		break;
 	}
+
+	// SEGFAULT if (variable.key.string != NULL) { free((void *)variable.key.string); }
 }
 
 }

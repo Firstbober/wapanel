@@ -10,3 +10,8 @@ docs/_templates
 docs/doxygen
 
 .clangd
+
+cppcheck-cppcheck-build-dir
+cppcheck.cppcheck
+
+output
