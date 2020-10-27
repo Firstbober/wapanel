@@ -17,7 +17,7 @@ private:
 	zwlr_foreign_toplevel_manager_v1 *m_manager = NULL;
 	bool m_initialized = false;
 
-	struct wl_seat* m_seat;
+	struct wl_seat *m_seat;
 
 	std::vector<std::function<void(toplevel *)>> m_on_toplevel_new_callback;
 	std::vector<std::function<void(toplevel *)>> m_on_toplevel_finished_callback;

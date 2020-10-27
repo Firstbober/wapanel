@@ -84,7 +84,8 @@ auto panel::configure() -> void {
 		wap_t_applet_config applet_config;
 
 		// Convert toml to config variable.
-		config_variable = conv::convert_toml_to_wap_t_config_variable(tm_applet_config.second, conf::config.panels_conf[m_id].height);
+		config_variable = conv::convert_toml_to_wap_t_config_variable(tm_applet_config.second,
+																	  conf::config.panels_conf[m_id].height);
 		m_last_applet_config_variables.push_back(config_variable);
 
 		// Insert everything into applet config.

@@ -1,9 +1,9 @@
 #pragma once
 
-#include <string>
-#include <wlr-foreign-toplevel-management-unstable-v1-client-protocol.h>
 #include <functional>
+#include <string>
 #include <vector>
+#include <wlr-foreign-toplevel-management-unstable-v1-client-protocol.h>
 
 namespace wapanel::applet::wl {
 
@@ -18,7 +18,7 @@ struct toplevel {
 
 	std::vector<std::function<void(toplevel_event)>> callbacks;
 
-	toplevel(zwlr_foreign_toplevel_handle_v1 *handle, unsigned int id, struct wl_seat* seat);
+	toplevel(zwlr_foreign_toplevel_handle_v1 *handle, unsigned int id, struct wl_seat *seat);
 	~toplevel();
 
 	auto clean() -> void;
@@ -41,7 +41,7 @@ struct toplevel {
 
 private:
 	zwlr_foreign_toplevel_handle_v1 *m_handle;
-	struct wl_seat* m_seat;
+	struct wl_seat *m_seat;
 };
 
 }

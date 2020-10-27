@@ -49,7 +49,7 @@ auto toplevel_manager::try_to_initialize() -> void {
 	auto gdk_display = gdk_display_get_default();
 	auto display = gdk_wayland_display_get_wl_display(gdk_display);
 
-	GdkSeat* seat = gdk_display_get_default_seat(gdk_display);
+	GdkSeat *seat = gdk_display_get_default_seat(gdk_display);
 	m_seat = gdk_wayland_seat_get_wl_seat(seat);
 
 	wl_registry *registry = wl_display_get_registry(display);
@@ -73,7 +73,7 @@ auto toplevel_manager::clean() -> void {
 	m_on_toplevel_new_callback.clear();
 	m_on_toplevel_finished_callback.clear();
 
-	for(auto &&[key, val] : toplevels) {
+	for (auto &&[key, val] : toplevels) {
 		val->clean();
 	}
 

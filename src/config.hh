@@ -1,18 +1,16 @@
 #pragma once
-#include <vector>
 #include <string>
+#include <vector>
 
 #include <toml11/toml.hpp>
 
-#define CONFIG_SEARCH_PATHS {"./wapanel.toml", "~/.config/wapanel.toml"}
+#define CONFIG_SEARCH_PATHS                                                                                            \
+	{ "./wapanel.toml", "~/.config/wapanel.toml" }
 
 namespace wapanel::conf {
 
 // Panel stuff.
-enum class panel_position {
-	TOP,
-	BOTTOM
-};
+enum class panel_position { TOP, BOTTOM };
 
 struct panel_config {
 	panel_position position;
