@@ -36,12 +36,14 @@ Installation
 Dependencies
 ------------
 
-- Meson build systemt
+- Meson build system *
+- C and C++ compiler *
+- pkg-config *
 - GTK+3 with Wayland support
 - gtk-layer-shell
-- pkg-config
 - xdg-utils (for Activator applet)
-- C and C++ compiler
+
+`*` indicates compile-time dependencies
 
 --------------------
 Building from source
