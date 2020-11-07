@@ -88,10 +88,15 @@ class Meson(BuildBackend):
                         os.system("meson configure " + BUILD_DIRECTORY + " --buildtype " +
                                   build_type + " --prefix " + os.getcwd() + "/" + EXECUTABLE_OUTPUT + "/" + build_type)
 
-        os.system("meson compile -C " + BUILD_DIRECTORY)
+        proc = subprocess.Popen(["meson", "compile", "-C", BUILD_DIRECTORY])
+        out, err = proc.communicate()
+
+        if proc.returncode != 0:
+            return False
+
         os.system("meson install -C " + BUILD_DIRECTORY)
 
-        pass
+        return True
 
     def run(self, opts, args):
         meson_out = os.popen("meson introspect " +
@@ -129,9 +134,11 @@ class Meson(BuildBackend):
                             proc = subprocess.Popen(
                                 exec_path, cwd='/'.join(target["install_filename"][0].split("/")[:-1]))
                             out, err = proc.communicate()
-                            print("Output: ", out, "\nError: ", err, "\nReturn code: ", proc.returncode)
-                            if len(RETURN_CODES) >= abs(proc.returncode):
-                                print("Message: ", RETURN_CODES[abs(proc.returncode)-1])
+
+                            if proc.returncode != 0:
+                                print("Return code:", proc.returncode)
+                                if len(RETURN_CODES) >= abs(proc.returncode):
+                                    print("Message:", RETURN_CODES[abs(proc.returncode)])
 
                     else:
                         exec_path = [os.getcwd() + "/" + EXECUTABLE_OUTPUT + "/" +
@@ -149,9 +156,11 @@ class Meson(BuildBackend):
                                 exec_path, cwd=os.getcwd() + "/" + EXECUTABLE_OUTPUT + "/" +
                                 requested_binary_type + "/bin/")
                             out, err = proc.communicate()
-                            print("Output: ", out, "\nError: ", err, "\nReturn code: ", proc.returncode)
-                            if len(RETURN_CODES) >= abs(proc.returncode):
-                                print("Message: ", RETURN_CODES[abs(proc.returncode)-1])
+
+                            if proc.returncode != 0:
+                                print("Return code:", proc.returncode)
+                                if len(RETURN_CODES) >= abs(proc.returncode):
+                                    print("Message:", RETURN_CODES[abs(proc.returncode)])
         else:
             print("Project is not compiled yet!")
 
@@ -203,6 +212,7 @@ def keyboard_interrupt_handler(signal, frame):
     exit(0)
 
 RETURN_CODES = [
+    "0",
     "1 (SIGHUP) [Hangup detected on controlling terminal or death of controlling process]",
     "2 (SIGINT) [Interrupt from keyboard]",
     "3 (SIGQUIT)[Quit from keyboard]",
@@ -326,8 +336,8 @@ if __name__ == "__main__":
         format_files(directory, extensions)
 
     elif parsed_opts.buildrun == True:
-        build_backend.build(build_system_opts)
-        build_backend.run(build_system_opts, addional_args)
+        if build_backend.build(build_system_opts):
+            build_backend.run(build_system_opts, addional_args)
     elif parsed_opts.buildvalgrind == True:
-        build_backend.build(build_system_opts)
-        build_backend.valgrind(build_system_opts, addional_args)
+        if build_backend.build(build_system_opts):
+            build_backend.valgrind(build_system_opts, addional_args)
