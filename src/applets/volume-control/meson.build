@@ -1,6 +1,7 @@
 library('wapanel-applet-volume-control',
 	[
-		'main.cc'
+		'main.cc',
+		'backends/pulseaudio.cc'
 	],
 	dependencies: [
 		dependency('gtk+-3.0')
