@@ -5,14 +5,14 @@ namespace wapanel::applet::backends {
 pulseaudio::pulseaudio() {}
 pulseaudio::~pulseaudio() {}
 
-int pulseaudio::get_input_volume_in_percent() {}
-void pulseaudio::set_input_volume_in_percent() {}
-void pulseaudio::mute_input() {}
-void pulseaudio::unmute_input() {}
+auto pulseaudio::get_input_volume_in_percent() -> int {}
+auto pulseaudio::set_input_volume_in_percent() -> void {}
+auto pulseaudio::mute_input() -> void {}
+auto pulseaudio::unmute_input() -> void {}
 
-int pulseaudio::get_output_volume_in_percent() {}
-void pulseaudio::set_output_volume_in_percent() {}
-void pulseaudio::mute_output() {}
-void pulseaudio::unmute_output() {}
+auto pulseaudio::get_output_volume_in_percent() -> int {}
+auto pulseaudio::set_output_volume_in_percent() -> void {}
+auto pulseaudio::mute_output() -> void {}
+auto pulseaudio::unmute_output() -> void {}
 
 } // namespace wapanel::applet::backend

@@ -8,15 +8,15 @@ public:
 	pulseaudio();
 	~pulseaudio();
 
-	virtual int get_input_volume_in_percent();
-	virtual void set_input_volume_in_percent();
-	virtual void mute_input();
-	virtual void unmute_input();
+	virtual auto get_input_volume_in_percent() -> int;
+	virtual auto set_input_volume_in_percent() -> void;
+	virtual auto mute_input() -> void;
+	virtual auto unmute_input() -> void;
 
-	virtual int get_output_volume_in_percent();
-	virtual void set_output_volume_in_percent();
-	virtual void mute_output();
-	virtual void unmute_output();
+	virtual auto get_output_volume_in_percent() -> int;
+	virtual auto set_output_volume_in_percent() -> void;
+	virtual auto mute_output() -> void;
+	virtual auto unmute_output() -> void;
 };
 
 } // namespace wapanel::applet::backend
