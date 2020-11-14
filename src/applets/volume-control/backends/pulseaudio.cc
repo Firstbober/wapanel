@@ -7,8 +7,7 @@ namespace wapanel::applet::backends {
 pulseaudio::pulseaudio()
 	: m_mainloop(NULL)
 	, m_mainloop_api(NULL)
-	, m_context(NULL)
-	, m_signal(NULL) {}
+	, m_context(NULL) {}
 pulseaudio::~pulseaudio() { this->destroy(); }
 
 auto pulseaudio::initialize() -> bool {
@@ -23,13 +22,6 @@ auto pulseaudio::initialize() -> bool {
 		log_error("Failed to init and bind UNIX signal subsystem to PulseAudio main loop");
 		return false;
 	}
-
-	m_signal = pa_signal_new(SIGINT, this->exit_signal_callback, this);
-	if (!m_signal) {
-		log_error("Failed to create UNIX signal event source object");
-		return false;
-	}
-	signal(SIGPIPE, SIG_IGN);
 
 	m_context = pa_context_new(m_mainloop_api, "Wapanel - volume control applet");
 	if (!m_context) {
@@ -54,12 +46,6 @@ auto pulseaudio::destroy() -> void {
 	if (m_context) {
 		pa_context_unref(m_context);
 		m_context = NULL;
-	}
-
-	if (m_signal) {
-		pa_signal_free(m_signal);
-		pa_signal_done();
-		m_signal = NULL;
 	}
 
 	if (m_mainloop) {

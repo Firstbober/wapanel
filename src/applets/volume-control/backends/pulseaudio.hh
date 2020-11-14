@@ -9,7 +9,6 @@ private:
 	pa_mainloop *m_mainloop;
 	pa_mainloop_api *m_mainloop_api;
 	pa_context *m_context;
-	pa_signal_event *m_signal;
 
 public:
 	pulseaudio();
@@ -31,11 +30,6 @@ public:
 	auto pa_context_state_change_callback(pa_context *ctx) -> void;
 
 private:
-	static auto exit_signal_callback(pa_mainloop_api *m, pa_signal_event *e, int sig, void *userdata) -> void {
-		pulseaudio *pa_backend = (pulseaudio *)userdata;
-		if (pa_backend) { pa_backend->destroy(); }
-	}
-
 	static auto ex_context_state_change_callback(pa_context *ctx, void *userdata) -> void {
 		assert(ctx && userdata);
 
