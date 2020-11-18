@@ -10,6 +10,8 @@ public:
 	// Destroys backend, class destructor should call
 	virtual auto destroy() -> void = 0;
 
+	virtual auto run() -> int = 0;
+
 	virtual auto get_input_volume_in_percent() -> int = 0;
 	virtual auto set_input_volume_in_percent() -> void = 0;
 	virtual auto mute_input() -> void = 0;

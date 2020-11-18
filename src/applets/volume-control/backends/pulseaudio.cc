@@ -35,7 +35,7 @@ auto pulseaudio::initialize() -> bool {
 		return false;
 	}
 
-	pa_context_set_state_callback(m_context, this->ex_context_state_change_callback, this);
+	pa_context_set_state_callback(m_context, this->redirect_context_state_change_callback, this);
 
 	log_info("Successfully initialized PulseAudio backend");
 
@@ -43,6 +43,8 @@ auto pulseaudio::initialize() -> bool {
 }
 
 auto pulseaudio::destroy() -> void {
+	this->quit_main_loop(0);
+
 	if (m_context) {
 		pa_context_unref(m_context);
 		m_context = NULL;
@@ -54,8 +56,22 @@ auto pulseaudio::destroy() -> void {
 		m_mainloop_api = NULL;
 	}
 
+
 	log_info("Destroyed PulseAudio backend");
 }
+
+auto pulseaudio::run() -> int {
+	int ret = 1;
+
+	if (pa_mainloop_run(m_mainloop, &ret) < 0) {
+		log_error("PulseAudio mainloop execution failed");
+		return ret;
+	}
+
+	return ret;
+}
+
+auto pulseaudio::quit_main_loop(int ret) -> void { pa_mainloop_quit(m_mainloop, ret); }
 
 auto pulseaudio::get_input_volume_in_percent() -> int {}
 auto pulseaudio::set_input_volume_in_percent() -> void {}
@@ -67,6 +83,39 @@ auto pulseaudio::set_output_volume_in_percent() -> void {}
 auto pulseaudio::mute_output() -> void {}
 auto pulseaudio::unmute_output() -> void {}
 
-auto pulseaudio::pa_context_state_change_callback(pa_context *ctx) -> void {}
+auto pulseaudio::pa_context_state_change_callback(pa_context *ctx) -> void {
+	switch (pa_context_get_state(ctx)) {
+	case PA_CONTEXT_CONNECTING:
+	case PA_CONTEXT_AUTHORIZING:
+	case PA_CONTEXT_SETTING_NAME:
+		break;
+
+	case PA_CONTEXT_READY:
+		log_info("PulseAudio connection established");
+		pa_context_get_server_info(ctx, this->redirect_context_server_info_callback, this);
+
+		break;
+
+	case PA_CONTEXT_TERMINATED:
+		log_error("PulseAudio connection terminated");
+		this->quit_main_loop(0);
+		break;
+
+	case PA_CONTEXT_FAILED:
+	default:
+		log_error("PulseAudio connection failed: %s", pa_strerror(pa_context_errno(ctx)));
+		this->quit_main_loop(1);
+		break;
+	}
+}
+
+auto pulseaudio::pa_context_server_info_callback(pa_context *ctx, const pa_server_info *info) -> void {
+	log_warn("server info");
+	// TODO: Get default sink and source
+}
+auto pulseaudio::pa_context_sink_info_callback(pa_context *ctx, const pa_sink_info *info, int eol) -> void {
+	log_warn("sink info");
+	// TODO: Implement everything that might be needed here.
+}
 
 } // namespace wapanel::applet::backends
