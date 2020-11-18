@@ -56,7 +56,6 @@ auto pulseaudio::destroy() -> void {
 		m_mainloop_api = NULL;
 	}
 
-
 	log_info("Destroyed PulseAudio backend");
 }
 
@@ -73,15 +72,19 @@ auto pulseaudio::run() -> int {
 
 auto pulseaudio::quit_main_loop(int ret) -> void { pa_mainloop_quit(m_mainloop, ret); }
 
-auto pulseaudio::get_input_volume_in_percent() -> int {}
-auto pulseaudio::set_input_volume_in_percent() -> void {}
-auto pulseaudio::mute_input() -> void {}
-auto pulseaudio::unmute_input() -> void {}
+auto pulseaudio::get_input_volume_in_percent() -> float {
+	return ((float)this->pa_def_source_info.volume / (float)PA_VOLUME_NORM)*100.f;
+}
+auto pulseaudio::set_input_volume_in_percent() -> void { /* TODO */ }
+auto pulseaudio::mute_input() -> void { /* TODO */ }
+auto pulseaudio::unmute_input() -> void { /* TODO */ }
 
-auto pulseaudio::get_output_volume_in_percent() -> int {}
-auto pulseaudio::set_output_volume_in_percent() -> void {}
-auto pulseaudio::mute_output() -> void {}
-auto pulseaudio::unmute_output() -> void {}
+auto pulseaudio::get_output_volume_in_percent() -> float {
+	return ((float)this->pa_def_source_info.volume / (float)PA_VOLUME_NORM)*100.f;
+}
+auto pulseaudio::set_output_volume_in_percent() -> void { /* TODO */ }
+auto pulseaudio::mute_output() -> void { /* TODO */ }
+auto pulseaudio::unmute_output() -> void { /* TODO */ }
 
 auto pulseaudio::pa_context_state_change_callback(pa_context *ctx) -> void {
 	switch (pa_context_get_state(ctx)) {
@@ -110,12 +113,33 @@ auto pulseaudio::pa_context_state_change_callback(pa_context *ctx) -> void {
 }
 
 auto pulseaudio::pa_context_server_info_callback(pa_context *ctx, const pa_server_info *info) -> void {
-	log_warn("server info");
-	// TODO: Get default sink and source
+	log_info("Default PulseAudio sink name: %s", info->default_sink_name);
+	log_info("Default PulseAudio source name: %s", info->default_source_name);
+
+	pa_context_get_sink_info_by_name(ctx, info->default_sink_name, this->redirect_context_sink_info_callback, this);
+	pa_context_get_source_info_by_name(ctx, info->default_source_name, this->redirect_context_source_info_callback,
+									   this);
 }
+
 auto pulseaudio::pa_context_sink_info_callback(pa_context *ctx, const pa_sink_info *info, int eol) -> void {
 	log_warn("sink info");
-	// TODO: Implement everything that might be needed here.
+
+	if (info) {
+		this->pa_def_sink_info.name = std::string(info->name);
+		this->pa_def_sink_info.volume = pa_cvolume_avg(&(info->volume));
+		/*
+		printf("%d\n", (100*PA_VOLUME_NORM)/100);
+		*/
+	}
+}
+
+auto pulseaudio::pa_context_source_info_callback(pa_context *ctx, const pa_source_info *info, int eol) -> void {
+	log_warn("source info");
+
+	if (info) {
+		this->pa_def_source_info.name = std::string(info->name);
+		this->pa_def_source_info.volume = pa_cvolume_avg(&(info->volume));
+	}
 }
 
 } // namespace wapanel::applet::backends
