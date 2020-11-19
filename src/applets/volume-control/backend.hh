@@ -1,8 +1,7 @@
 #pragma once
+#include <functional>
 
 namespace wapanel::applet {
-
-// TODO: Callbacks for various volume events
 
 class backend
 {
@@ -23,6 +22,12 @@ public:
 	virtual auto set_output_volume_in_percent() -> void = 0;
 	virtual auto mute_output() -> void = 0;
 	virtual auto unmute_output() -> void = 0;
+
+	virtual auto callback_input_volume_changed(std::function<void(float)> callback) -> void = 0;
+	virtual auto callback_input_mute_changed(std::function<void(bool)> callback) -> void = 0;
+
+	virtual auto callback_output_volume_changed(std::function<void(float)> callback) -> void = 0;
+	virtual auto callback_output_mute_changed(std::function<void(bool)> callback) -> void = 0;
 
 	virtual ~backend() = default;
 };

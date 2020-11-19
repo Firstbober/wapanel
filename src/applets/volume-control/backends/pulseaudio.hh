@@ -2,6 +2,7 @@
 #include "../backend.hh"
 #include <pulse/pulseaudio.h>
 #include <string>
+#include <vector>
 
 namespace wapanel::applet::backends {
 
@@ -14,7 +15,14 @@ private:
 	struct pa_ss_info {
 		std::string name = "";
 		int volume = 0;
+		bool is_muted = false;
 	} pa_def_sink_info, pa_def_source_info;
+
+	std::vector<std::function<void(float)>> m_input_volume_changed_callbacks;
+	std::vector<std::function<void(float)>> m_output_volume_changed_callbacks;
+
+	std::vector<std::function<void(bool)>> m_input_mute_changed_callbacks;
+	std::vector<std::function<void(bool)>> m_output_mute_changed_callbacks;
 
 public:
 	pulseaudio();
@@ -35,6 +43,12 @@ public:
 	virtual auto set_output_volume_in_percent() -> void;
 	virtual auto mute_output() -> void;
 	virtual auto unmute_output() -> void;
+
+	virtual auto callback_input_volume_changed(std::function<void(float)> callback) -> void;
+	virtual auto callback_input_mute_changed(std::function<void(bool)> callback) -> void;
+
+	virtual auto callback_output_volume_changed(std::function<void(float)> callback) -> void;
+	virtual auto callback_output_mute_changed(std::function<void(bool)> callback) -> void;
 
 	auto pa_context_state_change_callback() -> void;
 	auto pa_context_server_info_callback(const pa_server_info *info) -> void;

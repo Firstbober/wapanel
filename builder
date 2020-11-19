@@ -132,7 +132,7 @@ class Meson(BuildBackend):
                             return [exec_path, '/'.join(target["install_filename"][0].split("/")[:-1])]
                         else:
                             os.chdir('/'.join(target["install_filename"][0].split("/")[:-1]))
-                            os.system(" ".join(exec_path))
+                            os.system(" ".join(exec_path) + ">&2")
 
                     else:
                         exec_path = [os.getcwd() + "/" + EXECUTABLE_OUTPUT + "/" +
@@ -147,7 +147,7 @@ class Meson(BuildBackend):
                                     requested_binary_type + "/bin/"]
                         else:
                             os.chdir(os.getcwd() + "/" + EXECUTABLE_OUTPUT + "/" + requested_binary_type + "/bin/")
-                            os.system(" ".join(exec_path))
+                            os.system(" ".join(exec_path) + ">&2")
         else:
             print("Project is not compiled yet!")
 

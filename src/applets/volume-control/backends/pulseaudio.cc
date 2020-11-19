@@ -56,6 +56,12 @@ auto pulseaudio::destroy() -> void {
 		m_mainloop_api = NULL;
 	}
 
+	this->m_input_volume_changed_callbacks.clear();
+	this->m_output_volume_changed_callbacks.clear();
+
+	this->m_input_mute_changed_callbacks.clear();
+	this->m_output_mute_changed_callbacks.clear();
+
 	log_info("Destroyed PulseAudio backend");
 }
 
@@ -90,6 +96,20 @@ auto pulseaudio::set_output_volume_in_percent() -> void { /* TODO */
 auto pulseaudio::mute_output() -> void { /* TODO */
 }
 auto pulseaudio::unmute_output() -> void { /* TODO */
+}
+
+auto pulseaudio::callback_input_volume_changed(std::function<void(float)> callback) -> void {
+	m_input_volume_changed_callbacks.push_back(callback);
+}
+auto pulseaudio::callback_input_mute_changed(std::function<void(bool)> callback) -> void {
+	m_input_mute_changed_callbacks.push_back(callback);
+}
+
+auto pulseaudio::callback_output_volume_changed(std::function<void(float)> callback) -> void {
+	m_output_volume_changed_callbacks.push_back(callback);
+}
+auto pulseaudio::callback_output_mute_changed(std::function<void(bool)> callback) -> void {
+	m_output_mute_changed_callbacks.push_back(callback);
 }
 
 auto pulseaudio::pa_context_state_change_callback() -> void {
@@ -131,11 +151,26 @@ auto pulseaudio::pa_context_server_info_callback(const pa_server_info *info) -> 
 }
 
 auto pulseaudio::pa_context_sink_info_callback(const pa_sink_info *info, int eol) -> void {
-	log_warn("sink info");
-
 	if (info) {
+		int old_volume = this->pa_def_sink_info.volume;
+		bool old_mute_value = this->pa_def_sink_info.is_muted;
+
 		this->pa_def_sink_info.name = std::string(info->name);
 		this->pa_def_sink_info.volume = pa_cvolume_avg(&(info->volume));
+		this->pa_def_sink_info.is_muted = info->mute;
+
+		if (old_volume != this->pa_def_sink_info.volume) {
+			for (auto &&callback : this->m_output_volume_changed_callbacks) {
+				callback(this->get_output_volume_in_percent());
+			}
+		}
+
+		if (old_mute_value != this->pa_def_sink_info.is_muted) {
+			for (auto &&callback : this->m_output_mute_changed_callbacks) {
+				callback(this->pa_def_source_info.is_muted);
+			}
+		}
+
 		/*
 		printf("%d\n", (100*PA_VOLUME_NORM)/100);
 		*/
@@ -143,11 +178,25 @@ auto pulseaudio::pa_context_sink_info_callback(const pa_sink_info *info, int eol
 }
 
 auto pulseaudio::pa_context_source_info_callback(const pa_source_info *info, int eol) -> void {
-	log_warn("source info");
-
 	if (info) {
+		int old_volume = this->pa_def_source_info.volume;
+		bool old_mute_value = this->pa_def_source_info.is_muted;
+
 		this->pa_def_source_info.name = std::string(info->name);
 		this->pa_def_source_info.volume = pa_cvolume_avg(&(info->volume));
+		this->pa_def_source_info.is_muted = info->mute;
+
+		if (old_volume != this->pa_def_source_info.volume) {
+			for (auto &&callback : this->m_input_volume_changed_callbacks) {
+				callback(this->get_input_volume_in_percent());
+			}
+		}
+
+		if (old_mute_value != this->pa_def_source_info.is_muted) {
+			for (auto &&callback : this->m_input_mute_changed_callbacks) {
+				callback(this->pa_def_source_info.is_muted);
+			}
+		}
 	}
 }
 

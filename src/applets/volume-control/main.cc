@@ -21,6 +21,23 @@ GtkWidget *wap_applet_new_instance(wap_t_applet_config applet_config) {
 	backend = new wapanel::applet::backends::pulseaudio();
 	backend->initialize();
 
+	backend->callback_output_volume_changed([](float volume) {
+		printf("Changed volume in output!!!\n");
+	});
+
+	backend->callback_input_mute_changed([](bool is_muted) {
+		printf("Muted input!!!\n");
+	});
+
+	backend->callback_input_volume_changed([](float volume) {
+		printf("Changed volume in input!!!\n");
+	});
+
+	backend->callback_output_mute_changed([](bool is_muted) {
+		printf("Muted output!!!\n");
+	});
+
+
 	runThread = std::thread(&wapanel::applet::backend::run, backend);
 
 	// instances.push_back(vc);
