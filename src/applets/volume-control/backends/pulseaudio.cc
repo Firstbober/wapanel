@@ -73,21 +73,27 @@ auto pulseaudio::run() -> int {
 auto pulseaudio::quit_main_loop(int ret) -> void { pa_mainloop_quit(m_mainloop, ret); }
 
 auto pulseaudio::get_input_volume_in_percent() -> float {
-	return ((float)this->pa_def_source_info.volume / (float)PA_VOLUME_NORM)*100.f;
+	return ((float)this->pa_def_source_info.volume / (float)PA_VOLUME_NORM) * 100.f;
 }
-auto pulseaudio::set_input_volume_in_percent() -> void { /* TODO */ }
-auto pulseaudio::mute_input() -> void { /* TODO */ }
-auto pulseaudio::unmute_input() -> void { /* TODO */ }
+auto pulseaudio::set_input_volume_in_percent() -> void { /* TODO */
+}
+auto pulseaudio::mute_input() -> void { /* TODO */
+}
+auto pulseaudio::unmute_input() -> void { /* TODO */
+}
 
 auto pulseaudio::get_output_volume_in_percent() -> float {
-	return ((float)this->pa_def_source_info.volume / (float)PA_VOLUME_NORM)*100.f;
+	return ((float)this->pa_def_source_info.volume / (float)PA_VOLUME_NORM) * 100.f;
 }
-auto pulseaudio::set_output_volume_in_percent() -> void { /* TODO */ }
-auto pulseaudio::mute_output() -> void { /* TODO */ }
-auto pulseaudio::unmute_output() -> void { /* TODO */ }
+auto pulseaudio::set_output_volume_in_percent() -> void { /* TODO */
+}
+auto pulseaudio::mute_output() -> void { /* TODO */
+}
+auto pulseaudio::unmute_output() -> void { /* TODO */
+}
 
-auto pulseaudio::pa_context_state_change_callback(pa_context *ctx) -> void {
-	switch (pa_context_get_state(ctx)) {
+auto pulseaudio::pa_context_state_change_callback() -> void {
+	switch (pa_context_get_state(m_context)) {
 	case PA_CONTEXT_CONNECTING:
 	case PA_CONTEXT_AUTHORIZING:
 	case PA_CONTEXT_SETTING_NAME:
@@ -95,8 +101,10 @@ auto pulseaudio::pa_context_state_change_callback(pa_context *ctx) -> void {
 
 	case PA_CONTEXT_READY:
 		log_info("PulseAudio connection established");
-		pa_context_get_server_info(ctx, this->redirect_context_server_info_callback, this);
+		pa_context_get_server_info(m_context, this->redirect_context_server_info_callback, this);
 
+		pa_context_set_subscribe_callback(m_context, this->redirect_context_subscribe_callback, this);
+		pa_context_subscribe(m_context, PA_SUBSCRIPTION_MASK_ALL, NULL, NULL);
 		break;
 
 	case PA_CONTEXT_TERMINATED:
@@ -106,22 +114,23 @@ auto pulseaudio::pa_context_state_change_callback(pa_context *ctx) -> void {
 
 	case PA_CONTEXT_FAILED:
 	default:
-		log_error("PulseAudio connection failed: %s", pa_strerror(pa_context_errno(ctx)));
+		log_error("PulseAudio connection failed: %s", pa_strerror(pa_context_errno(m_context)));
 		this->quit_main_loop(1);
 		break;
 	}
 }
 
-auto pulseaudio::pa_context_server_info_callback(pa_context *ctx, const pa_server_info *info) -> void {
+auto pulseaudio::pa_context_server_info_callback(const pa_server_info *info) -> void {
 	log_info("Default PulseAudio sink name: %s", info->default_sink_name);
 	log_info("Default PulseAudio source name: %s", info->default_source_name);
 
-	pa_context_get_sink_info_by_name(ctx, info->default_sink_name, this->redirect_context_sink_info_callback, this);
-	pa_context_get_source_info_by_name(ctx, info->default_source_name, this->redirect_context_source_info_callback,
-									   this);
+	pa_context_get_sink_info_by_name(m_context, info->default_sink_name, this->redirect_context_sink_info_callback,
+									 this);
+	pa_context_get_source_info_by_name(m_context, info->default_source_name,
+									   this->redirect_context_source_info_callback, this);
 }
 
-auto pulseaudio::pa_context_sink_info_callback(pa_context *ctx, const pa_sink_info *info, int eol) -> void {
+auto pulseaudio::pa_context_sink_info_callback(const pa_sink_info *info, int eol) -> void {
 	log_warn("sink info");
 
 	if (info) {
@@ -133,13 +142,33 @@ auto pulseaudio::pa_context_sink_info_callback(pa_context *ctx, const pa_sink_in
 	}
 }
 
-auto pulseaudio::pa_context_source_info_callback(pa_context *ctx, const pa_source_info *info, int eol) -> void {
+auto pulseaudio::pa_context_source_info_callback(const pa_source_info *info, int eol) -> void {
 	log_warn("source info");
 
 	if (info) {
 		this->pa_def_source_info.name = std::string(info->name);
 		this->pa_def_source_info.volume = pa_cvolume_avg(&(info->volume));
 	}
+}
+
+auto pulseaudio::pa_context_subscribe_callback(pa_subscription_event_type_t type, uint32_t idx) -> void {
+	unsigned facility = type & PA_SUBSCRIPTION_EVENT_FACILITY_MASK;
+	pa_operation *op = NULL;
+
+	switch (facility) {
+	case PA_SUBSCRIPTION_EVENT_SINK:
+		pa_context_get_sink_info_by_index(m_context, idx, this->redirect_context_sink_info_callback, this);
+		break;
+
+	case PA_SUBSCRIPTION_EVENT_SOURCE:
+		pa_context_get_source_info_by_index(m_context, idx, this->redirect_context_source_info_callback, this);
+		break;
+
+	default:
+		break;
+	}
+
+	if (op) pa_operation_unref(op);
 }
 
 } // namespace wapanel::applet::backends

@@ -36,36 +36,44 @@ public:
 	virtual auto mute_output() -> void;
 	virtual auto unmute_output() -> void;
 
-	auto pa_context_state_change_callback(pa_context *ctx) -> void;
-	auto pa_context_server_info_callback(pa_context *ctx, const pa_server_info *info) -> void;
+	auto pa_context_state_change_callback() -> void;
+	auto pa_context_server_info_callback(const pa_server_info *info) -> void;
 
-	auto pa_context_sink_info_callback(pa_context *ctx, const pa_sink_info *info, int eol) -> void;
-	auto pa_context_source_info_callback(pa_context *ctx, const pa_source_info *info, int eol) -> void;
+	auto pa_context_sink_info_callback(const pa_sink_info *info, int eol) -> void;
+	auto pa_context_source_info_callback(const pa_source_info *info, int eol) -> void;
+
+	auto pa_context_subscribe_callback(pa_subscription_event_type_t type, uint32_t idx) -> void;
 
 private:
 	static auto redirect_context_state_change_callback(pa_context *ctx, void *userdata) -> void {
 		assert(ctx && userdata);
 
 		pulseaudio *pa_backend = (pulseaudio *)userdata;
-		pa_backend->pa_context_state_change_callback(ctx);
+		pa_backend->pa_context_state_change_callback();
 	}
 
 	static auto redirect_context_server_info_callback(pa_context *ctx, const pa_server_info *info, void *userdata)
 		-> void {
 		pulseaudio *pa_backend = (pulseaudio *)userdata;
-		pa_backend->pa_context_server_info_callback(ctx, info);
+		pa_backend->pa_context_server_info_callback(info);
 	}
 
 	static auto redirect_context_sink_info_callback(pa_context *ctx, const pa_sink_info *info, int eol, void *userdata)
 		-> void {
 		pulseaudio *pa_backend = (pulseaudio *)userdata;
-		pa_backend->pa_context_sink_info_callback(ctx, info, eol);
+		pa_backend->pa_context_sink_info_callback(info, eol);
 	}
 
 	static auto redirect_context_source_info_callback(pa_context *ctx, const pa_source_info *info, int eol,
 													  void *userdata) -> void {
 		pulseaudio *pa_backend = (pulseaudio *)userdata;
-		pa_backend->pa_context_source_info_callback(ctx, info, eol);
+		pa_backend->pa_context_source_info_callback(info, eol);
+	}
+
+	static auto redirect_context_subscribe_callback(pa_context *ctx, pa_subscription_event_type_t type, uint32_t idx,
+													void *userdata) -> void {
+		pulseaudio *pa_backend = (pulseaudio *)userdata;
+		pa_backend->pa_context_subscribe_callback(type, idx);
 	}
 };
 
