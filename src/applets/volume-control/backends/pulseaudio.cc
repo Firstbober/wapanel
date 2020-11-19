@@ -81,21 +81,37 @@ auto pulseaudio::quit_main_loop(int ret) -> void { pa_mainloop_quit(m_mainloop, 
 auto pulseaudio::get_input_volume_in_percent() -> float {
 	return ((float)this->pa_def_source_info.volume / (float)PA_VOLUME_NORM) * 100.f;
 }
-auto pulseaudio::set_input_volume_in_percent() -> void { /* TODO */
+auto pulseaudio::set_input_volume_in_percent(float volume) -> void {
+	pa_cvolume_set(&(this->pa_def_source_info.pa_volume), this->pa_def_source_info.pa_channels,
+				   static_cast<int>((volume * PA_VOLUME_NORM) / 100.f));
+	pa_context_set_source_volume_by_name(this->m_context, this->pa_def_source_info.name.c_str(),
+										 &(this->pa_def_source_info.pa_volume), NULL, NULL);
 }
-auto pulseaudio::mute_input() -> void { /* TODO */
+auto pulseaudio::mute_input() -> void {
+	log_info("Muted PulseAudio input");
+	pa_context_set_source_mute_by_name(this->m_context, this->pa_def_source_info.name.c_str(), true, NULL, NULL);
 }
-auto pulseaudio::unmute_input() -> void { /* TODO */
+auto pulseaudio::unmute_input() -> void {
+	log_info("Unmuted PulseAudio input");
+	pa_context_set_source_mute_by_name(this->m_context, this->pa_def_source_info.name.c_str(), true, NULL, NULL);
 }
 
 auto pulseaudio::get_output_volume_in_percent() -> float {
-	return ((float)this->pa_def_source_info.volume / (float)PA_VOLUME_NORM) * 100.f;
+	return ((float)this->pa_def_sink_info.volume / (float)PA_VOLUME_NORM) * 100.f;
 }
-auto pulseaudio::set_output_volume_in_percent() -> void { /* TODO */
+auto pulseaudio::set_output_volume_in_percent(float volume) -> void {
+	pa_cvolume_set(&(this->pa_def_sink_info.pa_volume), this->pa_def_sink_info.pa_channels,
+				   static_cast<int>((volume * PA_VOLUME_NORM) / 100.f));
+	pa_context_set_sink_volume_by_name(this->m_context, this->pa_def_sink_info.name.c_str(),
+									   &(this->pa_def_sink_info.pa_volume), NULL, NULL);
 }
-auto pulseaudio::mute_output() -> void { /* TODO */
+auto pulseaudio::mute_output() -> void {
+	log_info("Muted PulseAudio output");
+	pa_context_set_sink_mute_by_name(this->m_context, this->pa_def_sink_info.name.c_str(), true, NULL, NULL);
 }
-auto pulseaudio::unmute_output() -> void { /* TODO */
+auto pulseaudio::unmute_output() -> void {
+	log_info("Unmuted PulseAudio output");
+	pa_context_set_sink_mute_by_name(this->m_context, this->pa_def_sink_info.name.c_str(), false, NULL, NULL);
 }
 
 auto pulseaudio::callback_input_volume_changed(std::function<void(float)> callback) -> void {
@@ -158,6 +174,8 @@ auto pulseaudio::pa_context_sink_info_callback(const pa_sink_info *info, int eol
 		this->pa_def_sink_info.name = std::string(info->name);
 		this->pa_def_sink_info.volume = pa_cvolume_avg(&(info->volume));
 		this->pa_def_sink_info.is_muted = info->mute;
+		this->pa_def_sink_info.pa_volume = info->volume;
+		this->pa_def_sink_info.pa_channels = info->channel_map.channels;
 
 		if (old_volume != this->pa_def_sink_info.volume) {
 			for (auto &&callback : this->m_output_volume_changed_callbacks) {
@@ -170,10 +188,6 @@ auto pulseaudio::pa_context_sink_info_callback(const pa_sink_info *info, int eol
 				callback(this->pa_def_source_info.is_muted);
 			}
 		}
-
-		/*
-		printf("%d\n", (100*PA_VOLUME_NORM)/100);
-		*/
 	}
 }
 
@@ -185,6 +199,8 @@ auto pulseaudio::pa_context_source_info_callback(const pa_source_info *info, int
 		this->pa_def_source_info.name = std::string(info->name);
 		this->pa_def_source_info.volume = pa_cvolume_avg(&(info->volume));
 		this->pa_def_source_info.is_muted = info->mute;
+		this->pa_def_source_info.pa_volume = info->volume;
+		this->pa_def_source_info.pa_channels = info->channel_map.channels;
 
 		if (old_volume != this->pa_def_source_info.volume) {
 			for (auto &&callback : this->m_input_volume_changed_callbacks) {

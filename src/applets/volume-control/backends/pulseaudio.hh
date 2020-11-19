@@ -16,6 +16,8 @@ private:
 		std::string name = "";
 		int volume = 0;
 		bool is_muted = false;
+		pa_cvolume pa_volume;
+		uint8_t pa_channels;
 	} pa_def_sink_info, pa_def_source_info;
 
 	std::vector<std::function<void(float)>> m_input_volume_changed_callbacks;
@@ -35,12 +37,12 @@ public:
 	auto quit_main_loop(int ret) -> void;
 
 	virtual auto get_input_volume_in_percent() -> float;
-	virtual auto set_input_volume_in_percent() -> void;
+	virtual auto set_input_volume_in_percent(float volume) -> void;
 	virtual auto mute_input() -> void;
 	virtual auto unmute_input() -> void;
 
 	virtual auto get_output_volume_in_percent() -> float;
-	virtual auto set_output_volume_in_percent() -> void;
+	virtual auto set_output_volume_in_percent(float volume) -> void;
 	virtual auto mute_output() -> void;
 	virtual auto unmute_output() -> void;
 
