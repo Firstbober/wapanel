@@ -1,14 +1,16 @@
-#include <appletapi.h>
-#include <gtk/gtk.h>
-#include <vector>
-#include <thread>
+#include "../../log.hh"
 #include "backend.hh"
 #include "backends/pulseaudio.hh"
+#include "icon-cache.hh"
+#include "volume-control.hh"
+#include <appletapi.h>
+#include <gtk/gtk.h>
+#include <thread>
+#include <vector>
 
-// std::vector<*> instances;
-
-wapanel::applet::backend* backend;
-std::thread runThread;
+std::vector<wapanel::applet::volume_control *> instances;
+wapanel::applet::backend *backend;
+std::thread backend_thread;
 
 extern "C" {
 
@@ -17,51 +19,39 @@ wap_t_applet_info wap_applet_info() { return { .name = "volume-control", .versio
 
 // Called when some panel need new instance of your applet.
 GtkWidget *wap_applet_new_instance(wap_t_applet_config applet_config) {
-	// x *vc = new x(applet_config);
-	backend = new wapanel::applet::backends::pulseaudio();
-	backend->initialize();
+	if (backend == NULL) {
+		backend = new wapanel::applet::backends::pulseaudio();
 
-	backend->callback_output_volume_changed([](float volume) {
-		printf("Changed volume in output!!!\n");
-	});
+		if (backend->initialize()) {
+			backend_thread = std::thread(&wapanel::applet::backend::run, backend);
+		} else {
+			log_error("Failed to initialize backend!");
+			return NULL;
+		}
+	}
 
-	backend->callback_input_mute_changed([](bool is_muted) {
-		printf("Muted input!!!\n");
-	});
+	if (backend != NULL) {
+		wapanel::applet::volume_control *vc = new wapanel::applet::volume_control(applet_config, backend);
+		instances.push_back(vc);
 
-	backend->callback_input_volume_changed([](float volume) {
-		printf("Changed volume in input!!!\n");
-	});
+		return GTK_WIDGET(vc->get_widget());
+	}
 
-	backend->callback_output_mute_changed([](bool is_muted) {
-		printf("Muted output!!!\n");
-	});
-
-
-	runThread = std::thread(&wapanel::applet::backend::run, backend);
-
-	// instances.push_back(vc);
-	// return vc->get_widget();
-
-	GtkLabel *label = GTK_LABEL(gtk_label_new("|| volume-control ||"));
-
-	return GTK_WIDGET(label);
+	return NULL;
 }
 
 // Called when requested to remove all existing instances. GtkWidget should be disposed by panel.
 void wap_event_remove_instances() {
-	/*
 	for (auto &&vc : instances) {
 		delete vc;
 	}
-
-	instances.clear();
-	*/
 }
 
 // Called when panel exits.
 void wap_event_exit() {
 	delete backend;
-	runThread.join();
+	wapanel::applet::ic::clean();
+
+	backend_thread.join();
 }
 }

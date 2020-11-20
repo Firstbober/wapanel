@@ -157,9 +157,11 @@ auto task_switcher::window_button_click_event(GdkEvent *event, wl::toplevel *top
 			auto on_minimize = +[](GtkMenuItem *menu_item, wl::toplevel *toplevel) { toplevel->set_minimized(); };
 			auto on_maximize = +[](GtkMenuItem *menu_item, wl::toplevel *toplevel) { toplevel->set_maximized(); };
 			auto on_unminimize = +[](GtkMenuItem *menu_item, wl::toplevel *toplevel) { toplevel->unset_minimized(); };
-			// NOT USED auto on_unmaximize = +[](GtkMenuItem *menu_item, wl::toplevel *toplevel) { toplevel->unset_maximized(); };
+			// NOT USED auto on_unmaximize = +[](GtkMenuItem *menu_item, wl::toplevel *toplevel) {
+			// toplevel->unset_maximized(); };
 			auto on_close = +[](GtkMenuItem *menu_item, wl::toplevel *toplevel) { toplevel->close(); };
-			// NOT USED auto on_show = +[](GtkMenuItem *menu_item, wl::toplevel *toplevel) { toplevel->set_activated(); };
+			// NOT USED auto on_show = +[](GtkMenuItem *menu_item, wl::toplevel *toplevel) { toplevel->set_activated();
+			// };
 
 			if (toplevel->mgid == wl::toplevel_manager::get().current_window) {
 				item = gtk_menu_item_new_with_label("Minimize");

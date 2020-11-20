@@ -1,6 +1,9 @@
 library('wapanel-applet-volume-control',
 	[
 		'main.cc',
+		'volume-control.cc',
+		'icon-cache.cc',
+
 		'backends/pulseaudio.cc'
 	],
 	dependencies: [
