@@ -24,7 +24,7 @@ Applets
 - ☑ Clock
 - ☑ Separator
 - ☐ System tray (Freedesktop StatusNotifierItem implementation)
-- ☐ Volume control (PulseAudio, PipeWire in future)
+- ☑ Volume control (PulseAudio, PipeWire in future)
 - ☑ Task switcher
 - ☑ Activator
 - ☐ App finder
@@ -42,6 +42,7 @@ Dependencies
 - GTK+3 with Wayland support
 - gtk-layer-shell
 - xdg-utils (for Activator applet)
+- libpulse (for Volume control applet)
 
 `*` indicates compile-time dependencies
 

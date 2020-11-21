@@ -2,7 +2,7 @@
 
 namespace wapanel::applet::ic {
 
-std::unordered_map<int, icon_cache*> _sizes;
+std::unordered_map<int, icon_cache *> _sizes;
 
 auto icon_cache::get_icon(std::string icon_name, int icon_size) -> GdkPixbuf * {
 	if (icons.contains(icon_name)) {

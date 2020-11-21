@@ -21,7 +21,7 @@ struct icon_cache {
 	auto get_icon(std::string icon_name, int icon_size) -> GdkPixbuf *;
 };
 
-extern std::unordered_map<int, icon_cache*> _sizes;
+extern std::unordered_map<int, icon_cache *> _sizes;
 
 auto get_icon(std::string icon_name, int icon_size) -> GdkPixbuf *;
 auto clean() -> void;

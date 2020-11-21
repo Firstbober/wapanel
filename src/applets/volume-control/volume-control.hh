@@ -5,6 +5,17 @@
 #include <gtk/gtk.h>
 #include <string>
 
+/*
+	Default config
+	-1 stands for default value
+
+	[[panel.applet]]
+		name = "volume-control"
+		icon_height = -1
+		flat = false
+		sound_mixer = ""
+*/
+
 namespace wapanel::applet {
 
 class volume_widget {
@@ -49,8 +60,8 @@ private:
 	struct config {
 		unsigned int __panel_height;
 
-		int icon_height;
-		bool is_flat;
+		int icon_height = -1;
+		bool is_flat = false;
 
 		std::string sound_mixer_executable = "";
 	} m_config;
