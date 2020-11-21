@@ -8,7 +8,8 @@ library('wapanel-applet-volume-control',
 	],
 	dependencies: [
 		dependency('gtk+-3.0'),
-		dependency('libpulse')
+		dependency('libpulse'),
+		dependency('threads')
 	],
 	install: true,
 	include_directories: include_directories('../../lib'),
