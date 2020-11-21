@@ -1,6 +1,35 @@
 #include "volume-control.hh"
 #include "../../log.hh"
 #include "icon-cache.hh"
+#include <sys/stat.h>
+#include <sys/wait.h>
+#include <unistd.h>
+
+auto double_fork() -> int {
+	pid_t fork_id;
+	if ((fork_id = fork()) == 0) {
+		setsid();
+
+		signal(SIGCHLD, SIG_IGN);
+		signal(SIGHUP, SIG_IGN);
+
+		if (fork() == 0) {
+			umask(0);
+
+			int x;
+			for (x = sysconf(_SC_OPEN_MAX); x >= 0; x--) {
+				close(x);
+			}
+
+			return 0;
+		} else {
+			exit(0);
+		}
+	} else {
+		waitpid(fork_id, 0, 0);
+		return 1;
+	}
+}
 
 namespace wapanel::applet {
 
@@ -32,6 +61,16 @@ volume_control::volume_control(wap_t_applet_config applet_config, backend *backe
 		m_config.icon_height = wapi_var_as_integer(var);
 	}
 
+	if (wapi_key_exists(&applet_config.root, "sound_mixer")) {
+		_wap_t_config_variable *var = wapi_get_var_from_table(&applet_config.root, "sound_mixer");
+
+		if (var->type == WAP_CONF_VAR_TYPE_STRING) {
+			m_config.sound_mixer_executable = std::string(wapi_var_as_string(var));
+		} else {
+			m_config.sound_mixer_executable = "";
+		}
+	}
+
 	log_info("Resolved config");
 
 	// Rest of config stuff
@@ -51,6 +90,21 @@ volume_control::volume_control(wap_t_applet_config applet_config, backend *backe
 		= GTK_IMAGE(gtk_image_new_from_pixbuf(ic::get_icon("audio-volume-muted-symbolic", m_config.icon_height)));
 
 	gtk_container_add(GTK_CONTAINER(this->m_pop_control), GTK_WIDGET(this->m_button_icon));
+
+	if (m_config.sound_mixer_executable != "") {
+		m_open_sound_mixer = GTK_BUTTON(gtk_button_new_with_label("Sound mixer..."));
+		gtk_button_set_relief(GTK_BUTTON(m_open_sound_mixer), GTK_RELIEF_NONE);
+
+		g_signal_connect(m_open_sound_mixer, "clicked", G_CALLBACK(+[](GtkButton *button, std::string *exec_name) {
+							 if (double_fork() == 0) {
+								 system(exec_name->c_str());
+								 exit(0);
+							 }
+						 }),
+						 &m_config.sound_mixer_executable);
+
+		gtk_box_pack_end(m_vol_widget_list, GTK_WIDGET(m_open_sound_mixer), false, false, 0);
+	}
 
 	gtk_box_pack_end(m_vol_widget_list, m_input_widget.get_widget(), false, false, 0);
 	gtk_box_pack_end(m_vol_widget_list, m_output_widget.get_widget(), false, false, 0);

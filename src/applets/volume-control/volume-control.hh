@@ -3,6 +3,7 @@
 #include <appletapi.h>
 #include <atomic>
 #include <gtk/gtk.h>
+#include <string>
 
 namespace wapanel::applet {
 
@@ -43,12 +44,15 @@ private:
 	GtkPopover *m_control_container;
 	GtkBox *m_vol_widget_list;
 	volume_widget m_output_widget, m_input_widget;
+	GtkButton *m_open_sound_mixer;
 
 	struct config {
 		unsigned int __panel_height;
 
 		int icon_height;
 		bool is_flat;
+
+		std::string sound_mixer_executable = "";
 	} m_config;
 
 public:
