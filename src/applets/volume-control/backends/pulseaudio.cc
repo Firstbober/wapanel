@@ -87,14 +87,18 @@ auto pulseaudio::set_input_volume_in_percent(float volume) -> void {
 	pa_context_set_source_volume_by_name(this->m_context, this->pa_def_source_info.name.c_str(),
 										 &(this->pa_def_source_info.pa_volume), NULL, NULL);
 }
+auto pulseaudio::is_input_muted() -> bool {
+	return this->pa_def_source_info.is_muted;
+}
 auto pulseaudio::mute_input() -> void {
 	log_info("Muted PulseAudio input");
 	pa_context_set_source_mute_by_name(this->m_context, this->pa_def_source_info.name.c_str(), true, NULL, NULL);
 }
 auto pulseaudio::unmute_input() -> void {
 	log_info("Unmuted PulseAudio input");
-	pa_context_set_source_mute_by_name(this->m_context, this->pa_def_source_info.name.c_str(), true, NULL, NULL);
+	pa_context_set_source_mute_by_name(this->m_context, this->pa_def_source_info.name.c_str(), false, NULL, NULL);
 }
+
 
 auto pulseaudio::get_output_volume_in_percent() -> float {
 	return ((float)this->pa_def_sink_info.volume / (float)PA_VOLUME_NORM) * 100.f;
@@ -104,6 +108,9 @@ auto pulseaudio::set_output_volume_in_percent(float volume) -> void {
 				   static_cast<int>((volume * PA_VOLUME_NORM) / 100.f));
 	pa_context_set_sink_volume_by_name(this->m_context, this->pa_def_sink_info.name.c_str(),
 									   &(this->pa_def_sink_info.pa_volume), NULL, NULL);
+}
+auto pulseaudio::is_output_muted() -> bool {
+	return this->pa_def_sink_info.is_muted;
 }
 auto pulseaudio::mute_output() -> void {
 	log_info("Muted PulseAudio output");
@@ -185,7 +192,7 @@ auto pulseaudio::pa_context_sink_info_callback(const pa_sink_info *info, int eol
 
 		if (old_mute_value != this->pa_def_sink_info.is_muted) {
 			for (auto &&callback : this->m_output_mute_changed_callbacks) {
-				callback(this->pa_def_source_info.is_muted);
+				callback(this->pa_def_sink_info.is_muted);
 			}
 		}
 	}

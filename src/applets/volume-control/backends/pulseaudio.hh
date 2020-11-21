@@ -38,11 +38,13 @@ public:
 
 	virtual auto get_input_volume_in_percent() -> float;
 	virtual auto set_input_volume_in_percent(float volume) -> void;
+	virtual auto is_input_muted() -> bool;
 	virtual auto mute_input() -> void;
 	virtual auto unmute_input() -> void;
 
 	virtual auto get_output_volume_in_percent() -> float;
 	virtual auto set_output_volume_in_percent(float volume) -> void;
+	virtual auto is_output_muted() -> bool;
 	virtual auto mute_output() -> void;
 	virtual auto unmute_output() -> void;
 
