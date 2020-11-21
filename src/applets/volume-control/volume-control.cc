@@ -122,7 +122,7 @@ volume_control::volume_control(wap_t_applet_config applet_config, backend *backe
 
 	// Change icon on volume change
 
-	auto fn_icon_change = [=](float volume) {
+	auto fn_icon_change = [=, this](float volume) {
 		if (volume == 0) {
 			gtk_image_set_from_pixbuf(m_button_icon, ic::get_icon("audio-volume-muted-symbolic", m_config.icon_height));
 		} else if (volume <= 33) {
@@ -161,7 +161,7 @@ volume_widget::volume_widget(backend *backend, bool type_volume)
 	if (type_volume) {
 		m_ind_icon = GTK_IMAGE(gtk_image_new_from_pixbuf(ic::get_icon("audio-volume-high-symbolic", 18)));
 
-		auto fn_vol_change = [=](float volume) {
+		auto fn_vol_change = [=, this](float volume) {
 			if (!is_icon_change_locked) {
 				is_icon_change_locked = true;
 
@@ -217,7 +217,7 @@ volume_widget::volume_widget(backend *backend, bool type_volume)
 							 return false;
 						 }),
 						 state_set_data);
-		m_backend->callback_output_mute_changed([=](bool state) {
+		m_backend->callback_output_mute_changed([=, this](bool state) {
 			is_switched_outside = true;
 			gtk_switch_set_active(m_mute_switch, !state);
 			is_switched_outside = false;
@@ -225,7 +225,7 @@ volume_widget::volume_widget(backend *backend, bool type_volume)
 	} else {
 		m_ind_icon = GTK_IMAGE(gtk_image_new_from_pixbuf(ic::get_icon("microphone-sensitivity-high-symbolic", 18)));
 
-		auto fn_vol_change = [=](float volume) {
+		auto fn_vol_change = [=, this](float volume) {
 			if (!is_icon_change_locked) {
 				is_icon_change_locked = true;
 
@@ -277,7 +277,7 @@ volume_widget::volume_widget(backend *backend, bool type_volume)
 							 return false;
 						 }),
 						 state_set_data);
-		m_backend->callback_input_mute_changed([=](bool state) {
+		m_backend->callback_input_mute_changed([=, this](bool state) {
 			is_switched_outside = true;
 			gtk_switch_set_active(m_mute_switch, !state);
 			is_switched_outside = false;
