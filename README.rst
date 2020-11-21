@@ -24,7 +24,7 @@ Applets
 - ☑ Clock
 - ☑ Separator
 - ☐ System tray (Freedesktop StatusNotifierItem implementation)
-- ☐ Volume control (PulseAudio, PipeWire in future)
+- ☑ Volume control (PulseAudio, PipeWire in future)
 - ☑ Task switcher
 - ☑ Activator
 - ☐ App finder
@@ -36,12 +36,15 @@ Installation
 Dependencies
 ------------
 
-- Meson build systemt
+- Meson build system *
+- C and C++ compiler *
+- pkg-config *
 - GTK+3 with Wayland support
 - gtk-layer-shell
-- pkg-config
 - xdg-utils (for Activator applet)
-- C and C++ compiler
+- libpulse (for Volume control applet)
+
+`*` indicates compile-time dependencies
 
 --------------------
 Building from source

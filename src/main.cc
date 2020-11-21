@@ -1,5 +1,6 @@
 #include <gio/gio.h>
 #include <gtk/gtk.h>
+#include <signal.h>
 #include <stdio.h>
 #include <vector>
 
@@ -112,6 +113,17 @@ auto static app_activate(GtkApplication *_app) -> void {
 
 auto static app_shutdown(GtkApplication *_app) -> void { wapanel::applets::remove_applets(); }
 
+// Signal handling
+
+auto static signal_interrupt_callback(int sig) {
+	fprintf(stderr, "\n");
+
+	wapanel::applets::remove_existing_instances();
+	wapanel::applets::remove_applets();
+
+	exit(sig);
+}
+
 // Main function
 
 auto main(int argc, char **argv) -> int {
@@ -120,6 +132,9 @@ auto main(int argc, char **argv) -> int {
 #ifdef VERSION
 	log_info("Started wapanel version %s", VERSION_STRING(VERSION));
 #endif
+
+	// Connect SIGINT to callback
+	signal(SIGINT, signal_interrupt_callback);
 
 	// Create GTK Application.
 	app = gtk_application_new("com.firstbober.wapanel", G_APPLICATION_FLAGS_NONE);

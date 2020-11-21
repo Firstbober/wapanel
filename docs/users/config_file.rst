@@ -195,3 +195,26 @@ activator.command           Command that activator should execute. Text
 activator.working_directory Working directory of executed command. Text
 activator.url               URL of website.                        Text
 =========================== ====================================== ===========================
+
+--------------
+Volume control
+--------------
+
+.. code-block:: toml
+
+	[[panel.applet]]
+		name = "volume-control"
+		flat = false
+		icon_height = -1
+		sound_mixer = ""
+
+This text above is default settings. You can ommit all of this but root `name` must be present.
+-1 means automatic option.
+
+=========================== ====================================== ===========================
+**Parameter**               **Description**				           **Content**
+--------------------------- -------------------------------------- ---------------------------
+flat                        Should activator buttons be flat.      true/false
+icon_height                 Height of icon on panel.               Integer
+sound_mixer                 Command to execute using Sound Mixer.  Text
+=========================== ====================================== ===========================

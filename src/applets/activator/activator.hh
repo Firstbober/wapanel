@@ -61,7 +61,7 @@ private:
 		bool is_flat = false;
 
 		unsigned int __panel_height;
-		unsigned int icon_height;
+		int icon_height;
 
 		std::vector<activator> activators;
 	} m_config;
