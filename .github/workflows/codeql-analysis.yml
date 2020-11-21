@@ -59,7 +59,7 @@ jobs:
     #    uses a compiled language
 
     - run: |
-       sudo apt-get install -y meson libgtk-3-dev libgtk-layer-shell-dev libpulse
+       sudo apt-get install -y meson libgtk-3-dev libgtk-layer-shell-dev libpulse-dev
        mkdir build
        cd build
        meson ..
