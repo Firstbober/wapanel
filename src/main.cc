@@ -79,8 +79,23 @@ auto static config_changed(GFileMonitor *monitor, GFile *file, GFile *other_file
 auto static app_startup(GtkApplication *_app) -> void {
 	// Exit if error is found.
 	if (wapanel::conf::read_config()) {
-		wapanel::spawn_gtk_error("Found some error while trying to read config file. Exiting.");
-		exit(1);
+		GtkWindow *dialog_window = GTK_WINDOW(gtk_window_new(GTK_WINDOW_POPUP));
+		GtkMessageDialog *message_dialog = GTK_MESSAGE_DIALOG(
+			gtk_message_dialog_new(dialog_window, GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_ERROR,
+								   GTK_BUTTONS_OK_CANCEL, "No configuration file was found. Create a new one?"));
+
+		int result = gtk_dialog_run(GTK_DIALOG(message_dialog));
+		gtk_widget_destroy(GTK_WIDGET(dialog_window));
+
+		if (result == GTK_RESPONSE_OK) {
+			if(!std::filesystem::exists(MAIN_CONFIG_DIR))
+				std::filesystem::create_directory(MAIN_CONFIG_DIR);
+
+			std::filesystem::copy_file(std::string(DATA_DIR) + std::string("/wapanel.toml"), MAIN_CONFIG_FILE);
+			app_startup(_app);
+		} else {
+			exit(1);
+		}
 	}
 
 	// Monitor for changes in config.

@@ -34,6 +34,7 @@ pkgconfig.generate(appletapi_lib)
 subdir('src/applets')
 
 install_data('3TH_PARTY_LICENSES', install_dir : get_option('datadir') / 'wapanel')
+install_data('wapanel.toml', install_dir : get_option('datadir') / 'wapanel')
 
 conf_data = configuration_data()
 conf_data.set('version', meson.project_version())
@@ -41,6 +42,8 @@ conf_data.set('version', meson.project_version())
 if get_option('buildtype').startswith('release')
   conf_data.set('BUILD_RELEASE', true)
 endif
+
+conf_data.set('data_dir', get_option('datadir'))
 
 configure_file(input : 'config.hh.in',
                output : 'config.hh',
