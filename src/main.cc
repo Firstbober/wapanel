@@ -88,8 +88,7 @@ auto static app_startup(GtkApplication *_app) -> void {
 		gtk_widget_destroy(GTK_WIDGET(dialog_window));
 
 		if (result == GTK_RESPONSE_OK) {
-			if(!std::filesystem::exists(MAIN_CONFIG_DIR))
-				std::filesystem::create_directory(MAIN_CONFIG_DIR);
+			if (!std::filesystem::exists(MAIN_CONFIG_DIR)) std::filesystem::create_directory(MAIN_CONFIG_DIR);
 
 			std::filesystem::copy_file(std::string(DATA_DIR) + std::string("/wapanel.toml"), MAIN_CONFIG_FILE);
 			app_startup(_app);
