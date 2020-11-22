@@ -2,6 +2,7 @@
 #include <filesystem>
 
 #include "log.hh"
+#include "../config.hh"
 
 #include <dlfcn.h>
 #include <pwd.h>
@@ -93,7 +94,7 @@ auto search_for_applets() -> void {
 	std::string applet_paths[] = APPLET_SEARCH_PATHS;
 	const char *home_dir;
 
-#ifndef RELEASE
+#ifndef BUILD_RELEASE
 	applet_paths[0] = "../lib/wapanel/applets";
 #endif
 

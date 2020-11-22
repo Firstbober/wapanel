@@ -6,10 +6,6 @@ project('wapanel', 'cpp',
 	])
 add_languages('c', required: true, native: false)
 
-if get_option('buildtype').startswith('release')
-  add_project_arguments('-DRELEASE', language : 'cpp')
-endif
-
 gtklayershell  = dependency('gtk-layer-shell-0', version: '>= 0.1', fallback: ['gtk-layer-shell', 'gtk_layer_shell_dep'])
 dynlink        = meson.get_compiler('cpp').find_library('dl', required: true)
 pkgconfig      = import('pkgconfig')
@@ -41,6 +37,10 @@ install_data('3TH_PARTY_LICENSES', install_dir : get_option('datadir') / 'wapane
 
 conf_data = configuration_data()
 conf_data.set('version', meson.project_version())
+
+if get_option('buildtype').startswith('release')
+  conf_data.set('BUILD_RELEASE', true)
+endif
 
 configure_file(input : 'config.hh.in',
                output : 'config.hh',

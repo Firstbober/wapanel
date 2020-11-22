@@ -23,7 +23,6 @@ Applets
 
 - ☑ Clock
 - ☑ Separator
-- ☐ System tray (Freedesktop StatusNotifierItem implementation)
 - ☑ Volume control (PulseAudio, PipeWire in future)
 - ☑ Task switcher
 - ☑ Activator
@@ -60,6 +59,10 @@ Be sure you have installed all listed dependencies and enter:
 	$ sudo ninja install
 
 Everything should build and install.
+
+If you want to not build some applets then use toggle `-Dname=false`.
+List of them is in `meson_options.txt` e.g. `-Dactivator=false`. This
+will disable building of an `activator` applet.
 
 Contribute
 ==========
