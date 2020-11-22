@@ -1,8 +1,8 @@
 #include "applets.hh"
 #include <filesystem>
 
-#include "log.hh"
 #include "../config.hh"
+#include "log.hh"
 
 #include <dlfcn.h>
 #include <pwd.h>
