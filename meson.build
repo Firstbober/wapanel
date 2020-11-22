@@ -39,11 +39,17 @@ subdir('src/applets')
 
 install_data('3TH_PARTY_LICENSES', install_dir : get_option('datadir') / 'wapanel')
 
+conf_data = configuration_data()
+conf_data.set('version', meson.project_version())
+
+configure_file(input : 'config.hh.in',
+               output : 'config.hh',
+               configuration : conf_data)
+
 executable(
 	'wapanel',
 	sources,
 	dependencies: deps,
 	install: true,
-	include_directories : include_directories('thirdparty'),
-	cpp_args: ['-DVERSION="@0@"'.format(meson.project_version())]
+	include_directories : include_directories('thirdparty')
 )

@@ -1,11 +1,12 @@
 #pragma once
 #include <string>
 #include <vector>
-
 #include <toml11/toml.hpp>
 
 #define CONFIG_SEARCH_PATHS                                                                                            \
 	{ "./wapanel.toml", "~/.config/wapanel.toml" }
+
+#define VERSION_STR "@version@"
 
 namespace wapanel::conf {
 

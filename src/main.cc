@@ -4,8 +4,8 @@
 #include <stdio.h>
 #include <vector>
 
+#include "../config.hh"
 #include "applets.hh"
-#include "config.hh"
 #include "log.hh"
 #include "panel.hh"
 #include "utils.hh"
@@ -15,13 +15,6 @@ std::vector<wapanel::panel *> panels;
 GtkApplication *app;
 GFileMonitor *config_monitor;
 // Basic info
-
-#ifndef VERSION
-#	define VERSION "0.0.0~ERROR"
-#endif
-
-#define __inter_verstr(verstr)	#verstr
-#define VERSION_STRING(version) __inter_verstr(version)
 
 // Command line things
 
@@ -129,9 +122,7 @@ auto static signal_interrupt_callback(int sig) {
 auto main(int argc, char **argv) -> int {
 	int status;
 
-#ifdef VERSION
-	log_info("Started wapanel version %s", VERSION_STRING(VERSION));
-#endif
+	log_info("Started wapanel version %s", VERSION_STR);
 
 	// Connect SIGINT to callback
 	signal(SIGINT, signal_interrupt_callback);
