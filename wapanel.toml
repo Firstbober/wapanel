@@ -1,0 +1,15 @@
+[[panel]]
+	position = "bottom"
+	height = 16
+
+	[[panel.applet]]
+		name = "task-switcher"
+
+	[[panel.applet]]
+		name = "system-tray"
+
+	[[panel.applet]]
+		name = "volume-control"
+
+	[[panel.applet]]
+		name = "clock"
