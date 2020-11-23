@@ -84,7 +84,7 @@ auto static config_changed(GFileMonitor *monitor, GFile *file, GFile *other_file
 }
 
 auto static stylesheet_changed(GFileMonitor *monitor, GFile *file, GFile *other_file, GFileMonitorEvent event_type,
-						   gpointer user_data) -> void {
+							   gpointer user_data) -> void {
 	if (event_type != G_FILE_MONITOR_EVENT_CHANGES_DONE_HINT) { return; }
 
 	log_info("====== Stylesheet file update ======");
@@ -117,19 +117,30 @@ auto static app_startup(GtkApplication *_app) -> void {
 	glb_stylesheet_path = "";
 
 	if (std::filesystem::exists(std::string(DATA_DIR) + std::string("/wapanel.css"))) {
-		glb_stylesheet_path = std::string(DATA_DIR) + std::string("/wapanel.css");
-		log_info("Found stylesheet file in install data directory");
-	} else if (std::filesystem::exists(HOME_STYLE_FILE)) {
-		glb_stylesheet_path = HOME_STYLE_FILE;
-		log_info("Found stylesheet in home config directory");
+		log_info("Applying root stylesheet.");
+
+		GtkCssProvider *root_css_provider = gtk_css_provider_new();
+		gtk_css_provider_load_from_path(root_css_provider,
+										std::string(std::string(DATA_DIR) + std::string("/wapanel.css")).c_str(), NULL);
+		gtk_style_context_add_provider_for_screen(gdk_screen_get_default(), GTK_STYLE_PROVIDER(root_css_provider),
+												  GTK_STYLE_PROVIDER_PRIORITY_USER);
 	} else {
-		log_warn("No stylesheet file was found.");
+		log_error("Root stylesheet was not found. Check your installation.");
 	}
 
-	if(glb_stylesheet_path != "") {
+	if (std::filesystem::exists(PRIORITIZED_STYLE_FILE)) {
+		glb_stylesheet_path = PRIORITIZED_STYLE_FILE;
+		log_info("Found stylesheet in binary directory.");
+	} else if (std::filesystem::exists(MAIN_STYLE_FILE)) {
+		glb_stylesheet_path = MAIN_STYLE_FILE;
+		log_warn("Found stylesheet in home directory.");
+	}
+
+	if (glb_stylesheet_path != "") {
 		glb_css_provider = gtk_css_provider_new();
 		gtk_css_provider_load_from_path(glb_css_provider, glb_stylesheet_path.c_str(), NULL);
-		gtk_style_context_add_provider_for_screen(gdk_screen_get_default(), GTK_STYLE_PROVIDER(glb_css_provider), GTK_STYLE_PROVIDER_PRIORITY_USER);
+		gtk_style_context_add_provider_for_screen(gdk_screen_get_default(), GTK_STYLE_PROVIDER(glb_css_provider),
+												  GTK_STYLE_PROVIDER_PRIORITY_USER);
 	}
 
 	// Monitor for changes in config.
@@ -138,9 +149,9 @@ auto static app_startup(GtkApplication *_app) -> void {
 	g_signal_connect(config_monitor, "changed", G_CALLBACK(config_changed), &wapanel::conf::config);
 
 	// Monitor for changes in stylesheet.
-	if(glb_stylesheet_path != "") {
-		stylesheet_monitor = g_file_monitor_file(g_file_new_for_path(glb_stylesheet_path.c_str()),
-										 G_FILE_MONITOR_NONE, NULL, NULL);
+	if (glb_stylesheet_path != "") {
+		stylesheet_monitor
+			= g_file_monitor_file(g_file_new_for_path(glb_stylesheet_path.c_str()), G_FILE_MONITOR_NONE, NULL, NULL);
 		g_signal_connect(stylesheet_monitor, "changed", G_CALLBACK(stylesheet_changed), NULL);
 	}
 
