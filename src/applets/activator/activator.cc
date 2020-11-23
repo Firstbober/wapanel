@@ -220,7 +220,7 @@ auto activator::resolve_activator_configuration(_wap_t_config_variable *config) 
 	return activator_struct_conf;
 }
 
-activator::activator(wap_t_applet_config &applet_config) {
+activator::activator(wap_t_applet_config &applet_config, int id) {
 	_wap_t_config_variable *activator_array = NULL;
 
 	log_info("Created activator instance");
@@ -301,6 +301,16 @@ activator::activator(wap_t_applet_config &applet_config) {
 	gtk_container_add(GTK_CONTAINER(m_menu_popover), GTK_WIDGET(m_menu_popover_container));
 	gtk_menu_button_set_popover(m_menu_button, GTK_WIDGET(m_menu_popover));
 	gtk_widget_show_all(GTK_WIDGET(m_menu_popover_container));
+
+	// Set GTK style things.
+	GtkStyleContext *context = gtk_widget_get_style_context(GTK_WIDGET(m_container));
+	gtk_style_context_add_class(context, "activator");
+	gtk_widget_set_name(GTK_WIDGET(m_container), std::string("activator-" + std::to_string(id)).c_str());
+
+	// For popover
+	context = gtk_widget_get_style_context(GTK_WIDGET(m_menu_popover));
+	gtk_style_context_add_class(context, "activator-popover");
+	gtk_widget_set_name(GTK_WIDGET(m_menu_popover), std::string("activator-popover-" + std::to_string(id)).c_str());
 
 	gtk_container_add(GTK_CONTAINER(m_container), GTK_WIDGET(m_menu_button));
 }

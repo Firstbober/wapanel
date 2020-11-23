@@ -18,6 +18,11 @@ panel::panel(unsigned int id)
 	gtk_window_set_decorated(m_window, false);
 	gtk_window_set_resizable(m_window, false);
 
+	// GTK style things.
+	GtkStyleContext *context = gtk_widget_get_style_context(GTK_WIDGET(m_window));
+	gtk_style_context_add_class(context, "panel");
+	gtk_widget_set_name(GTK_WIDGET(m_window), std::string("panel-" + std::to_string(m_id)).c_str());
+
 	// GTK Layer Shell configuration.
 	gtk_layer_init_for_window(m_window);
 

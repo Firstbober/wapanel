@@ -15,3 +15,4 @@ cppcheck-cppcheck-build-dir
 cppcheck.cppcheck
 
 output
+local_docs.txt

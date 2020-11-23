@@ -31,7 +31,8 @@ GtkWidget *wap_applet_new_instance(wap_t_applet_config applet_config) {
 	}
 
 	if (backend != NULL) {
-		wapanel::applet::volume_control *vc = new wapanel::applet::volume_control(applet_config, backend);
+		wapanel::applet::volume_control *vc
+			= new wapanel::applet::volume_control(applet_config, backend, instances.size());
 		instances.push_back(vc);
 
 		return GTK_WIDGET(vc->get_widget());
@@ -51,12 +52,10 @@ void wap_event_remove_instances() {
 
 // Called when panel exits.
 void wap_event_exit() {
-	if(backend != NULL)
-		delete backend;
+	if (backend != NULL) delete backend;
 
 	wapanel::applet::ic::clean();
 
-	if(backend_thread.joinable())
-		backend_thread.join();
+	if (backend_thread.joinable()) backend_thread.join();
 }
 }

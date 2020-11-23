@@ -12,7 +12,7 @@
 
 namespace wapanel::applet {
 
-task_switcher::task_switcher(wap_t_applet_config applet_config) {
+task_switcher::task_switcher(wap_t_applet_config applet_config, int id) {
 	wl::toplevel_manager::get().try_to_initialize();
 
 	wl::toplevel_manager::get().on_toplevel_new(
@@ -136,6 +136,14 @@ task_switcher::task_switcher(wap_t_applet_config applet_config) {
 	}
 
 	log_info("Updated m_buttons");
+
+	// GTK style things
+
+	m_id = id;
+
+	GtkStyleContext *context = gtk_widget_get_style_context(GTK_WIDGET(m_scroll_window));
+	gtk_style_context_add_class(context, "task-switcher");
+	gtk_widget_set_name(GTK_WIDGET(m_scroll_window), std::string("task-switcher-" + std::to_string(m_id)).c_str());
 }
 task_switcher::~task_switcher() {}
 
@@ -186,6 +194,11 @@ auto task_switcher::window_button_click_event(GdkEvent *event, wl::toplevel *top
 
 			gtk_widget_show_all(GTK_WIDGET(m_context_menu));
 			gtk_menu_popup_at_pointer(GTK_MENU(m_context_menu), event);
+
+			GtkStyleContext *context = gtk_widget_get_style_context(GTK_WIDGET(m_context_menu));
+			gtk_style_context_add_class(context, "task-switcher-context-menu");
+			gtk_widget_set_name(GTK_WIDGET(m_context_menu),
+								std::string("task-switcher-context-menu-" + std::to_string(m_id)).c_str());
 		}
 	}
 }

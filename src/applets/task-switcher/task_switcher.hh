@@ -65,13 +65,14 @@ class task_switcher {
 private:
 	GtkFlowBox *m_window_button_container;
 	GtkScrolledWindow *m_scroll_window;
+	int m_id;
 
 	GtkMenu *m_context_menu = NULL;
 
 	std::unordered_map<unsigned int, window_button *> m_buttons;
 
 public:
-	task_switcher(wap_t_applet_config applet_config);
+	task_switcher(wap_t_applet_config applet_config, int id);
 	~task_switcher();
 
 	auto get_widget() -> GtkWidget *;

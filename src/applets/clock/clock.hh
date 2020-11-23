@@ -40,7 +40,7 @@ private:
 	struct tm m_time_conv;
 
 public:
-	clock(wap_t_applet_config applet_config);
+	clock(wap_t_applet_config applet_config, int id);
 	~clock();
 
 	// Returns widget used by panel.

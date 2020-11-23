@@ -1,5 +1,6 @@
 #include "clock.hh"
 #include "../../log.hh"
+#include <string>
 
 namespace wapanel::applet {
 
@@ -153,7 +154,7 @@ auto resolve_font_config(wap_t_applet_config applet_config) -> PangoAttrList * {
 	return attr_list;
 }
 
-clock::clock(wap_t_applet_config applet_config) {
+clock::clock(wap_t_applet_config applet_config, int id) {
 	// Create instances of required widgets.
 	m_clock_button = GTK_BUTTON(gtk_button_new());
 	m_clock_label = GTK_LABEL(gtk_label_new(""));
@@ -201,12 +202,7 @@ clock::clock(wap_t_applet_config applet_config) {
 	auto css_provider = gtk_css_provider_new();
 	auto calendar_style_context = gtk_widget_get_style_context(GTK_WIDGET(m_calendar));
 
-	gtk_css_provider_load_from_data(css_provider, ".clock-internal-calendar{border:none;}", 40, NULL);
-	gtk_style_context_add_provider_for_screen(gdk_screen, GTK_STYLE_PROVIDER(css_provider),
-											  GTK_STYLE_PROVIDER_PRIORITY_USER);
-
 	gtk_widget_set_size_request(GTK_WIDGET(m_calendar), 250, -1);
-	gtk_style_context_add_class(calendar_style_context, "clock-internal-calendar");
 	gtk_calendar_set_display_options(m_calendar,
 									 (GtkCalendarDisplayOptions)(GTK_CALENDAR_SHOW_HEADING | GTK_CALENDAR_SHOW_DAY_NAMES
 																 | GTK_CALENDAR_SHOW_WEEK_NUMBERS));
@@ -219,6 +215,16 @@ clock::clock(wap_t_applet_config applet_config) {
 	m_label_attr = resolve_font_config(applet_config);
 	gtk_label_set_attributes(m_clock_label, m_label_attr);
 	gtk_container_add(GTK_CONTAINER(m_clock_button), GTK_WIDGET(m_clock_label));
+
+	// GTK style things
+	GtkStyleContext *context = gtk_widget_get_style_context(GTK_WIDGET(m_clock_button));
+	gtk_style_context_add_class(context, "clock");
+	gtk_widget_set_name(GTK_WIDGET(m_clock_button), std::string("clock-" + std::to_string(id)).c_str());
+
+	// For popover
+	context = gtk_widget_get_style_context(GTK_WIDGET(m_calendar_popover));
+	gtk_style_context_add_class(context, "clock-popover");
+	gtk_widget_set_name(GTK_WIDGET(m_calendar_popover), std::string("clock-popover-" + std::to_string(id)).c_str());
 }
 
 clock::~clock() {

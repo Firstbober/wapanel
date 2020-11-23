@@ -14,7 +14,7 @@ wap_t_applet_info wap_applet_info() { return { .name = "task-switcher", .version
 
 // Called when some panel need new instance of your applet.
 GtkWidget *wap_applet_new_instance(wap_t_applet_config applet_config) {
-	wapanel::applet::task_switcher *ts = new wapanel::applet::task_switcher(applet_config);
+	wapanel::applet::task_switcher *ts = new wapanel::applet::task_switcher(applet_config, instances.size());
 	instances.push_back(ts);
 
 	return ts->get_widget();

@@ -67,7 +67,7 @@ private:
 	} m_config;
 
 public:
-	volume_control(wap_t_applet_config applet_config, backend *backend);
+	volume_control(wap_t_applet_config applet_config, backend *backend, int id);
 	~volume_control();
 
 	auto get_widget() -> GtkWidget *;

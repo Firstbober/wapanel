@@ -33,7 +33,7 @@ auto double_fork() -> int {
 
 namespace wapanel::applet {
 
-volume_control::volume_control(wap_t_applet_config applet_config, backend *backend)
+volume_control::volume_control(wap_t_applet_config applet_config, backend *backend, int id)
 	: m_backend(backend)
 	, m_pop_control(GTK_MENU_BUTTON(gtk_menu_button_new()))
 	, m_control_container(GTK_POPOVER(gtk_popover_new(GTK_WIDGET(m_pop_control))))
@@ -119,6 +119,19 @@ volume_control::volume_control(wap_t_applet_config applet_config, backend *backe
 	gtk_widget_set_margin_end(GTK_WIDGET(m_vol_widget_list), 6);
 
 	gtk_menu_button_set_popover(m_pop_control, GTK_WIDGET(m_control_container));
+
+	// GTK style things
+
+	GtkStyleContext *context = gtk_widget_get_style_context(GTK_WIDGET(m_pop_control));
+	gtk_style_context_add_class(context, "volume-control");
+	gtk_widget_set_name(GTK_WIDGET(m_pop_control), std::string("volume-control-" + std::to_string(id)).c_str());
+
+	// For popover
+
+	context = gtk_widget_get_style_context(GTK_WIDGET(m_control_container));
+	gtk_style_context_add_class(context, "volume-control-popover");
+	gtk_widget_set_name(GTK_WIDGET(m_control_container),
+						std::string("volume-control-popover-" + std::to_string(id)).c_str());
 
 	// Change icon on volume change
 
@@ -299,8 +312,7 @@ volume_widget::volume_widget(backend *backend, bool type_volume)
 	log_info("Created volume widget");
 }
 volume_widget::~volume_widget() {
-	if(state_set_data != NULL)
-		delete state_set_data;
+	if (state_set_data != NULL) delete state_set_data;
 }
 
 auto volume_widget::get_widget() -> GtkWidget * { return GTK_WIDGET(m_root); }

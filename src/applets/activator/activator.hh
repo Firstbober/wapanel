@@ -83,7 +83,7 @@ private:
 	auto create_activator_button(config::activator activator, bool is_listed = false) -> GtkButton *;
 
 public:
-	activator(wap_t_applet_config &applet_config);
+	activator(wap_t_applet_config &applet_config, int id);
 	~activator();
 
 	auto get_widget() -> GtkWidget *;
