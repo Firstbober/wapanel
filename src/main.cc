@@ -13,7 +13,12 @@
 // Basic info
 std::vector<wapanel::panel *> panels;
 GtkApplication *app;
+
+GtkCssProvider *glb_css_provider;
+std::string glb_stylesheet_path;
+
 GFileMonitor *config_monitor;
+GFileMonitor *stylesheet_monitor;
 // Basic info
 
 // Command line things
@@ -53,6 +58,8 @@ auto static config_changed(GFileMonitor *monitor, GFile *file, GFile *other_file
 		exit(1);
 	}
 
+	gtk_css_provider_load_from_path(glb_css_provider, glb_stylesheet_path.c_str(), NULL);
+
 	wapanel::applets::remove_existing_instances();
 
 	// Check if any panels is removed or added to the config.
@@ -76,6 +83,15 @@ auto static config_changed(GFileMonitor *monitor, GFile *file, GFile *other_file
 	}
 }
 
+auto static stylesheet_changed(GFileMonitor *monitor, GFile *file, GFile *other_file, GFileMonitorEvent event_type,
+						   gpointer user_data) -> void {
+	if (event_type != G_FILE_MONITOR_EVENT_CHANGES_DONE_HINT) { return; }
+
+	log_info("====== Stylesheet file update ======");
+
+	gtk_css_provider_load_from_path(glb_css_provider, glb_stylesheet_path.c_str(), NULL);
+}
+
 auto static app_startup(GtkApplication *_app) -> void {
 	// Exit if error is found.
 	if (wapanel::conf::read_config()) {
@@ -97,10 +113,36 @@ auto static app_startup(GtkApplication *_app) -> void {
 		}
 	}
 
+	// Load stylesheet
+	glb_stylesheet_path = "";
+
+	if (std::filesystem::exists(std::string(DATA_DIR) + std::string("/wapanel.css"))) {
+		glb_stylesheet_path = std::string(DATA_DIR) + std::string("/wapanel.css");
+		log_info("Found stylesheet file in install data directory");
+	} else if (std::filesystem::exists(HOME_STYLE_FILE)) {
+		glb_stylesheet_path = HOME_STYLE_FILE;
+		log_info("Found stylesheet in home config directory");
+	} else {
+		log_warn("No stylesheet file was found.");
+	}
+
+	if(glb_stylesheet_path != "") {
+		glb_css_provider = gtk_css_provider_new();
+		gtk_css_provider_load_from_path(glb_css_provider, glb_stylesheet_path.c_str(), NULL);
+		gtk_style_context_add_provider_for_screen(gdk_screen_get_default(), GTK_STYLE_PROVIDER(glb_css_provider), GTK_STYLE_PROVIDER_PRIORITY_USER);
+	}
+
 	// Monitor for changes in config.
 	config_monitor = g_file_monitor_file(g_file_new_for_path(wapanel::conf::config.used_config_file.c_str()),
 										 G_FILE_MONITOR_NONE, NULL, NULL);
 	g_signal_connect(config_monitor, "changed", G_CALLBACK(config_changed), &wapanel::conf::config);
+
+	// Monitor for changes in stylesheet.
+	if(glb_stylesheet_path != "") {
+		stylesheet_monitor = g_file_monitor_file(g_file_new_for_path(glb_stylesheet_path.c_str()),
+										 G_FILE_MONITOR_NONE, NULL, NULL);
+		g_signal_connect(stylesheet_monitor, "changed", G_CALLBACK(stylesheet_changed), NULL);
+	}
 
 	// Searches various paths for applets.
 	wapanel::applets::search_for_applets();

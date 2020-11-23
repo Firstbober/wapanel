@@ -6,6 +6,7 @@
 
 #define MAIN_CONFIG_DIR std::string(xdg::ConfigHomeDir().string() + "/wapanel")
 #define MAIN_CONFIG_FILE MAIN_CONFIG_DIR + std::string("/wapanel.toml")
+#define HOME_STYLE_FILE MAIN_CONFIG_DIR + std::string("/wapanel.css")
 
 #define CONFIG_SEARCH_PATHS                                                                                            \
 	{ "./wapanel.toml", MAIN_CONFIG_FILE }
