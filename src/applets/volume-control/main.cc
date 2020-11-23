@@ -9,7 +9,7 @@
 #include <vector>
 
 std::vector<wapanel::applet::volume_control *> instances;
-wapanel::applet::backend *backend;
+wapanel::applet::backend *backend = NULL;
 std::thread backend_thread;
 
 extern "C" {
@@ -45,13 +45,18 @@ void wap_event_remove_instances() {
 	for (auto &&vc : instances) {
 		delete vc;
 	}
+
+	instances.clear();
 }
 
 // Called when panel exits.
 void wap_event_exit() {
-	delete backend;
+	if(backend != NULL)
+		delete backend;
+
 	wapanel::applet::ic::clean();
 
-	backend_thread.join();
+	if(backend_thread.joinable())
+		backend_thread.join();
 }
 }

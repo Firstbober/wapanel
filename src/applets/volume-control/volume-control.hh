@@ -38,7 +38,7 @@ private:
 		std::atomic_bool *v1;
 		backend *v2;
 	};
-	_state_set_data *state_set_data;
+	_state_set_data *state_set_data = NULL;
 
 public:
 	volume_widget(backend *backend, bool type_volume);
@@ -54,7 +54,7 @@ private:
 	GtkImage *m_button_icon;
 	GtkPopover *m_control_container;
 	GtkBox *m_vol_widget_list;
-	volume_widget m_output_widget, m_input_widget;
+	volume_widget *m_output_widget, *m_input_widget;
 	GtkButton *m_open_sound_mixer;
 
 	struct config {
@@ -63,7 +63,7 @@ private:
 		int icon_height = -1;
 		bool is_flat = false;
 
-		std::string sound_mixer_executable = "";
+		std::string sound_mixer_executable;
 	} m_config;
 
 public:

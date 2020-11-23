@@ -137,7 +137,7 @@ class Meson(BuildBackend):
                     else:
                         exec_path = [os.getcwd() + "/" + EXECUTABLE_OUTPUT + "/" +
                                      requested_binary_type + "/bin/" +
-                                     target["install_filename"][0].split("/")[-1]]
+                                     target["install_filename"][0].split("/")[:-1]]
 
                         if len(args) > 0:
                             exec_path += args
@@ -157,7 +157,8 @@ class Meson(BuildBackend):
         opts.append("__no_call")
         exec_info = self.run(opts, args)
 
-        subprocess.call(["valgrind"]+exec_info[0], cwd=exec_info[1])
+        os.chdir(exec_info[1])
+        os.system("valgrind ./" + exec_info[0][0].split("/")[-1] + ">&2")
         pass
 
     def test(self, opts):

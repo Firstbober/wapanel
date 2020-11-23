@@ -38,8 +38,8 @@ volume_control::volume_control(wap_t_applet_config applet_config, backend *backe
 	, m_pop_control(GTK_MENU_BUTTON(gtk_menu_button_new()))
 	, m_control_container(GTK_POPOVER(gtk_popover_new(GTK_WIDGET(m_pop_control))))
 	, m_vol_widget_list(GTK_BOX(gtk_box_new(GTK_ORIENTATION_VERTICAL, 8)))
-	, m_output_widget(backend, true)
-	, m_input_widget(backend, false) {
+	, m_output_widget(new volume_widget(backend, true))
+	, m_input_widget(new volume_widget(backend, false)) {
 
 	log_info("Created volume-control instance");
 
@@ -106,8 +106,8 @@ volume_control::volume_control(wap_t_applet_config applet_config, backend *backe
 		gtk_box_pack_end(m_vol_widget_list, GTK_WIDGET(m_open_sound_mixer), false, false, 0);
 	}
 
-	gtk_box_pack_end(m_vol_widget_list, m_input_widget.get_widget(), false, false, 0);
-	gtk_box_pack_end(m_vol_widget_list, m_output_widget.get_widget(), false, false, 0);
+	gtk_box_pack_end(m_vol_widget_list, m_input_widget->get_widget(), false, false, 0);
+	gtk_box_pack_end(m_vol_widget_list, m_output_widget->get_widget(), false, false, 0);
 
 	gtk_container_add(GTK_CONTAINER(m_control_container), GTK_WIDGET(m_vol_widget_list));
 	gtk_widget_show_all(GTK_WIDGET(m_vol_widget_list));
@@ -138,7 +138,10 @@ volume_control::volume_control(wap_t_applet_config applet_config, backend *backe
 
 	m_backend->callback_output_volume_changed(fn_icon_change);
 }
-volume_control::~volume_control() {}
+volume_control::~volume_control() {
+	delete m_input_widget;
+	delete m_output_widget;
+}
 
 auto volume_control::get_widget() -> GtkWidget * { return GTK_WIDGET(this->m_pop_control); }
 
@@ -295,7 +298,10 @@ volume_widget::volume_widget(backend *backend, bool type_volume)
 
 	log_info("Created volume widget");
 }
-volume_widget::~volume_widget() { delete state_set_data; }
+volume_widget::~volume_widget() {
+	if(state_set_data != NULL)
+		delete state_set_data;
+}
 
 auto volume_widget::get_widget() -> GtkWidget * { return GTK_WIDGET(m_root); }
 
