@@ -2,6 +2,10 @@ if get_option('activator')
 	subdir('activator')
 endif
 
+if get_option('app-finder')
+	subdir('app-finder')
+endif
+
 if get_option('clock')
 	subdir('clock')
 endif

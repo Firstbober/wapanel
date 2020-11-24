@@ -1,4 +1,5 @@
 option('activator', type: 'boolean', value: true)
+option('app-finder', type: 'boolean', value: true)
 option('clock', type: 'boolean', value: true)
 option('separator', type: 'boolean', value: true)
 option('task-switcher', type: 'boolean', value: true)
