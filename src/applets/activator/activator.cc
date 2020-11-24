@@ -2,9 +2,7 @@
 #include "../../log.hh"
 #include "appletapi.h"
 #include <cstring>
-#include <sys/stat.h>
-#include <sys/wait.h>
-#include <unistd.h>
+#include "../double_fork.hh"
 
 #define use_wapi_string_variable(config, name, if_1, if_2)                                                             \
 	if (wapi_key_exists(config, name)) {                                                                               \
@@ -16,32 +14,6 @@
 			if_2                                                                                                       \
 		}                                                                                                              \
 	}
-
-auto double_fork() -> int {
-	pid_t fork_id;
-	if ((fork_id = fork()) == 0) {
-		setsid();
-
-		signal(SIGCHLD, SIG_IGN);
-		signal(SIGHUP, SIG_IGN);
-
-		if (fork() == 0) {
-			umask(0);
-
-			int x;
-			for (x = sysconf(_SC_OPEN_MAX); x >= 0; x--) {
-				close(x);
-			}
-
-			return 0;
-		} else {
-			exit(0);
-		}
-	} else {
-		waitpid(fork_id, 0, 0);
-		return 1;
-	}
-}
 
 namespace wapanel::applet {
 
@@ -118,7 +90,7 @@ auto activator::create_activator_button(config::activator activator, bool is_lis
 		m_clicked_data.push_back(data);
 
 		g_signal_connect(activator_button, "clicked", G_CALLBACK(+[](GtkButton *button, struct clicked_data *data) {
-							 if (double_fork() == 0) {
+							 if (utils::double_fork() == 0) {
 								 chdir(data->v1);
 
 								 system(data->v2);
@@ -139,7 +111,7 @@ auto activator::create_activator_button(config::activator activator, bool is_lis
 		m_clicked_data.push_back(data);
 
 		g_signal_connect(activator_button, "clicked", G_CALLBACK(+[](GtkButton *button, struct clicked_data *data) {
-							 if (double_fork() == 0) { system(data->v1); }
+							 if (utils::double_fork() == 0) { system(data->v1); }
 
 							 return true;
 						 }),

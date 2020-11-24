@@ -1,3 +1,5 @@
+icon_cache_util = static_library('icon-cache-util', ['icon_cache.cc'], dependencies: dependency('gtk+-3.0'))
+
 if get_option('activator')
 	subdir('activator')
 endif

@@ -1,35 +1,7 @@
 #include "volume-control.hh"
 #include "../../log.hh"
-#include "icon-cache.hh"
-#include <sys/stat.h>
-#include <sys/wait.h>
-#include <unistd.h>
-
-auto double_fork() -> int {
-	pid_t fork_id;
-	if ((fork_id = fork()) == 0) {
-		setsid();
-
-		signal(SIGCHLD, SIG_IGN);
-		signal(SIGHUP, SIG_IGN);
-
-		if (fork() == 0) {
-			umask(0);
-
-			int x;
-			for (x = sysconf(_SC_OPEN_MAX); x >= 0; x--) {
-				close(x);
-			}
-
-			return 0;
-		} else {
-			exit(0);
-		}
-	} else {
-		waitpid(fork_id, 0, 0);
-		return 1;
-	}
-}
+#include "../double_fork.hh"
+#include "../icon_cache.hh"
 
 namespace wapanel::applet {
 
@@ -86,8 +58,8 @@ volume_control::volume_control(wap_t_applet_config applet_config, backend *backe
 
 	// GTK
 
-	m_button_icon
-		= GTK_IMAGE(gtk_image_new_from_pixbuf(ic::get_icon("audio-volume-muted-symbolic", m_config.icon_height)));
+	m_button_icon = GTK_IMAGE(
+		gtk_image_new_from_pixbuf(utils::ic::get_icon("audio-volume-muted-symbolic", m_config.icon_height)));
 
 	gtk_container_add(GTK_CONTAINER(this->m_pop_control), GTK_WIDGET(this->m_button_icon));
 
@@ -96,7 +68,7 @@ volume_control::volume_control(wap_t_applet_config applet_config, backend *backe
 		gtk_button_set_relief(GTK_BUTTON(m_open_sound_mixer), GTK_RELIEF_NONE);
 
 		g_signal_connect(m_open_sound_mixer, "clicked", G_CALLBACK(+[](GtkButton *button, std::string *exec_name) {
-							 if (double_fork() == 0) {
+							 if (utils::double_fork() == 0) {
 								 system(exec_name->c_str());
 								 exit(0);
 							 }
@@ -137,19 +109,30 @@ volume_control::volume_control(wap_t_applet_config applet_config, backend *backe
 
 	auto fn_icon_change = [=, this](float volume) {
 		if (volume == 0) {
-			gtk_image_set_from_pixbuf(m_button_icon, ic::get_icon("audio-volume-muted-symbolic", m_config.icon_height));
+			gtk_image_set_from_pixbuf(m_button_icon,
+									  utils::ic::get_icon("audio-volume-muted-symbolic", m_config.icon_height));
 		} else if (volume <= 33) {
-			gtk_image_set_from_pixbuf(m_button_icon, ic::get_icon("audio-volume-low-symbolic", m_config.icon_height));
+			gtk_image_set_from_pixbuf(m_button_icon,
+									  utils::ic::get_icon("audio-volume-low-symbolic", m_config.icon_height));
 		} else if (volume <= 66 && volume > 33) {
 			gtk_image_set_from_pixbuf(m_button_icon,
-									  ic::get_icon("audio-volume-medium-symbolic", m_config.icon_height));
+									  utils::ic::get_icon("audio-volume-medium-symbolic", m_config.icon_height));
 		} else if (volume > 66) {
-			gtk_image_set_from_pixbuf(m_button_icon, ic::get_icon("audio-volume-high-symbolic", m_config.icon_height));
+			gtk_image_set_from_pixbuf(m_button_icon,
+									  utils::ic::get_icon("audio-volume-high-symbolic", m_config.icon_height));
 		}
 	};
 	fn_icon_change(m_backend->get_output_volume_in_percent());
 
 	m_backend->callback_output_volume_changed(fn_icon_change);
+	m_backend->callback_output_mute_changed([=, this](bool state) {
+		if (state) {
+			gtk_image_set_from_pixbuf(m_button_icon,
+									  utils::ic::get_icon("audio-volume-muted-symbolic", m_config.icon_height));
+		} else {
+			fn_icon_change(m_backend->get_output_volume_in_percent());
+		}
+	});
 }
 volume_control::~volume_control() {
 	delete m_input_widget;
@@ -175,7 +158,7 @@ volume_widget::volume_widget(backend *backend, bool type_volume)
 	state_set_data->v2 = m_backend;
 
 	if (type_volume) {
-		m_ind_icon = GTK_IMAGE(gtk_image_new_from_pixbuf(ic::get_icon("audio-volume-high-symbolic", 18)));
+		m_ind_icon = GTK_IMAGE(gtk_image_new_from_pixbuf(utils::ic::get_icon("audio-volume-high-symbolic", 18)));
 
 		auto fn_vol_change = [=, this](float volume) {
 			if (!is_icon_change_locked) {
@@ -183,29 +166,37 @@ volume_widget::volume_widget(backend *backend, bool type_volume)
 
 				if (volume == 0) {
 					if (volume_state != vol_state::muted) {
-						gtk_image_set_from_pixbuf(m_ind_icon, ic::get_icon("audio-volume-muted-symbolic", 18));
+						gtk_image_set_from_pixbuf(m_ind_icon, utils::ic::get_icon("audio-volume-muted-symbolic", 18));
 						volume_state = vol_state::muted;
 					}
 				} else if (volume <= 33) {
 					if (volume_state != vol_state::low) {
-						gtk_image_set_from_pixbuf(m_ind_icon, ic::get_icon("audio-volume-low-symbolic", 18));
+						gtk_image_set_from_pixbuf(m_ind_icon, utils::ic::get_icon("audio-volume-low-symbolic", 18));
 						volume_state = vol_state::low;
 					}
 				} else if (volume <= 66 && volume > 33) {
 					if (volume_state != vol_state::medium) {
-						gtk_image_set_from_pixbuf(m_ind_icon, ic::get_icon("audio-volume-medium-symbolic", 18));
+						gtk_image_set_from_pixbuf(m_ind_icon, utils::ic::get_icon("audio-volume-medium-symbolic", 18));
 						volume_state = vol_state::medium;
 					}
 				} else if (volume > 66) {
 					if (volume_state != vol_state::high) {
-						gtk_image_set_from_pixbuf(m_ind_icon, ic::get_icon("audio-volume-high-symbolic", 18));
+						gtk_image_set_from_pixbuf(m_ind_icon, utils::ic::get_icon("audio-volume-high-symbolic", 18));
 						volume_state = vol_state::high;
+					}
+				}
+
+				if (force_mute_icon) {
+					if (volume_state != vol_state::muted) {
+						gtk_image_set_from_pixbuf(m_ind_icon, utils::ic::get_icon("audio-volume-muted-symbolic", 18));
+						volume_state = vol_state::muted;
 					}
 				}
 
 				is_icon_change_locked = false;
 			}
 		};
+
 		fn_vol_change(m_backend->get_output_volume_in_percent());
 		gtk_adjustment_set_value(m_volume_adj, m_backend->get_output_volume_in_percent());
 
@@ -234,12 +225,16 @@ volume_widget::volume_widget(backend *backend, bool type_volume)
 						 }),
 						 state_set_data);
 		m_backend->callback_output_mute_changed([=, this](bool state) {
+			force_mute_icon = state;
+			fn_vol_change(m_backend->get_output_volume_in_percent());
+
 			is_switched_outside = true;
 			gtk_switch_set_active(m_mute_switch, !state);
 			is_switched_outside = false;
 		});
 	} else {
-		m_ind_icon = GTK_IMAGE(gtk_image_new_from_pixbuf(ic::get_icon("microphone-sensitivity-high-symbolic", 18)));
+		m_ind_icon
+			= GTK_IMAGE(gtk_image_new_from_pixbuf(utils::ic::get_icon("microphone-sensitivity-high-symbolic", 18)));
 
 		auto fn_vol_change = [=, this](float volume) {
 			if (!is_icon_change_locked) {
@@ -247,12 +242,14 @@ volume_widget::volume_widget(backend *backend, bool type_volume)
 
 				if (volume <= 66) {
 					if (volume_state != vol_state::muted) {
-						gtk_image_set_from_pixbuf(m_ind_icon, ic::get_icon("microphone-sensitivity-low-symbolic", 18));
+						gtk_image_set_from_pixbuf(m_ind_icon,
+												  utils::ic::get_icon("microphone-sensitivity-low-symbolic", 18));
 						volume_state = vol_state::muted;
 					}
 				} else if (volume > 66) {
 					if (volume_state != vol_state::high) {
-						gtk_image_set_from_pixbuf(m_ind_icon, ic::get_icon("microphone-sensitivity-high-symbolic", 18));
+						gtk_image_set_from_pixbuf(m_ind_icon,
+												  utils::ic::get_icon("microphone-sensitivity-high-symbolic", 18));
 						volume_state = vol_state::high;
 					}
 				}
@@ -260,6 +257,7 @@ volume_widget::volume_widget(backend *backend, bool type_volume)
 				is_icon_change_locked = false;
 			}
 		};
+
 		fn_vol_change(m_backend->get_input_volume_in_percent());
 		gtk_adjustment_set_value(m_volume_adj, m_backend->get_input_volume_in_percent());
 

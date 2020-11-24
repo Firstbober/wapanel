@@ -1,10 +1,10 @@
 #pragma once
-#include "../../log.hh"
+#include "../log.hh"
 #include <gtk/gtk.h>
 #include <string>
 #include <unordered_map>
 
-namespace wapanel::applet::ic {
+namespace wapanel::applet::utils::ic {
 
 struct icon_cache {
 	std::unordered_map<std::string, GdkPixbuf *> icons;

@@ -1,6 +1,6 @@
-#include "icon-cache.hh"
+#include "icon_cache.hh"
 
-namespace wapanel::applet::ic {
+namespace wapanel::applet::utils::ic {
 
 std::unordered_map<int, icon_cache *> _sizes;
 
@@ -10,7 +10,7 @@ auto icon_cache::get_icon(std::string icon_name, int icon_size) -> GdkPixbuf * {
 	} else {
 		GtkIconTheme *default_icon_theme = gtk_icon_theme_get_default();
 		icons[icon_name] = gtk_icon_theme_load_icon(default_icon_theme, icon_name.c_str(), icon_size,
-													GTK_ICON_LOOKUP_FORCE_SYMBOLIC, NULL);
+													GTK_ICON_LOOKUP_FORCE_SIZE, NULL);
 
 		log_info("Initialized cache for icon `%s` with size `%d`", icon_name.c_str(), icon_size);
 		return icons[icon_name];
