@@ -13,6 +13,7 @@
 	{ "./wapanel.toml", MAIN_CONFIG_FILE }
 
 #define VERSION_STR "@version@"
+#define PREFIX_DATA_DIR "../@data_dir@"
 #define DATA_DIR "../@data_dir@/wapanel"
 
 namespace wapanel::conf {
