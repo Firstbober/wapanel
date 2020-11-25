@@ -32,13 +32,13 @@ pkgconfig.generate(appletapi_lib)
 
 subdir('src/applets')
 
-install_data('3TH_PARTY_LICENSES', install_dir : get_option('datadir') / 'wapanel')
+install_data('3TH_PARTY_LICENSES', install_dir : get_option('datadir') / meson.project_name())
 
-install_data('wapanel.toml', install_dir : get_option('datadir') / 'wapanel')
-install_data('wapanel.css', install_dir : get_option('datadir') / 'wapanel')
+install_data('wapanel.toml', install_dir : get_option('datadir') / meson.project_name())
+install_data('wapanel.css', install_dir : get_option('datadir') / meson.project_name())
 
 install_data('resources/wapa-logo-nocolor-dark.svg',
-            install_dir : get_option('datadir') / 'icons' / 'hicolor' / 'scalable' / 'apps')
+            install_dir : get_option('datadir') / meson.project_name() / 'icons/hicolor/scalable/apps')
 
 conf_data = configuration_data()
 conf_data.set('app_version', meson.project_version())

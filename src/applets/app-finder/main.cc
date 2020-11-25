@@ -1,3 +1,4 @@
+#include "../icon_cache.hh"
 #include "app-finder.hh"
 #include <appletapi.h>
 #include <gtk/gtk.h>
@@ -29,5 +30,5 @@ void wap_event_remove_instances() {
 }
 
 // Called when panel exits.
-void wap_event_exit() {}
+void wap_event_exit() { wapanel::applet::utils::ic::clean(); }
 }
