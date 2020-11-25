@@ -7,7 +7,7 @@
 #include <unistd.h>
 
 #include "log.hh"
-#include "utils.hh"
+#include "../config_data.hh"
 
 #include <toml11/toml.hpp>
 
@@ -74,7 +74,6 @@ auto read_config() -> bool {
 
 			for (auto &&tm_applet : applets) {
 				if (!tm_applet.contains("name") || toml::find_or(tm_applet, "name", "").length() == 0) {
-					spawn_gtk_error("Tried to load applet without name");
 					log_error("Tried to load applet without name");
 
 					continue;

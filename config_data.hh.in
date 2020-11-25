@@ -1,0 +1,18 @@
+#pragma once
+#include <string>
+#include <xdgpp/xdg.hpp>
+
+#define USED_CONFIG_DIR std::string(xdg::ConfigHomeDir().string() + "/wapanel")
+
+#define USER_CONFIG_PATH	 USED_CONFIG_DIR + std::string("/wapanel.toml")
+#define USER_STYLESHEET_PATH USED_CONFIG_DIR + std::string("/wapanel.css")
+
+#define LOCAL_CONFIG_PATH	  "./wapanel.toml"
+#define LOCAL_STYLESHEET_PATH "./wapanel.css"
+
+#define CONFIG_SEARCH_PATHS                                                                                            \
+	{ LOCAL_CONFIG_PATH, USER_CONFIG_PATH }
+
+#define APP_VERSION		"@app_version@"
+#define PREFIX_DATA_DIR "../@data_dir@"
+#define APP_DATA_DIR	"../@data_dir@/wapanel"

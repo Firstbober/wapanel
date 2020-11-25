@@ -4,11 +4,12 @@
 #include <stdio.h>
 #include <vector>
 
-#include "../config.hh"
+#include "config.hh"
 #include "applets.hh"
 #include "log.hh"
 #include "panel.hh"
-#include "utils.hh"
+
+#include "../config_data.hh"
 
 // Basic info
 std::vector<wapanel::panel *> panels;
@@ -54,7 +55,7 @@ auto static config_changed(GFileMonitor *monitor, GFile *file, GFile *other_file
 
 	// Exit if error is found.
 	if (wapanel::conf::read_config()) {
-		wapanel::spawn_gtk_error("Found some error while trying to read config file. Exiting.");
+		log_error("Tried to load invalid config file.");
 		exit(1);
 	}
 
@@ -104,9 +105,9 @@ auto static app_startup(GtkApplication *_app) -> void {
 		gtk_widget_destroy(GTK_WIDGET(dialog_window));
 
 		if (result == GTK_RESPONSE_OK) {
-			if (!std::filesystem::exists(MAIN_CONFIG_DIR)) std::filesystem::create_directory(MAIN_CONFIG_DIR);
+			if (!std::filesystem::exists(USED_CONFIG_DIR)) std::filesystem::create_directory(USED_CONFIG_DIR);
 
-			std::filesystem::copy_file(std::string(DATA_DIR) + std::string("/wapanel.toml"), MAIN_CONFIG_FILE);
+			std::filesystem::copy_file(std::string(APP_DATA_DIR) + std::string("/wapanel.toml"), USER_CONFIG_PATH);
 			app_startup(_app);
 		} else {
 			exit(1);
@@ -116,23 +117,23 @@ auto static app_startup(GtkApplication *_app) -> void {
 	// Load stylesheet
 	glb_stylesheet_path = "";
 
-	if (std::filesystem::exists(std::string(DATA_DIR) + std::string("/wapanel.css"))) {
+	if (std::filesystem::exists(std::string(APP_DATA_DIR) + std::string("/wapanel.css"))) {
 		log_info("Applying root stylesheet.");
 
 		GtkCssProvider *root_css_provider = gtk_css_provider_new();
 		gtk_css_provider_load_from_path(root_css_provider,
-										std::string(std::string(DATA_DIR) + std::string("/wapanel.css")).c_str(), NULL);
+										std::string(std::string(APP_DATA_DIR) + std::string("/wapanel.css")).c_str(), NULL);
 		gtk_style_context_add_provider_for_screen(gdk_screen_get_default(), GTK_STYLE_PROVIDER(root_css_provider),
 												  GTK_STYLE_PROVIDER_PRIORITY_USER);
 	} else {
 		log_error("Root stylesheet was not found. Check your installation.");
 	}
 
-	if (std::filesystem::exists(PRIORITIZED_STYLE_FILE)) {
-		glb_stylesheet_path = PRIORITIZED_STYLE_FILE;
+	if (std::filesystem::exists(LOCAL_STYLESHEET_PATH)) {
+		glb_stylesheet_path = LOCAL_STYLESHEET_PATH;
 		log_info("Found stylesheet in binary directory.");
-	} else if (std::filesystem::exists(MAIN_STYLE_FILE)) {
-		glb_stylesheet_path = MAIN_STYLE_FILE;
+	} else if (std::filesystem::exists(USER_STYLESHEET_PATH)) {
+		glb_stylesheet_path = USER_STYLESHEET_PATH;
 		log_warn("Found stylesheet in home directory.");
 	}
 
@@ -189,7 +190,7 @@ auto static signal_interrupt_callback(int sig) {
 auto main(int argc, char **argv) -> int {
 	int status;
 
-	log_info("Started wapanel version %s", VERSION_STR);
+	log_info("Started wapanel version %s", APP_VERSION);
 
 	// Connect SIGINT to callback
 	signal(SIGINT, signal_interrupt_callback);

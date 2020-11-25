@@ -2,19 +2,6 @@
 #include <string>
 #include <vector>
 #include <toml11/toml.hpp>
-#include <xdgpp/xdg.hpp>
-
-#define MAIN_CONFIG_DIR std::string(xdg::ConfigHomeDir().string() + "/wapanel")
-#define MAIN_CONFIG_FILE MAIN_CONFIG_DIR + std::string("/wapanel.toml")
-#define MAIN_STYLE_FILE MAIN_CONFIG_DIR + std::string("/wapanel.css")
-#define PRIORITIZED_STYLE_FILE "./wapanel.css"
-
-#define CONFIG_SEARCH_PATHS                                                                                            \
-	{ "./wapanel.toml", MAIN_CONFIG_FILE }
-
-#define VERSION_STR "@version@"
-#define PREFIX_DATA_DIR "../@data_dir@"
-#define DATA_DIR "../@data_dir@/wapanel"
 
 namespace wapanel::conf {
 
