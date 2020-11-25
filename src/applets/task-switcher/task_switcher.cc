@@ -44,11 +44,11 @@ task_switcher::task_switcher(wap_t_applet_config applet_config, int id) {
 		mode_tb = wapi_get_var_from_table(&applet_config.root, "mode");
 	}
 
-	if (mode_tb != NULL && wapi_key_exists(mode_tb, "scroll")) {
+	if (mode_tb != NULL && mode_tb->type == WAP_CONF_VAR_TYPE_TABLE && wapi_key_exists(mode_tb, "scroll")) {
 		mode_scroll_tb = wapi_get_var_from_table(mode_tb, "scroll");
 	}
 
-	if (mode_scroll_tb != NULL) {
+	if (mode_scroll_tb != NULL && mode_scroll_tb->type == WAP_CONF_VAR_TYPE_TABLE) {
 		_wap_t_config_variable *var = NULL;
 
 		if (wapi_key_exists(mode_scroll_tb, "fallback_icon")) {

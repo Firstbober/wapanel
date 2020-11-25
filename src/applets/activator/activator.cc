@@ -1,8 +1,8 @@
 #include "activator.hh"
 #include "../../log.hh"
+#include "../double_fork.hh"
 #include "appletapi.h"
 #include <cstring>
-#include "../double_fork.hh"
 
 #define use_wapi_string_variable(config, name, if_1, if_2)                                                             \
 	if (wapi_key_exists(config, name)) {                                                                               \
@@ -207,12 +207,12 @@ activator::activator(wap_t_applet_config &applet_config, int id) {
 	if (wapi_key_exists(&applet_config.root, "flat")) {
 		_wap_t_config_variable *var = wapi_get_var_from_table(&applet_config.root, "flat");
 
-		if (var->type == WAP_CONF_VAR_TYPE_BOOLEAN) { m_config.is_flat = wapi_var_as_boolean(var); }
+		if (var->type == WAP_CONF_VAR_TYPE_BOOLEAN) m_config.is_flat = wapi_var_as_boolean(var);
 	}
 
 	if (wapi_key_exists(&applet_config.root, "icon_height")) {
 		_wap_t_config_variable *var = wapi_get_var_from_table(&applet_config.root, "icon_height");
-		m_config.icon_height = wapi_var_as_integer(var);
+		if (var->type == WAP_CONF_VAR_TYPE_INTEGER) m_config.icon_height = wapi_var_as_integer(var);
 	}
 
 	if (wapi_key_exists(&applet_config.root, "activator")) {
