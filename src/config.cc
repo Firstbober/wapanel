@@ -6,8 +6,8 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-#include "log.hh"
 #include "../config_data.hh"
+#include "log.hh"
 
 #include <toml11/toml.hpp>
 
@@ -15,6 +15,9 @@ namespace wapanel::conf {
 namespace fs = std::filesystem;
 
 global_config config;
+
+bool is_there_last_config = false;
+toml::value last_working_config;
 
 auto read_config() -> bool {
 	// Config finding code.
@@ -56,7 +59,23 @@ auto read_config() -> bool {
 	config.used_config_file = found_config_path;
 
 	// Config reading code.
-	const auto tm_data = toml::parse(found_config_path);
+	toml::value tm_data;
+
+	try {
+		tm_data = toml::parse(found_config_path);
+	} catch (const std::exception &e) {
+		log_error("\n%s", e.what());
+
+		if (is_there_last_config) {
+			tm_data = last_working_config;
+		} else {
+			exit(1);
+		}
+	}
+
+	is_there_last_config = true;
+	last_working_config = tm_data;
+
 	const auto panels = toml::find<std::vector<toml::value>>(tm_data, "panel");
 
 	// Iterate over panel entries in toml.
