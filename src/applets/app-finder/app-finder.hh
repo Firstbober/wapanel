@@ -8,8 +8,13 @@
 
 	[[panel.applet]]
 		name = "app-finder"
+
 		icon = ""
+		icon_height = -1
 		flat = false
+
+		popover_width = -1
+		popover_height = -1
 
 		user_manager = ""
 		settings = ""
@@ -33,11 +38,6 @@ namespace ui_comps {
 		GtkBox *m_root;
 
 	public:
-		logout_box();
-		~logout_box();
-
-		auto get_widget() -> GtkWidget *;
-
 		struct config {
 			std::string shutdown_cmd;
 			std::string restart_cmd;
@@ -45,7 +45,15 @@ namespace ui_comps {
 			std::string suspend_cmd;
 			std::string hibernate_cmd;
 			std::string lock_cmd;
-		} cmp_config;
+		};
+
+		logout_box(config conf);
+		~logout_box();
+
+		auto get_widget() -> GtkWidget *;
+
+	private:
+		config cmp_config;
 	};
 
 	class action_bar {
@@ -56,27 +64,30 @@ namespace ui_comps {
 		GtkBox *m_fast_actions_container;
 		GtkButton *m_system_settings;
 		GtkButton *m_file_manager;
-
-		GtkToggleButton *m_logout;
+		GtkMenuButton *m_logout;
 		GtkPopover *m_logout_popover;
 
 		logout_box m_logout_content;
 
 	public:
-		action_bar();
-		~action_bar();
-
-		auto get_widget() -> GtkWidget *;
-
 		struct config {
 			std::string user_manager_cmd;
 			std::string settings_cmd;
 			std::string file_manager_cmd;
-		} cmp_config;
+		};
+
+		action_bar(action_bar::config cmp_conf, logout_box::config logout_conf);
+		~action_bar();
+
+		auto get_widget() -> GtkWidget *;
+
+	private:
+		config cmp_config;
 	};
 
 	class list_area {
 	private:
+		GtkBox *m_root;
 		GtkNotebook *m_list_container;
 
 	public:
@@ -102,8 +113,13 @@ private:
 
 	struct config {
 		int __panel_height;
+
+		std::string icon_name;
 		int icon_height = -1;
 		bool is_flat;
+
+		int popover_width = -1;
+		int popover_height = -1;
 	} m_config;
 
 public:
