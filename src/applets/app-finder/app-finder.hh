@@ -45,6 +45,8 @@ namespace ui_comps {
 			std::string suspend_cmd;
 			std::string hibernate_cmd;
 			std::string lock_cmd;
+
+			bool is_anything_there = false;
 		};
 
 		logout_box(config conf);
@@ -67,7 +69,7 @@ namespace ui_comps {
 		GtkMenuButton *m_logout;
 		GtkPopover *m_logout_popover;
 
-		logout_box m_logout_content;
+		logout_box *m_logout_content;
 
 	public:
 		struct config {
@@ -76,7 +78,7 @@ namespace ui_comps {
 			std::string file_manager_cmd;
 		};
 
-		action_bar(action_bar::config cmp_conf, logout_box::config logout_conf);
+		action_bar(action_bar::config cmp_conf, logout_box::config logout_conf, int apid);
 		~action_bar();
 
 		auto get_widget() -> GtkWidget *;

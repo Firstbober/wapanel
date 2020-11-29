@@ -12,10 +12,10 @@ namespace ui_comps {
 	logout_box::~logout_box() {}
 	auto logout_box::get_widget() -> GtkWidget * { return GTK_WIDGET(m_root); }
 
-	action_bar::action_bar(action_bar::config conf, logout_box::config logout_conf)
+	action_bar::action_bar(action_bar::config conf, logout_box::config logout_conf, int apid)
 		: m_root(GTK_BOX(gtk_box_new(GTK_ORIENTATION_VERTICAL, 0)))
-		, m_logout_content(logout_conf)
 		, m_fast_actions_container(GTK_BOX(gtk_box_new(GTK_ORIENTATION_VERTICAL, 8)))
+		, m_logout_content(new logout_box(logout_conf))
 		, cmp_config(conf) {
 
 		if (cmp_config.user_manager_cmd != "") {
@@ -62,11 +62,34 @@ namespace ui_comps {
 			gtk_box_pack_start(m_fast_actions_container, GTK_WIDGET(m_file_manager), false, true, 0);
 		}
 
+		if (logout_conf.is_anything_there) {
+			m_logout = GTK_MENU_BUTTON(gtk_menu_button_new());
+			m_logout_popover = GTK_POPOVER(gtk_popover_new(GTK_WIDGET(m_logout)));
+
+			gtk_container_add(
+				GTK_CONTAINER(m_logout),
+				GTK_WIDGET(gtk_image_new_from_pixbuf(utils::ic::get_icon("system-log-out-symbolic", 24))));
+
+			gtk_button_set_relief(GTK_BUTTON(m_logout), GTK_RELIEF_NONE);
+
+			gtk_container_add(GTK_CONTAINER(m_logout_popover), GTK_WIDGET(m_logout_content->get_widget()));
+			gtk_widget_show_all(m_logout_content->get_widget());
+			gtk_widget_set_size_request(GTK_WIDGET(m_logout_popover), 100, 100); // TODO: Try to make it automatic
+			gtk_menu_button_set_popover(m_logout, GTK_WIDGET(m_logout_popover));
+
+			GtkStyleContext *context = gtk_widget_get_style_context(GTK_WIDGET(m_logout_popover));
+			gtk_style_context_add_class(context, "app-finder-logout-popover");
+			gtk_widget_set_name(GTK_WIDGET(m_logout_popover),
+								std::string("app-finder-logout-popover-" + std::to_string(apid)).c_str());
+
+			gtk_box_pack_start(m_fast_actions_container, GTK_WIDGET(m_logout), false, true, 0);
+		}
+
 		// TODO: Add logout button
 
 		gtk_box_pack_end(m_root, GTK_WIDGET(m_fast_actions_container), false, true, 0);
 	}
-	action_bar::~action_bar() {}
+	action_bar::~action_bar() { delete m_logout_content; }
 	auto action_bar::get_widget() -> GtkWidget * { return GTK_WIDGET(m_root); }
 
 	list_area::list_area()
@@ -163,7 +186,10 @@ app_finder::app_finder(wap_t_applet_config applet_config, int id)
 
 		for (size_t i = 0; i < keys.size(); i++) {
 			var = wapi_get_var_from_table(config_logout, keys[i].c_str());
-			if (var->type == WAP_CONF_VAR_TYPE_STRING) var_ref[i].get() = std::string(wapi_var_as_string(var));
+			if (var->type == WAP_CONF_VAR_TYPE_STRING) {
+				var_ref[i].get() = std::string(wapi_var_as_string(var));
+				if (var_ref[i].get() != "") logout_box_cfg.is_anything_there = true;
+			}
 		}
 	}
 
@@ -173,7 +199,7 @@ app_finder::app_finder(wap_t_applet_config applet_config, int id)
 
 	// Subclass initialization
 
-	m_sidebar = new ui_comps::action_bar(action_bar_cfg, logout_box_cfg);
+	m_sidebar = new ui_comps::action_bar(action_bar_cfg, logout_box_cfg, m_id);
 	m_list_area = new ui_comps::list_area();
 
 	// Gtk styling and other stuff
