@@ -7,7 +7,7 @@ std::unordered_map<int, icon_cache *> _sizes;
 
 icon_cache::icon_cache() {
 	default_icon_theme = gtk_icon_theme_get_default();
-	gtk_icon_theme_append_search_path(default_icon_theme, PREFIX_DATA_DIR "/icons");
+	gtk_icon_theme_append_search_path(default_icon_theme, APP_DATA_DIR "/icons");
 }
 
 icon_cache::~icon_cache() {

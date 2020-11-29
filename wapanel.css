@@ -3,3 +3,9 @@
 .clock-popover calendar {
 	border: none;
 }
+
+/* Make app-finder icons more fit */
+
+.app-finder-popover box box:first-child button {
+	padding: 6px;
+}

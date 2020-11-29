@@ -1,7 +1,9 @@
 #pragma once
 #include <appletapi.h>
+#include <array>
 #include <gtk/gtk.h>
 #include <string>
+#include <vector>
 
 /*
 	Default config
@@ -36,6 +38,8 @@ namespace ui_comps {
 	class logout_box {
 	private:
 		GtkBox *m_root;
+		std::array<GtkButton *, 6> m_action_buttons;
+		std::array<GtkBox *, 6> m_action_btn_container;
 
 	public:
 		struct config {

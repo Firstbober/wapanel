@@ -40,6 +40,12 @@ install_data('wapanel.css', install_dir : get_option('datadir') / meson.project_
 install_data('resources/wapa-logo-nocolor-dark.svg',
             install_dir : get_option('datadir') / meson.project_name() / 'icons/hicolor/scalable/apps')
 
+install_data([
+	'resources/icons/wapa-account.svg',
+	'resources/icons/wapa-cog.svg',
+	'resources/icons/wapa-folder.svg'
+], install_dir : get_option('datadir') / meson.project_name() / 'icons/hicolor/scalable/actions')
+
 conf_data = configuration_data()
 conf_data.set('app_version', meson.project_version())
 
