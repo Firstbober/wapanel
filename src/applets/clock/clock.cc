@@ -198,9 +198,6 @@ clock::clock(wap_t_applet_config applet_config, int id) {
 	m_calendar_popover = GTK_POPOVER(gtk_popover_new(GTK_WIDGET(m_clock_button)));
 
 	m_calendar = GTK_CALENDAR(gtk_calendar_new());
-	auto gdk_screen = gdk_screen_get_default();
-	auto css_provider = gtk_css_provider_new();
-	auto calendar_style_context = gtk_widget_get_style_context(GTK_WIDGET(m_calendar));
 
 	gtk_widget_set_size_request(GTK_WIDGET(m_calendar), 250, -1);
 	gtk_calendar_set_display_options(m_calendar,

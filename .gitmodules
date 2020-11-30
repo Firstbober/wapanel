@@ -1,3 +1,6 @@
 [submodule "thirdparty/toml11"]
 	path = thirdparty/toml11
 	url = https://github.com/ToruNiina/toml11.git
+[submodule "thirdparty/tinyxml2"]
+	path = thirdparty/tinyxml2
+	url = https://github.com/leethomason/tinyxml2.git

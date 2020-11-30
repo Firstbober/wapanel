@@ -32,7 +32,7 @@ pkgconfig.generate(appletapi_lib)
 
 subdir('src/applets')
 
-install_data('3TH_PARTY_LICENSES', install_dir : get_option('datadir') / meson.project_name())
+install_data('3RD_PARTY_LICENSES', install_dir : get_option('datadir') / meson.project_name())
 
 install_data('wapanel.toml', install_dir : get_option('datadir') / meson.project_name())
 install_data('wapanel.css', install_dir : get_option('datadir') / meson.project_name())

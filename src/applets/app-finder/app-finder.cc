@@ -1,6 +1,8 @@
 #include "app-finder.hh"
+#include "../../log.hh"
 #include "../double_fork.hh"
 #include "../icon_cache.hh"
+#include "menu_entries.hh"
 #include <functional>
 
 namespace wapanel::applet {
@@ -128,6 +130,8 @@ namespace ui_comps {
 	list_area::list_area()
 		: m_root(GTK_BOX(gtk_box_new(GTK_ORIENTATION_VERTICAL, 4)))
 		, m_list_container(GTK_NOTEBOOK(gtk_notebook_new())) {
+
+		menu_entries::get();
 		// TODO: Make this work
 	}
 	list_area::~list_area() {}
