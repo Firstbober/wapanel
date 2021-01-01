@@ -5,7 +5,8 @@ library('wapanel-applet-app-finder',
 		'menu_entries.cc'
 	],
 	dependencies: [
-		dependency('gtk+-3.0')
+		dependency('gtk+-3.0'),
+		dependency('pugixml')
 	],
 	install: true,
 	include_directories: [

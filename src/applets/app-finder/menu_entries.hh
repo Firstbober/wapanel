@@ -1,5 +1,7 @@
 #pragma once
 #include "../../log.hh"
+#include <filesystem>
+#include <optional>
 #include <string>
 #include <vector>
 
@@ -7,9 +9,27 @@ namespace wapanel::applet {
 
 struct menu_entry {};
 
-struct menu_category {
+enum class xdg_menu_rule_type { None, Filename, Category, All, And, Or, Not };
+
+struct xdg_menu_rule {
+	xdg_menu_rule_type type = xdg_menu_rule_type::None;
+	std::vector<xdg_menu_rule> subrules;
+	std::optional<std::string> optional_content;
+};
+
+struct xdg_menu {
+	std::vector<xdg_menu> submenus;
+
+	std::vector<std::filesystem::path> app_dirs;
+	std::vector<std::filesystem::path> directory_dirs;
+
 	std::string name;
-	std::vector<menu_entry> entries;
+	std::filesystem::path menu_directory_entry_path;
+	bool only_unallocated = false;
+	bool deleted = false;
+
+	std::vector<xdg_menu_rule> include_rules;
+	std::vector<xdg_menu_rule> exclude_rules;
 };
 
 class menu_entries {
@@ -19,7 +39,7 @@ public:
 		return instance;
 	}
 
-	auto get_categories_names() -> std::vector<std::string>;
+	std::optional<xdg_menu> root_menu;
 
 private:
 	menu_entries() {
@@ -31,8 +51,6 @@ private:
 	menu_entries &operator=(const menu_entries &) = delete;
 
 	auto create_cache() -> void;
-
-	std::vector<menu_category> m_categories;
 };
 
 } // namespace wapanel::applet
