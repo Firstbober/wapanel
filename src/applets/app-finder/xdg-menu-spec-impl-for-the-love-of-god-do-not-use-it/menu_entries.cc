@@ -132,7 +132,7 @@ auto parse_menu_node(pugi::xml_node menu_node) -> std::optional<xdg_menu> {
 		}
 	}
 
-	// ---- <Menu> independent nodes
+	// ---- Count independent
 
 	if (menu_node.child("DefaultAppDirs")) {
 		for (auto &&data_dir : xdg::DataDirs()) {
@@ -152,7 +152,7 @@ auto parse_menu_node(pugi::xml_node menu_node) -> std::optional<xdg_menu> {
 		}
 	}
 
-	// ++++ <Menu> independent nodes
+	// ++++ Count independent
 
 	if (!menu.deleted) {
 		return menu;
@@ -160,6 +160,8 @@ auto parse_menu_node(pugi::xml_node menu_node) -> std::optional<xdg_menu> {
 		return {};
 	}
 
+	// TODO: Implement merging
+	// TODO: Implement Move, Old, New
 	// TODO: Add XML nodes from menu spec after the "<Not>" one
 }
 
@@ -223,6 +225,21 @@ auto menu_entries::create_cache() -> void {
 
 	// TODO: Make processing of parsed data
 	// Merging, rule execution etc.
+
+	std::vector<std::filesystem::path> list_of_paths_to_apps;
+
+	for (auto &&app_dir : this->root_menu.value().app_dirs) {
+		if(!std::filesystem::exists(app_dir))
+			continue;
+
+		for (auto &&app_path : std::filesystem::directory_iterator(app_dir.string())) {
+			list_of_paths_to_apps.push_back(app_path);
+		}
+	}
+
+	for (auto &&i : list_of_paths_to_apps) {
+		log_warn("%s", i.c_str());
+	}
 }
 
 } // namespace wapanel::applet

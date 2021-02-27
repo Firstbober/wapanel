@@ -2,7 +2,10 @@ library('wapanel-applet-app-finder',
 	[
 		'main.cc',
 		'app-finder.cc',
-		'menu_entries.cc'
+
+		'components/action_bar.cc',
+		'components/list_area.cc',
+		'components/logout_box.cc'
 	],
 	dependencies: [
 		dependency('gtk+-3.0'),
