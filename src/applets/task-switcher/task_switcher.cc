@@ -354,6 +354,8 @@ auto window_button::search_for_icon(std::string app_id) -> std::string {
 	for (auto &&directory_path : { "/usr/share/applications/", "/usr/local/share/applications/" }) {
 		if (icon_name.length() > 0) { break; }
 
+		if (!std::filesystem::exists(directory_path)) { continue; }
+
 		for (auto &&directory_entry : std::filesystem::directory_iterator(directory_path)) {
 			if (!directory_entry.is_regular_file()) continue;
 
