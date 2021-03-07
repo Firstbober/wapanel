@@ -94,7 +94,7 @@ class Meson(BuildBackend):
         if CURRENT_PROC.returncode != 0:
             return False
 
-        os.system("meson install -C " + BUILD_DIRECTORY)
+        os.system("meson install --quiet -C " + BUILD_DIRECTORY)
 
         return True
 
