@@ -39,6 +39,8 @@ logout_box::logout_box(config conf)
 							 &vars_to_check[i].get());
 		}
 	}
+
+	log_info("app-finder/logout-box created");
 }
 logout_box::~logout_box() {}
 auto logout_box::get_widget() -> GtkWidget * { return GTK_WIDGET(m_root); }

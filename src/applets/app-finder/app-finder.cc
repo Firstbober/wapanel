@@ -13,6 +13,8 @@ app_finder::app_finder(wap_t_applet_config applet_config, int id)
 	, m_finder_popover(GTK_POPOVER(gtk_popover_new(GTK_WIDGET(m_app_finder_btn))))
 	, m_finder_aligner(GTK_BOX(gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 4))) {
 
+	log_info("Started building app-finder");
+
 	_wap_t_config_variable *var;
 
 	// 1st part of config
@@ -74,22 +76,22 @@ app_finder::app_finder(wap_t_applet_config applet_config, int id)
 	}
 
 	// 4th part of config
-
 	ui_comps::logout_box::config logout_box_cfg;
+	{
+		if (wapi_key_exists(&applet_config.root, "logout")) {
+			_wap_t_config_variable *config_logout = wapi_get_var_from_table(&applet_config.root, "logout");
 
-	if (wapi_key_exists(&applet_config.root, "logout")) {
-		_wap_t_config_variable *config_logout = wapi_get_var_from_table(&applet_config.root, "logout");
+			std::array<std::string, 6> keys = { "shutdown", "restart", "logout", "suspend", "hibernate", "lock" };
+			std::array<std::reference_wrapper<std::string>, 6> var_ref
+				= { logout_box_cfg.shutdown_cmd, logout_box_cfg.restart_cmd,   logout_box_cfg.logout_cmd,
+					logout_box_cfg.suspend_cmd,	 logout_box_cfg.hibernate_cmd, logout_box_cfg.lock_cmd };
 
-		std::array<std::string, 6> keys = { "shutdown", "restart", "logout", "suspend", "hibernate", "lock" };
-		std::array<std::reference_wrapper<std::string>, 6> var_ref
-			= { logout_box_cfg.shutdown_cmd, logout_box_cfg.restart_cmd,   logout_box_cfg.logout_cmd,
-				logout_box_cfg.suspend_cmd,	 logout_box_cfg.hibernate_cmd, logout_box_cfg.lock_cmd };
-
-		for (size_t i = 0; i < keys.size(); i++) {
-			var = wapi_get_var_from_table(config_logout, keys[i].c_str());
-			if (var->type == WAP_CONF_VAR_TYPE_STRING) {
-				var_ref[i].get() = std::string(wapi_var_as_string(var));
-				if (var_ref[i].get() != "") logout_box_cfg.is_anything_there = true;
+			for (size_t i = 0; i < keys.size(); i++) {
+				var = wapi_get_var_from_table(config_logout, keys[i].c_str());
+				if (var->type == WAP_CONF_VAR_TYPE_STRING) {
+					var_ref[i].get() = std::string(wapi_var_as_string(var));
+					if (var_ref[i].get() != "") logout_box_cfg.is_anything_there = true;
+				}
 			}
 		}
 	}
@@ -153,6 +155,8 @@ app_finder::app_finder(wap_t_applet_config applet_config, int id)
 	gtk_widget_set_margin_end(GTK_WIDGET(m_finder_aligner), 4);
 
 	gtk_widget_show_all(GTK_WIDGET(m_finder_aligner));
+
+	log_info("app-finder created");
 }
 app_finder::~app_finder() {
 	gtk_popover_popdown(m_finder_popover);

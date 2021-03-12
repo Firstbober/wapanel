@@ -5,11 +5,14 @@ library('wapanel-applet-app-finder',
 
 		'components/action_bar.cc',
 		'components/list_area.cc',
-		'components/logout_box.cc'
+		'components/logout_box.cc',
+
+		'search-engine/search_engine.cc',
+		'search-engine/search_engine_globals.cc'
 	],
 	dependencies: [
 		dependency('gtk+-3.0'),
-		dependency('pugixml')
+		dependency('threads')
 	],
 	install: true,
 	include_directories: [

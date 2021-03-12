@@ -1,4 +1,5 @@
 #pragma once
+#include "../search-engine/search_engine.hh"
 #include <gtk/gtk.h>
 
 namespace ui_comps {
@@ -10,6 +11,7 @@ private:
 	GtkStack *m_view_stack;
 	GtkSearchEntry *m_search_entry;
 
+	se::SearchEngine m_se;
 public:
 	list_area(int apid);
 	~list_area();

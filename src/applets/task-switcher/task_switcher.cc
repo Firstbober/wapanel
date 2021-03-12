@@ -351,6 +351,8 @@ auto window_button::search_for_icon(std::string app_id) -> std::string {
 	std::string app_id_lowercase = app_id;
 	std::transform(app_id_lowercase.begin(), app_id_lowercase.end(), app_id_lowercase.begin(), ::toupper);
 
+	// TODO: Refactor this to match xdg spec.
+
 	for (auto &&directory_path : { "/usr/share/applications/", "/usr/local/share/applications/" }) {
 		if (icon_name.length() > 0) { break; }
 

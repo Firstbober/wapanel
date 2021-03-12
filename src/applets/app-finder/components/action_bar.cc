@@ -74,6 +74,8 @@ namespace ui_comps {
 		}
 
 		gtk_box_pack_end(m_root, GTK_WIDGET(m_fast_actions_container), false, true, 0);
+
+		log_info("app-finder/action-bar created");
 	}
 	action_bar::~action_bar() {
 		gtk_popover_popdown(m_logout_popover);
