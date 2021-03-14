@@ -6,7 +6,7 @@ namespace wapanel::applet::utils::ic {
 std::unordered_map<int, icon_cache *> _sizes;
 
 icon_cache::icon_cache() {
-	default_icon_theme = gtk_icon_theme_get_default();
+	default_icon_theme = gtk_icon_theme_get_for_screen(gdk_screen_get_default());
 	gtk_icon_theme_append_search_path(default_icon_theme, APP_DATA_DIR "/icons");
 }
 
@@ -22,11 +22,27 @@ auto icon_cache::get_icon(std::string icon_name, int icon_size) -> GdkPixbuf * {
 	if (icons.contains(icon_name)) {
 		return icons[icon_name];
 	} else {
-		GdkPixbuf *icon = gtk_icon_theme_load_icon(default_icon_theme, icon_name.c_str(), icon_size,
-												   GTK_ICON_LOOKUP_FORCE_SIZE, NULL);
+		bool load_file = false;
+		if (icon_name.length() > 0) {
+			if (icon_name[0] == '/') { load_file = true; }
+		}
+
+		GdkPixbuf *icon;
+
+		if (load_file) {
+			icon = gdk_pixbuf_new_from_file_at_size(icon_name.c_str(), icon_size, icon_size, NULL);
+		} else {
+			icon = gtk_icon_theme_load_icon(default_icon_theme, icon_name.c_str(), icon_size,
+											GTK_ICON_LOOKUP_FORCE_SIZE, NULL);
+		}
+
 		if (icon == NULL) {
 			log_error("Cannot find icon `%s`", icon_name.c_str());
-			return NULL;
+
+			icon = gtk_icon_theme_load_icon(default_icon_theme, "application-x-executable", icon_size,
+											GTK_ICON_LOOKUP_FORCE_SIZE, NULL);
+
+			return icon;
 		}
 
 		log_info("Initialized cache for icon `%s` with size `%d`", icon_name.c_str(), icon_size);

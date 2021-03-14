@@ -13,7 +13,8 @@ enum class Category {
 	Science,
 	Settings,
 	System,
-	Accessories // Utility
+	Accessories, // Utility,
+	Other // Uncategorized
 };
 
 struct AppEntry {
@@ -22,5 +23,4 @@ struct AppEntry {
 	std::string iconstring;
 	std::string exec;
 	std::string working_path;
-	std::vector<Category> categories;
 };

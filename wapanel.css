@@ -25,3 +25,7 @@
 	padding-top: 0;
 	background-color: @theme_bg_color;
 }
+
+.app-finder-category-app-list row label:first-child {
+	font-weight: bold;
+}
