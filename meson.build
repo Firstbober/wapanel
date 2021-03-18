@@ -9,7 +9,7 @@ add_languages('c', required: true, native: false)
 dynlink        = meson.get_compiler('cpp').find_library('dl', required: true)
 pkgconfig      = import('pkgconfig')
 
-gtklayershell  = dependency('gtk-layer-shell-0', version: '>= 0.6', fallback: ['gtk-layer-shell', 'gtk_layer_shell_dep'])
+gtklayershell  = dependency('gtk-layer-shell-0', version: '>= 0.6', fallback: ['gtk-layer-shell', 'gtk_layer_shell'])
 gtk3           = dependency('gtk+-3.0')
 gio2           = dependency('gio-2.0')
 
