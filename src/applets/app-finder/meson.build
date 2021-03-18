@@ -12,7 +12,8 @@ library('wapanel-applet-app-finder',
 	],
 	dependencies: [
 		dependency('gtk+-3.0'),
-		dependency('threads')
+		dependency('threads'),
+		gtklayershell
 	],
 	install: true,
 	include_directories: [

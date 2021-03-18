@@ -18,7 +18,7 @@ private:
 	std::vector<AppEntry> m_entries;
 
 public:
-	application_list(int apid);
+	application_list(int apid, GtkPopover *tl_popover);
 
 	auto get_widget() -> GtkWidget *;
 	auto add_app(AppEntry entry);
@@ -38,7 +38,7 @@ private:
 	std::map<Category, int> m_notebook_pages;
 
 public:
-	list_area(int apid);
+	list_area(int apid, GtkPopover *tl_popover);
 	~list_area();
 
 	auto get_widget() -> GtkWidget *;

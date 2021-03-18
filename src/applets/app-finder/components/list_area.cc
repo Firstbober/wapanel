@@ -29,7 +29,7 @@ auto construct_category_label(std::string icon_name, std::string category_name) 
 
 namespace ui_comps {
 
-application_list::application_list(int apid)
+application_list::application_list(int apid, GtkPopover *tl_popover)
 	: m_scroll_win(GTK_SCROLLED_WINDOW(gtk_scrolled_window_new(NULL, NULL)))
 	, m_viewport(GTK_VIEWPORT(gtk_viewport_new(NULL, NULL)))
 	, m_app_list(GTK_LIST_BOX(gtk_list_box_new())) {
@@ -40,6 +40,23 @@ application_list::application_list(int apid)
 	gtk_container_add(GTK_CONTAINER(m_viewport), GTK_WIDGET(m_app_list));
 
 	gtk_widget_show_all(GTK_WIDGET(m_scroll_win));
+
+	// Connect row-activated signal
+
+	g_signal_connect(
+		m_app_list, "row-activated", G_CALLBACK(+[](GtkListBox *box, GtkListBoxRow *row, GtkPopover *tl_popover) {
+			GObject *box_obj = G_OBJECT(gtk_bin_get_child(GTK_BIN(row)));
+
+			char *_exec = (char *)g_object_get_data(box_obj, "_exec");
+			char *_working_path = (char *)g_object_get_data(box_obj, "_working_path");
+
+			g_spawn_command_line_async(
+				std::string("sh -c \"cd " + std::string(_working_path) + ";" + std::string(_exec) + "\"").c_str(),
+				NULL);
+
+			gtk_popover_popdown(tl_popover);
+		}),
+		tl_popover);
 
 	// Styling
 
@@ -54,6 +71,8 @@ auto application_list::add_app(AppEntry entry) {
 	for (auto &&_entry : this->m_entries) {
 		if (entry.name == _entry.name && entry.exec == _entry.exec) { return; }
 	}
+
+	if (entry.working_path.empty()) { entry.working_path = "."; }
 
 	GtkBox *box = GTK_BOX(gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6));
 
@@ -82,6 +101,16 @@ auto application_list::add_app(AppEntry entry) {
 	gtk_widget_set_margin_end(GTK_WIDGET(box), 4);
 
 	gtk_widget_show_all(GTK_WIDGET(box));
+
+	char *cpy = (char *)malloc(entry.exec.length() + 1);
+	strncpy(cpy, entry.exec.c_str(), entry.exec.length() + 1);
+
+	g_object_set_data(G_OBJECT(box), "_exec", cpy);
+
+	cpy = (char *)malloc(entry.working_path.length() + 1);
+	strncpy(cpy, entry.working_path.c_str(), entry.working_path.length() + 1);
+
+	g_object_set_data(G_OBJECT(box), "_working_path", cpy);
 
 	gtk_list_box_insert(m_app_list, GTK_WIDGET(box), -1);
 
@@ -128,7 +157,7 @@ std::array category_icon { "applications-utilities-symbolic", "applications-engi
 std::array category_name { "Accessories", "Development", "Education", "Games",	  "Graphics", "Multimedia",
 						   "Network",	  "Office",		 "Science",	  "Settings", "System",	  "Other" };
 
-list_area::list_area(int apid)
+list_area::list_area(int apid, GtkPopover *tl_popover)
 	: m_root(GTK_BOX(gtk_box_new(GTK_ORIENTATION_VERTICAL, 6)))
 	, m_list_container(GTK_NOTEBOOK(gtk_notebook_new()))
 	, m_view_stack(GTK_STACK(gtk_stack_new()))
@@ -211,7 +240,7 @@ list_area::list_area(int apid)
 					}
 
 					if (!this->m_app_lists.contains(_catg)) {
-						this->m_app_lists.emplace(_catg, application_list(apid));
+						this->m_app_lists.emplace(_catg, application_list(apid, tl_popover));
 						this->m_app_lists.at(_catg).add_app(app_entry);
 					} else {
 						this->m_app_lists.at(_catg).add_app(app_entry);
@@ -220,7 +249,7 @@ list_area::list_area(int apid)
 
 				if (categories_vec.size() == 0) {
 					if (!this->m_app_lists.contains(Category::Other)) {
-						this->m_app_lists.emplace(Category::Other, application_list(apid));
+						this->m_app_lists.emplace(Category::Other, application_list(apid, tl_popover));
 						this->m_app_lists.at(Category::Other).add_app(app_entry);
 					} else {
 						this->m_app_lists.at(Category::Other).add_app(app_entry);

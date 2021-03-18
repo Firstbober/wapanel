@@ -3,6 +3,7 @@
 #include "../double_fork.hh"
 #include "../icon_cache.hh"
 #include <functional>
+#include <gtk-layer-shell.h>
 
 namespace wapanel::applet {
 
@@ -103,7 +104,7 @@ app_finder::app_finder(wap_t_applet_config applet_config, int id)
 	// Subclass initialization
 
 	m_sidebar = new ui_comps::action_bar(action_bar_cfg, logout_box_cfg, m_id);
-	m_list_area = new ui_comps::list_area(m_id);
+	m_list_area = new ui_comps::list_area(m_id, m_finder_popover);
 
 	// Gtk styling and other stuff
 
@@ -143,7 +144,18 @@ app_finder::app_finder(wap_t_applet_config applet_config, int id)
 	if (m_config.popover_height != -1) popover_height_to_use = m_config.popover_height;
 
 	gtk_widget_set_size_request(GTK_WIDGET(m_finder_popover), popover_width_to_use, popover_height_to_use);
-	gtk_widget_grab_focus(GTK_WIDGET(m_finder_popover));
+
+	g_signal_connect(m_app_finder_btn, "toggled", G_CALLBACK(+[](GtkToggleButton *togglebutton) {
+						 GtkWidget *tl = gtk_widget_get_toplevel(GTK_WIDGET(togglebutton));
+						 if (gtk_widget_is_toplevel(tl)) {
+							 if (gtk_toggle_button_get_active(togglebutton)) {
+								 gtk_layer_set_keyboard_mode(GTK_WINDOW(tl), GTK_LAYER_SHELL_KEYBOARD_MODE_EXCLUSIVE);
+							 } else {
+								 gtk_layer_set_keyboard_mode(GTK_WINDOW(tl), GTK_LAYER_SHELL_KEYBOARD_MODE_NONE);
+							 }
+						 }
+					 }),
+					 NULL);
 
 	gtk_box_pack_start(m_finder_aligner, m_sidebar->get_widget(), false, true, 0);
 	gtk_box_pack_start(m_finder_aligner, gtk_separator_new(GTK_ORIENTATION_VERTICAL), false, true, 0);
