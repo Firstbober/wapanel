@@ -11,7 +11,7 @@ library('wapanel-applet-app-finder',
 		'search-engine/search_engine_globals.cc'
 	],
 	dependencies: [
-		dependency('gtk+-3.0'),
+		gtk3,
 		dependency('threads'),
 		gtklayershell
 	],

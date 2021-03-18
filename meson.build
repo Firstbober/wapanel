@@ -6,13 +6,16 @@ project('wapanel', 'cpp',
 	])
 add_languages('c', required: true, native: false)
 
-gtklayershell  = dependency('gtk-layer-shell-0', version: '>= 0.1', fallback: ['gtk-layer-shell', 'gtk_layer_shell_dep'])
 dynlink        = meson.get_compiler('cpp').find_library('dl', required: true)
 pkgconfig      = import('pkgconfig')
 
+gtklayershell  = dependency('gtk-layer-shell-0', version: '>= 0.1', fallback: ['gtk-layer-shell', 'gtk_layer_shell_dep'])
+gtk3           = dependency('gtk+-3.0')
+gio2           = dependency('gio-2.0')
+
 deps = [
-	dependency('gtk+-3.0'),
-	dependency('gio-2.0'),
+	gtk3,
+	gio2,
 
 	gtklayershell,
 	dynlink

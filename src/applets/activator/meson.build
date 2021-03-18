@@ -4,7 +4,7 @@ library('wapanel-applet-activator',
 		'activator.cc'
 	],
 	dependencies: [
-		dependency('gtk+-3.0')
+		gtk3
 	],
 	install: true,
 	include_directories: include_directories('../../lib'),
