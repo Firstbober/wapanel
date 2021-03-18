@@ -1,3 +1,6 @@
 [submodule "thirdparty/toml11"]
 	path = thirdparty/toml11
 	url = https://github.com/ToruNiina/toml11.git
+[submodule "subprojects/gtk-layer-shell"]
+	path = subprojects/gtk-layer-shell
+	url = https://github.com/wmww/gtk-layer-shell.git
