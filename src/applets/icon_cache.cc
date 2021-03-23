@@ -18,6 +18,24 @@ icon_cache::~icon_cache() {
 	icons.clear();
 }
 
+auto split(std::string text, const char *separator) -> std::vector<std::string> {
+	std::vector<std::string> splitted;
+
+	char *cpy = (char *)malloc(text.length() + 1);
+	strncpy(cpy, text.c_str(), text.length() + 1);
+
+	char *token = strtok(cpy, separator);
+
+	while (token != NULL) {
+		splitted.push_back(token);
+		token = strtok(NULL, separator);
+	}
+
+	free(cpy);
+
+	return splitted;
+}
+
 auto icon_cache::get_icon(std::string icon_name, int icon_size) -> GdkPixbuf * {
 	if (icons.contains(icon_name)) {
 		return icons[icon_name];
@@ -34,6 +52,14 @@ auto icon_cache::get_icon(std::string icon_name, int icon_size) -> GdkPixbuf * {
 		} else {
 			icon = gtk_icon_theme_load_icon(default_icon_theme, icon_name.c_str(), icon_size,
 											GTK_ICON_LOOKUP_FORCE_SIZE, NULL);
+		}
+
+		if (icon == NULL) {
+			auto splt = split(icon_name, ".");
+			if (splt.size() > 0) {
+				icon = gtk_icon_theme_load_icon(default_icon_theme, splt[0].c_str(), icon_size,
+												GTK_ICON_LOOKUP_FORCE_SIZE, NULL);
+			}
 		}
 
 		if (icon == NULL) {

@@ -135,10 +135,14 @@ auto SearchEngine::register_result_handle(std::function<void(std::vector<File>)>
 auto SearchEngine::unregister_handle(int id) -> void { this->m_handles.erase(id); }
 
 auto SearchEngine::search(std::string text) -> void {
+	/*
 	for (auto &&thread : m_threads) {
 		if (thread.joinable()) thread.join();
 	}
+	*/
 	m_threads.clear();
+
+	this->m_stopsearch = false;
 
 	for (auto &&c : text) {
 		c = towlower(c);
@@ -154,6 +158,8 @@ auto SearchEngine::search(std::string text) -> void {
 	for (auto &&app_dir : m_app_dirs) {
 		search_directory(to_find, app_dir, false);
 	}
+
+	std::cout << "searching " << text << std::endl;
 }
 
 auto SearchEngine::get_all_desktop_entries() -> void {

@@ -43,6 +43,8 @@ public:
 	auto stop_search() -> void;
 
 	auto update_mountpoints() -> void;
+
+	bool __x = false;
 };
 
 }
