@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
-#include <vector>
 #include <toml11/toml.hpp>
+#include <vector>
 
 namespace wapanel::conf {
 

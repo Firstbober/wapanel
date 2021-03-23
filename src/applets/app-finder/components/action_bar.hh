@@ -1,7 +1,7 @@
 #pragma once
+#include "./logout_box.hh"
 #include <gtk/gtk.h>
 #include <string>
-#include "./logout_box.hh"
 
 namespace ui_comps {
 

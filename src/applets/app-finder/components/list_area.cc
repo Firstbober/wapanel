@@ -211,7 +211,7 @@ auto search_container::add_entry(SearchEntry search_entry) -> void {
 	gtk_widget_set_margin_end(GTK_WIDGET(box), 4);
 
 	gtk_widget_show_all(GTK_WIDGET(box));
-	
+
 	char *cpy = (char *)malloc(search_entry.path.length() + 1);
 	strncpy(cpy, search_entry.path.c_str(), search_entry.path.length() + 1);
 	g_object_set_data(G_OBJECT(box), "_path", cpy);
@@ -223,7 +223,7 @@ auto search_container::add_entry(SearchEntry search_entry) -> void {
 	g_object_set_data(G_OBJECT(box), "_type", &search_entry.type);
 
 	gtk_widget_set_tooltip_text(GTK_WIDGET(box), search_entry.title.c_str());
-	
+
 
 	gtk_list_box_insert(m_app_list, GTK_WIDGET(box), -1);
 	// m_widgets_to_add.enqueue(GTK_WIDGET(box));
@@ -266,18 +266,18 @@ list_area::list_area(int apid, GtkPopover *tl_popover)
 
 	// Initialize search notebook
 
-	//gtk_stack_add_named(this->m_view_stack, GTK_WIDGET(this->m_search_container), "search-notebook");
+	// gtk_stack_add_named(this->m_view_stack, GTK_WIDGET(this->m_search_container), "search-notebook");
 
 	// Configure stack and search entry
 
 	gtk_stack_set_visible_child_name(this->m_view_stack, "list-with-category");
 
-	//gtk_stack_set_visible_child_name(this->m_view_stack, "search-notebook");
-	//gtk_entry_set_placeholder_text(GTK_ENTRY(this->m_search_entry), "Search...");
+	// gtk_stack_set_visible_child_name(this->m_view_stack, "search-notebook");
+	// gtk_entry_set_placeholder_text(GTK_ENTRY(this->m_search_entry), "Search...");
 
 	// Pack everything to m_root and show all
 
-	//gtk_box_pack_end(this->m_root, GTK_WIDGET(this->m_search_entry), false, false, 0);
+	// gtk_box_pack_end(this->m_root, GTK_WIDGET(this->m_search_entry), false, false, 0);
 	gtk_box_pack_end(this->m_root, GTK_WIDGET(this->m_view_stack), true, true, 0);
 
 	gtk_widget_show_all(GTK_WIDGET(this->m_root));

@@ -30,8 +30,7 @@ volume_control::volume_control(wap_t_applet_config applet_config, backend *backe
 
 	if (wapi_key_exists(&applet_config.root, "icon_height")) {
 		_wap_t_config_variable *var = wapi_get_var_from_table(&applet_config.root, "icon_height");
-		if(var->type == WAP_CONF_VAR_TYPE_INTEGER)
-			m_config.icon_height = wapi_var_as_integer(var);
+		if (var->type == WAP_CONF_VAR_TYPE_INTEGER) m_config.icon_height = wapi_var_as_integer(var);
 	}
 
 	if (wapi_key_exists(&applet_config.root, "sound_mixer")) {

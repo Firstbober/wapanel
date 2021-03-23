@@ -1,7 +1,7 @@
 #include "../../log.hh"
+#include "../icon_cache.hh"
 #include "backend.hh"
 #include "backends/pulseaudio.hh"
-#include "../icon_cache.hh"
 #include "volume-control.hh"
 #include <appletapi.h>
 #include <gtk/gtk.h>
