@@ -26,7 +26,7 @@ Applets
 - ☑ Volume control (PulseAudio, PipeWire in future)
 - ☑ Task switcher
 - ☑ Activator
-- ☐ App finder
+- ☑ App finder
 
 Installation
 ============
