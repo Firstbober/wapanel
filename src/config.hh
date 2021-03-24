@@ -1,19 +1,7 @@
 #pragma once
 #include <string>
-#include <vector>
 #include <toml11/toml.hpp>
-#include <xdgpp/xdg.hpp>
-
-#define MAIN_CONFIG_DIR std::string(xdg::ConfigHomeDir().string() + "/wapanel")
-#define MAIN_CONFIG_FILE MAIN_CONFIG_DIR + std::string("/wapanel.toml")
-#define MAIN_STYLE_FILE MAIN_CONFIG_DIR + std::string("/wapanel.css")
-#define PRIORITIZED_STYLE_FILE "./wapanel.css"
-
-#define CONFIG_SEARCH_PATHS                                                                                            \
-	{ "./wapanel.toml", MAIN_CONFIG_FILE }
-
-#define VERSION_STR "@version@"
-#define DATA_DIR "../@data_dir@/wapanel"
+#include <vector>
 
 namespace wapanel::conf {
 
@@ -34,6 +22,9 @@ struct global_config {
 };
 
 extern global_config config;
+
+extern bool is_there_last_config;
+extern toml::value last_working_config;
 
 // This functions reads config from
 // first found path and places data in wapanel::conf::config.

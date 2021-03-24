@@ -27,6 +27,7 @@ panel::panel(unsigned int id)
 	gtk_layer_init_for_window(m_window);
 
 	gtk_layer_set_layer(m_window, GTK_LAYER_SHELL_LAYER_TOP);
+	gtk_layer_set_keyboard_mode(m_window, GTK_LAYER_SHELL_KEYBOARD_MODE_NONE);
 
 	// Repell other windows.
 	gtk_layer_auto_exclusive_zone_enable(m_window);

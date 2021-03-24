@@ -1,7 +1,7 @@
 #include "../../log.hh"
+#include "../icon_cache.hh"
 #include "backend.hh"
 #include "backends/pulseaudio.hh"
-#include "icon-cache.hh"
 #include "volume-control.hh"
 #include <appletapi.h>
 #include <gtk/gtk.h>
@@ -54,7 +54,7 @@ void wap_event_remove_instances() {
 void wap_event_exit() {
 	if (backend != NULL) delete backend;
 
-	wapanel::applet::ic::clean();
+	wapanel::applet::utils::ic::clean();
 
 	if (backend_thread.joinable()) backend_thread.join();
 }

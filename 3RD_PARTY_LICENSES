@@ -58,7 +58,6 @@ SOFTWARE.
 ===================================================
 
 Project: toml11
-Used in: all over my project as lib
 URL: https://github.com/ToruNiina/toml11/blob/master/LICENSE
 Copyright:
 
@@ -87,8 +86,7 @@ THE SOFTWARE.
 ===================================================
 
 Project: xdgpp
-Used in: all over my project as lib
-URL: https://sr.ht/~danyspin97/xdgpp/
+URL: https://git.sr.ht/~danyspin97/xdgpp/tree/master/LICENSE
 Copyright:
 
 Copyright © 2020 Danilo Spinella <oss@danyspin97.org>
@@ -110,3 +108,5 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+===================================================

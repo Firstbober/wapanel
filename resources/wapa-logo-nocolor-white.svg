@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   sodipodi:docname="wapa-logo-nocolor-white.svg"
+   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)"
+   id="svg8"
+   version="1.1"
+   viewBox="0 0 256 256"
+   height="256mm"
+   width="256mm">
+  <defs
+     id="defs2" />
+  <sodipodi:namedview
+     inkscape:window-maximized="1"
+     inkscape:window-y="31"
+     inkscape:window-x="0"
+     inkscape:window-height="1021"
+     inkscape:window-width="1920"
+     inkscape:object-paths="false"
+     showgrid="false"
+     inkscape:document-rotation="0"
+     inkscape:current-layer="layer1"
+     inkscape:document-units="mm"
+     inkscape:cy="749.39633"
+     inkscape:cx="107.57856"
+     inkscape:zoom="0.39525463"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     borderopacity="1.0"
+     bordercolor="#666666"
+     pagecolor="#ffffff"
+     id="base"
+     showguides="false" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="layer1"
+     inkscape:groupmode="layer"
+     inkscape:label="Warstwa 1">
+    <path
+       id="rect835"
+       style="fill:#ffffff;fill-opacity:1;stroke-width:188.976;stroke-linecap:square;paint-order:markers stroke fill"
+       d="M 134.13477 0 C 59.824579 0 0 59.824579 0 134.13477 L 0 833.42578 C 0 907.73598 59.824579 967.55859 134.13477 967.55859 L 833.42578 967.55859 C 907.73598 967.55859 967.55859 907.73598 967.55859 833.42578 L 967.55859 134.13477 C 967.55859 59.824579 907.73598 0 833.42578 0 L 134.13477 0 z M 825.00977 131.97656 L 788.1875 260.28516 L 727.87305 260.28516 L 762.88672 136.63281 L 825.00977 131.97656 z M 484.26953 237.88867 L 608.69141 677.30469 L 612.73438 663.0293 L 663.29492 484.46875 L 724.98438 484.46875 L 650.01367 761.38477 L 643.59375 761.38477 L 612.73438 761.38477 L 573.79102 761.38477 L 567.37109 761.38477 L 460.44922 366.44727 L 424.83398 242.34375 L 484.26953 237.88867 z M 202.21875 255.98047 L 344.5332 758.58398 L 446.99609 386.49805 L 475.64648 492.31836 L 383.84961 835.58203 L 306.82227 835.58203 L 142.54883 260.45312 L 202.21875 255.98047 z M 716.24805 301.83203 L 776.5625 301.83203 L 769.6875 325.79102 L 737.73438 443.8125 L 676.04688 443.8125 L 716.24805 301.83203 z "
+       transform="scale(0.26458333)" />
+  </g>
+</svg>

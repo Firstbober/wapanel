@@ -16,3 +16,5 @@ cppcheck.cppcheck
 
 output
 local_docs.txt
+
+.cache

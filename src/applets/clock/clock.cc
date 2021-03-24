@@ -7,7 +7,7 @@ namespace wapanel::applet {
 auto resolve_font_config(wap_t_applet_config applet_config) -> PangoAttrList * {
 	auto attr_list = pango_attr_list_new();
 	_wap_t_config_variable *font_table;
-	_wap_t_config_variable *operated_on;
+	_wap_t_config_variable *var;
 
 	if (!wapi_key_exists(&applet_config.root, "font")) {
 		pango_attr_list_insert(attr_list, pango_attr_family_new(""));
@@ -20,11 +20,11 @@ auto resolve_font_config(wap_t_applet_config applet_config) -> PangoAttrList * {
 	font_table = wapi_get_var_from_table(&applet_config.root, "font");
 
 	if (wapi_key_exists(font_table, "family")) {
-		operated_on = wapi_get_var_from_table(font_table, "family");
+		var = wapi_get_var_from_table(font_table, "family");
 		const char *family;
 
-		if (operated_on->type == WAP_CONF_VAR_TYPE_STRING) {
-			family = wapi_var_as_string(operated_on);
+		if (var->type == WAP_CONF_VAR_TYPE_STRING) {
+			family = wapi_var_as_string(var);
 
 			pango_attr_list_insert(attr_list, pango_attr_family_new(family));
 		}
@@ -33,11 +33,11 @@ auto resolve_font_config(wap_t_applet_config applet_config) -> PangoAttrList * {
 	}
 
 	if (wapi_key_exists(font_table, "style")) {
-		operated_on = wapi_get_var_from_table(font_table, "style");
+		var = wapi_get_var_from_table(font_table, "style");
 		const char *style;
 
-		if (operated_on->type == WAP_CONF_VAR_TYPE_STRING) {
-			style = wapi_var_as_string(operated_on);
+		if (var->type == WAP_CONF_VAR_TYPE_STRING) {
+			style = wapi_var_as_string(var);
 
 			if (!strcmp(style, "normal")) {
 				pango_attr_list_insert(attr_list, pango_attr_style_new(PANGO_STYLE_NORMAL));
@@ -50,12 +50,12 @@ auto resolve_font_config(wap_t_applet_config applet_config) -> PangoAttrList * {
 	}
 
 	if (wapi_key_exists(font_table, "weight")) {
-		operated_on = wapi_get_var_from_table(font_table, "weight");
+		var = wapi_get_var_from_table(font_table, "weight");
 		const char *weight;
 		PangoAttribute *attribute;
 
-		if (operated_on->type == WAP_CONF_VAR_TYPE_STRING) {
-			weight = wapi_var_as_string(operated_on);
+		if (var->type == WAP_CONF_VAR_TYPE_STRING) {
+			weight = wapi_var_as_string(var);
 
 			if (!strcmp(weight, "thin")) {
 				attribute = pango_attr_weight_new(PANGO_WEIGHT_THIN);
@@ -91,34 +91,34 @@ auto resolve_font_config(wap_t_applet_config applet_config) -> PangoAttrList * {
 	}
 
 	if (wapi_key_exists(font_table, "size")) {
-		operated_on = wapi_get_var_from_table(font_table, "size");
+		var = wapi_get_var_from_table(font_table, "size");
 		int64_t size;
 
-		if (operated_on->type == WAP_CONF_VAR_TYPE_INTEGER) {
-			size = wapi_var_as_integer(operated_on);
+		if (var->type == WAP_CONF_VAR_TYPE_INTEGER) {
+			size = wapi_var_as_integer(var);
 
 			if (size > -1) { pango_attr_list_insert(attr_list, pango_attr_size_new_absolute(size * PANGO_SCALE)); }
 		}
 	}
 
 	if (wapi_key_exists(font_table, "strikethrough")) {
-		operated_on = wapi_get_var_from_table(font_table, "strikethrough");
+		var = wapi_get_var_from_table(font_table, "strikethrough");
 		bool strikethrough;
 
-		if (operated_on->type == WAP_CONF_VAR_TYPE_BOOLEAN) {
-			strikethrough = wapi_var_as_boolean(operated_on);
+		if (var->type == WAP_CONF_VAR_TYPE_BOOLEAN) {
+			strikethrough = wapi_var_as_boolean(var);
 
 			pango_attr_list_insert(attr_list, pango_attr_strikethrough_new(strikethrough));
 		}
 	}
 
 	if (wapi_key_exists(font_table, "underline")) {
-		operated_on = wapi_get_var_from_table(font_table, "underline");
+		var = wapi_get_var_from_table(font_table, "underline");
 		const char *underline;
 		PangoAttribute *attribute;
 
-		if (operated_on->type == WAP_CONF_VAR_TYPE_STRING) {
-			underline = wapi_var_as_string(operated_on);
+		if (var->type == WAP_CONF_VAR_TYPE_STRING) {
+			underline = wapi_var_as_string(var);
 
 			if (!strcmp(underline, "none")) {
 				attribute = pango_attr_underline_new(PANGO_UNDERLINE_NONE);
@@ -139,11 +139,11 @@ auto resolve_font_config(wap_t_applet_config applet_config) -> PangoAttrList * {
 	}
 
 	if (wapi_key_exists(font_table, "letter_spacing")) {
-		operated_on = wapi_get_var_from_table(font_table, "letter_spacing");
+		var = wapi_get_var_from_table(font_table, "letter_spacing");
 		int64_t letter_spacing;
 
-		if (operated_on->type == WAP_CONF_VAR_TYPE_INTEGER) {
-			letter_spacing = wapi_var_as_integer(operated_on);
+		if (var->type == WAP_CONF_VAR_TYPE_INTEGER) {
+			letter_spacing = wapi_var_as_integer(var);
 
 			if (letter_spacing > -1) {
 				pango_attr_list_insert(attr_list, pango_attr_letter_spacing_new(letter_spacing * PANGO_SCALE));
@@ -165,11 +165,11 @@ clock::clock(wap_t_applet_config applet_config, int id) {
 
 	// Configure time formatting
 	if (wapi_key_exists(&applet_config.root, "format")) {
-		_wap_t_config_variable *operated = wapi_get_var_from_table(&applet_config.root, "format");
+		_wap_t_config_variable *var = wapi_get_var_from_table(&applet_config.root, "format");
 		const char *format;
 
-		if (operated->type == WAP_CONF_VAR_TYPE_STRING) {
-			format = wapi_var_as_string(operated);
+		if (var->type == WAP_CONF_VAR_TYPE_STRING) {
+			format = wapi_var_as_string(var);
 
 			if (!strcmp(format, "")) { format = "%X"; }
 
@@ -198,9 +198,6 @@ clock::clock(wap_t_applet_config applet_config, int id) {
 	m_calendar_popover = GTK_POPOVER(gtk_popover_new(GTK_WIDGET(m_clock_button)));
 
 	m_calendar = GTK_CALENDAR(gtk_calendar_new());
-	auto gdk_screen = gdk_screen_get_default();
-	auto css_provider = gtk_css_provider_new();
-	auto calendar_style_context = gtk_widget_get_style_context(GTK_WIDGET(m_calendar));
 
 	gtk_widget_set_size_request(GTK_WIDGET(m_calendar), 250, -1);
 	gtk_calendar_set_display_options(m_calendar,

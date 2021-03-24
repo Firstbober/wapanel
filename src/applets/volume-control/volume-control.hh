@@ -30,6 +30,7 @@ private:
 
 	std::atomic_bool is_icon_change_locked;
 	std::atomic_bool is_switched_outside;
+	std::atomic_bool force_mute_icon;
 
 	enum class vol_state { muted, low, medium, high };
 	std::atomic<vol_state> volume_state;

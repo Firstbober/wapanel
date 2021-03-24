@@ -3,3 +3,29 @@
 .clock-popover calendar {
 	border: none;
 }
+
+/* Make app-finder icons more fit */
+
+.app-finder-popover box box:first-child button {
+	padding: 6px;
+}
+
+/* Tweak notebook */
+
+.app-finder-category-notebook {
+	border: 0;
+}
+
+.app-finder-category-notebook tab {
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+
+.app-finder-category-notebook tabs {
+	padding-top: 0;
+	background-color: @theme_bg_color;
+}
+
+.app-finder-category-app-list row label:first-child {
+	font-weight: bold;
+}
