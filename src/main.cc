@@ -4,8 +4,8 @@
 #include <stdio.h>
 #include <vector>
 
-#include "config.hh"
 #include "applets.hh"
+#include "config.hh"
 #include "log.hh"
 #include "panel.hh"
 
@@ -121,8 +121,8 @@ auto static app_startup(GtkApplication *_app) -> void {
 		log_info("Applying root stylesheet.");
 
 		GtkCssProvider *root_css_provider = gtk_css_provider_new();
-		gtk_css_provider_load_from_path(root_css_provider,
-										std::string(std::string(APP_DATA_DIR) + std::string("/wapanel.css")).c_str(), NULL);
+		gtk_css_provider_load_from_path(
+			root_css_provider, std::string(std::string(APP_DATA_DIR) + std::string("/wapanel.css")).c_str(), NULL);
 		gtk_style_context_add_provider_for_screen(gdk_screen_get_default(), GTK_STYLE_PROVIDER(root_css_provider),
 												  GTK_STYLE_PROVIDER_PRIORITY_USER);
 	} else {

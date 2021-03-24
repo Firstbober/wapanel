@@ -1,6 +1,6 @@
 #pragma once
-#include <string>
 #include <array>
+#include <string>
 
 namespace se::blocklist {
 
