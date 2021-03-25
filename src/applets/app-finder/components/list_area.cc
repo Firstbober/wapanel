@@ -163,93 +163,6 @@ std::array category_icon { "applications-utilities-symbolic", "applications-engi
 std::array category_name { "Accessories", "Development", "Education", "Games",	  "Graphics", "Multimedia",
 						   "Network",	  "Office",		 "Science",	  "Settings", "System",	  "Other" };
 
-// Search container
-/*
-search_container::search_container(int apid, GtkPopover *tl_popover)
-	: m_scroll_win(GTK_SCROLLED_WINDOW(gtk_scrolled_window_new(NULL, NULL)))
-	, m_viewport(GTK_VIEWPORT(gtk_viewport_new(NULL, NULL)))
-	, m_app_list(GTK_LIST_BOX(gtk_list_box_new())) {
-	gtk_list_box_set_selection_mode(m_app_list, GTK_SELECTION_NONE);
-	gtk_list_box_set_activate_on_single_click(m_app_list, true);
-
-	gtk_container_add(GTK_CONTAINER(m_scroll_win), GTK_WIDGET(m_viewport));
-	gtk_container_add(GTK_CONTAINER(m_viewport), GTK_WIDGET(m_app_list));
-
-	gtk_widget_show_all(GTK_WIDGET(m_scroll_win));
-
-	// Styling
-
-	GtkStyleContext *context = gtk_widget_get_style_context(GTK_WIDGET(m_scroll_win));
-	gtk_style_context_add_class(context, "app-finder-search-app-list");
-	gtk_widget_set_name(GTK_WIDGET(m_scroll_win),
-						std::string("app-finder-search-app-list-" + std::to_string(apid)).c_str());
-}
-
-auto search_container::get_widget() -> GtkWidget * { return GTK_WIDGET(m_scroll_win); }
-auto search_container::add_entry(SearchEntry search_entry) -> void {
-	if (search_entry.working_path.empty()) { search_entry.working_path = "."; }
-	if (search_entry.title.empty()) { search_entry.title = ""; }
-
-	// m_widgets_to_add.enqueue(search_entry);
-
-	GtkBox *box = GTK_BOX(gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6));
-
-	constexpr int icon_size = 20;
-	gtk_box_pack_start(
-		box, gtk_image_new_from_pixbuf(wapanel::applet::utils::ic::get_icon(search_entry.iconstring, icon_size)), false,
-		true, 0);
-
-	GtkLabel *title = GTK_LABEL(gtk_label_new(search_entry.title.c_str()));
-	gtk_label_set_ellipsize(title, PANGO_ELLIPSIZE_END);
-	gtk_widget_set_halign(GTK_WIDGET(title), GTK_ALIGN_START);
-
-	gtk_box_pack_start(box, GTK_WIDGET(title), false, false, 0);
-
-	gtk_widget_set_margin_top(GTK_WIDGET(box), 2);
-	gtk_widget_set_margin_bottom(GTK_WIDGET(box), 2);
-	gtk_widget_set_margin_start(GTK_WIDGET(box), 4);
-	gtk_widget_set_margin_end(GTK_WIDGET(box), 4);
-
-	gtk_widget_show_all(GTK_WIDGET(box));
-
-	char *cpy = (char *)malloc(search_entry.path.length() + 1);
-	strncpy(cpy, search_entry.path.c_str(), search_entry.path.length() + 1);
-	g_object_set_data(G_OBJECT(box), "_path", cpy);
-
-	cpy = (char *)malloc(search_entry.working_path.length() + 1);
-	strncpy(cpy, search_entry.working_path.c_str(), search_entry.working_path.length() + 1);
-	g_object_set_data(G_OBJECT(box), "_working_path", cpy);
-
-	g_object_set_data(G_OBJECT(box), "_type", &search_entry.type);
-
-	gtk_widget_set_tooltip_text(GTK_WIDGET(box), search_entry.title.c_str());
-
-
-	gtk_list_box_insert(m_app_list, GTK_WIDGET(box), -1);
-	// m_widgets_to_add.enqueue(GTK_WIDGET(box));
-}
-
-auto search_container::reset() -> void {
-	// gtk_widget_destroy(GTK_WIDGET(m_app_list));
-	// m_app_list = GTK_LIST_BOX(gtk_list_box_new());
-	gtk_container_foreach(
-		GTK_CONTAINER(m_app_list),
-		[](GtkWidget *widget, gpointer data) { gtk_container_remove(GTK_CONTAINER(data), widget); }, m_app_list);
-}
-
-auto search_container::show_all() -> void {}
-*/
-
-// List area
-
-/*
-static auto insert_to_search_container(gpointer user_data) -> gboolean {
-	struct list_area::search_update_data *sud = (list_area::search_update_data *)user_data;
-	sud->sce->add_entry(*sud->see);
-
-	return G_SOURCE_REMOVE;
-}
-*/
 
 bool replace(std::string &str, const std::string &from, const std::string &to) {
 	size_t start_pos = str.find(from);
@@ -306,6 +219,12 @@ list_area::list_area(int apid, GtkPopover *tl_popover)
 				if (app_entry.exec == "") continue;
 
 				replace(app_entry.exec, "%F", "");
+				replace(app_entry.exec, "%f", "");
+				replace(app_entry.exec, "%U", "");
+				replace(app_entry.exec, "%u", "");
+				replace(app_entry.exec, "%i", "");
+				replace(app_entry.exec, "%c", "");
+				replace(app_entry.exec, "%k", "");
 
 				const char *KcP_cats = g_desktop_app_info_get_categories(app_info);
 
