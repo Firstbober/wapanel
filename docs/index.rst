@@ -6,6 +6,9 @@ Welcome to Wapanel's documentation!
 
    users/command_line
    users/config_file
+   users/applets
+   users/css
+   users/themes
 
 .. toctree::
    :caption: For developers:

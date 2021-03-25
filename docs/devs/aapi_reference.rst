@@ -44,19 +44,19 @@ Structs
 =======
 
 .. doxygenstruct:: _wap_t_config_variable
-	:members:
-	:private-members:
-	:undoc-members:
+    :members:
+    :private-members:
+    :undoc-members:
 
 .. doxygenstruct:: wap_t_applet_config
-	:members:
-	:private-members:
-	:undoc-members:
+    :members:
+    :private-members:
+    :undoc-members:
 
 .. doxygenstruct:: wap_t_applet_info
-	:members:
-	:private-members:
-	:undoc-members:
+    :members:
+    :private-members:
+    :undoc-members:
 
 =====
 Enums

@@ -251,6 +251,13 @@ static auto insert_to_search_container(gpointer user_data) -> gboolean {
 }
 */
 
+bool replace(std::string &str, const std::string &from, const std::string &to) {
+	size_t start_pos = str.find(from);
+	if (start_pos == std::string::npos) return false;
+	str.replace(start_pos, from.length(), to);
+	return true;
+}
+
 list_area::list_area(int apid, GtkPopover *tl_popover)
 	: m_root(GTK_BOX(gtk_box_new(GTK_ORIENTATION_VERTICAL, 6)))
 	, m_list_container(GTK_NOTEBOOK(gtk_notebook_new()))
@@ -297,6 +304,8 @@ list_area::list_area(int apid, GtkPopover *tl_popover)
 				app_entry.working_path = charp_to_string(g_desktop_app_info_get_string(app_info, "Path"));
 
 				if (app_entry.exec == "") continue;
+
+				replace(app_entry.exec, "%F", "");
 
 				const char *KcP_cats = g_desktop_app_info_get_categories(app_info);
 

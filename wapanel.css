@@ -41,10 +41,6 @@
 	padding: 0px;
 }
 
-.task-switcher flowbox flowboxchild {
-	padding: 0px;
-}
-
 .task-switcher flowbox flowboxchild button {
 	border-radius: 0px;
 }
@@ -63,7 +59,7 @@ button:checked {
 	margin-right: 4px;
 }
 
-.app-finder-popover {
+popover {
 	border-radius: 0;
 }
 

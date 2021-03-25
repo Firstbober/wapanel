@@ -7,15 +7,15 @@ little tutorial how to use it to make your applet configurable.
 
 .. code-block:: c
 
-	if (wapi_key_exists(&applet_config.root, "your_name")) {
-		_wap_t_config_variable *variable = \
-			wapi_get_var_from_table(&applet_config.root, "your_name");
-		const char *name;
+    if (wapi_key_exists(&applet_config.root, "your_name")) {
+        _wap_t_config_variable *variable = \
+            wapi_get_var_from_table(&applet_config.root, "your_name");
+        const char *name;
 
-		if (variable->type == WAP_CONF_VAR_TYPE_STRING) {
-			name = wapi_var_as_string(variable);
-		}
-	}
+        if (variable->type == WAP_CONF_VAR_TYPE_STRING) {
+            name = wapi_var_as_string(variable);
+        }
+    }
 
 As you can see, this is very simple code. Checking if key exists,
 checking variable type and packing it into our string. There is more

@@ -25,6 +25,9 @@
 
 	[[panel.applet]]
 		name = "task-switcher"
+		[panel.applet.mode.scroll]
+			[panel.applet.mode.scroll.button]
+				gap = 8
 
 	[[panel.applet]]
 		name = "system-tray"

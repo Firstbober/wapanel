@@ -19,18 +19,18 @@ They will be our basis for further operations.
 
 .. code-block::
 
-	project('example', 'c')
+    project('example', 'c')
 
-	library(
-		'wapanel-applet-example',
-		'example.c',
-		dependencies: [
-			dependency('gtk+-3.0'),
-			dependency('wapanel-appletapi')
-		],
-		install: true,
-		install_dir: 'lib/wapanel/applets',
-	)
+    library(
+        'wapanel-applet-example',
+        'example.c',
+        dependencies: [
+            dependency('gtk+-3.0'),
+            dependency('wapanel-appletapi')
+        ],
+        install: true,
+        install_dir: 'lib/wapanel/applets',
+    )
 
 We have here our project name, source filename **example.c**, required dependencies
 **gtk+3** and **wapanel-appletapi** (these two will be installed if you have wapanel in your system).
@@ -44,45 +44,45 @@ Let's take a look at **example.c**
 
 .. code-block:: c
 
-	#include <wapanel-appletapi/appletapi.h>
-	#include <gtk/gtk.h>
+    #include <wapanel-appletapi/appletapi.h>
+    #include <gtk/gtk.h>
 
-	// Called to get handy info about this applet.
-	wap_t_applet_info wap_applet_info() {
-		wap_t_applet_info info = { .name = "example", .version = 1 };
-		return info;
-	}
+    // Called to get handy info about this applet.
+    wap_t_applet_info wap_applet_info() {
+        wap_t_applet_info info = { .name = "example", .version = 1 };
+        return info;
+    }
 
-	// Called when some panel need a new instance of your applet.
-	GtkWidget *wap_applet_new_instance(wap_t_applet_config applet_config) {
-		return gtk_label_new("Hello, world!");
-	}
+    // Called when some panel need a new instance of your applet.
+    GtkWidget *wap_applet_new_instance(wap_t_applet_config applet_config) {
+        return gtk_label_new("Hello, world!");
+    }
 
-	// Called when requested to remove all existing instances. GtkWidget should already be disposed by panel.
-	void wap_event_remove_instances() {}
+    // Called when requested to remove all existing instances. GtkWidget should already be disposed by panel.
+    void wap_event_remove_instances() {}
 
-	// Called when panel exits.
-	void wap_event_exit() {}
+    // Called when panel exits.
+    void wap_event_exit() {}
 
 There is slightly more code. Here is small explanation:
 
 Includes:
 
 - #include <wapanel-appletapi/appletapi.h>
-	Include directive for applet API required for applets.
+    Include directive for applet API required for applets.
 - #include <gtk/gtk.h>
-	Just basic GTK include. You will need this anyways.
+    Just basic GTK include. You will need this anyways.
 
 Callbacks:
 
 - wap_t_applet_info wap_applet_info()
-	This function sends information about your applet to panel.
+    This function sends information about your applet to panel.
 - GtkWidget \*wap_applet_new_instance(wap_t_applet_config applet_config)
-	Panel calls this to get brand new GtkWidget, you can do some fancy stuff — remember to clean it up later.
+    Panel calls this to get brand new GtkWidget, you can do some fancy stuff — remember to clean it up later.
 - void wap_event_remove_instances()
-	Here you can make cleaning of unspeakable things you done before.
+    Here you can make cleaning of unspeakable things you done before.
 - void wap_event_exit()
-	You probably never need to write any code here.
+    You probably never need to write any code here.
 
 When we have our source and build files we can make our project live!
 Make **build** directory, go to it and then call `meson ..` and `ninja`.
