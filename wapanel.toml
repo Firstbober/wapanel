@@ -3,6 +3,27 @@
 	height = 16
 
 	[[panel.applet]]
+		name = "app-finder"
+
+		icon_height = -1
+		flat = true
+
+		popover_width = -1
+		popover_height = -1
+
+		user_manager = "mugshot"
+		settings = "xfce4-settings-manager"
+		file_manager = "thunar $HOME"
+
+		[panel.applet.logout]
+			shutdown = "systemctl poweroff"
+			restart = "systemctl reboot"
+			logout = "loginctl terminate-user $USER"
+			suspend = "systemctl suspend"
+			hibernate = "systemctl hibernate"
+			lock = "swaylock"
+
+	[[panel.applet]]
 		name = "task-switcher"
 
 	[[panel.applet]]
@@ -10,6 +31,8 @@
 
 	[[panel.applet]]
 		name = "volume-control"
+		flat = true
+		icon_height = 16
 
 	[[panel.applet]]
 		name = "clock"

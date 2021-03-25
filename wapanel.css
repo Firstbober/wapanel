@@ -29,3 +29,44 @@
 .app-finder-category-app-list row label:first-child {
 	font-weight: bold;
 }
+
+/* Remove padding from task-switcher */
+
+.task-switcher flowbox {
+	padding: 0px;
+	margin: 0px;
+}
+
+.task-switcher {
+	padding: 0px;
+}
+
+.task-switcher flowbox flowboxchild {
+	padding: 0px;
+}
+
+.task-switcher flowbox flowboxchild button {
+	border-radius: 0px;
+}
+
+/* Final general tweaks */
+
+button:checked {
+	border-bottom: 1px solid @theme_selected_bg_color;
+}
+
+.volume-control, .clock, .activator button, .app-finder {
+	border-radius: 0px;
+}
+
+.app-finder {
+	margin-right: 4px;
+}
+
+.app-finder-popover {
+	border-radius: 0;
+}
+
+button.toggle:hover {
+	-gtk-icon-effect: none;
+}

@@ -332,7 +332,7 @@ auto window_button::toplevel_event_handler(wl::toplevel_event event) -> void {
 				g_object_get_property(G_OBJECT(m_button), "active", &val);
 				g_value_set_boolean(&val, false);
 				g_object_set_property(G_OBJECT(m_button), "active", &val);
-				gtk_label_set_label(m_title, ("[" + m_toplevel->title + "]").c_str());
+				//gtk_label_set_label(m_title, ("[" + m_toplevel->title + "]").c_str());
 			}
 		}
 		break;
