@@ -18,7 +18,7 @@ library('wapanel-applet-app-finder',
 	install: true,
 	include_directories: [
 		include_directories('../../lib'),
-		include_directories('../../../thirdparty')
+		wapanel_include_directories
 	],
 	install_dir: 'lib/wapanel/applets',
 	link_with: [appletapi_lib, icon_cache_util]

@@ -7,7 +7,7 @@
 #include <pwd.h>
 #include <queue>
 #include <unistd.h>
-#include <xdgpp/xdg.hpp>
+#include <xdg.hpp>
 
 namespace se {
 

@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-#include <toml11/toml.hpp>
+#include <toml.hpp>
 #include <vector>
 
 namespace wapanel::conf {

@@ -1,5 +1,5 @@
 project('wapanel', 'cpp',
-	version: '0.1.0',
+	version: '1.0.0',
 	default_options: [
 		'cpp_std=c++2a',
 		'build.cpp_std=c++2a'
@@ -28,6 +28,8 @@ sources = [
 	'src/applets.cc',
 	'src/wap_t_convert.cc'
 ]
+
+subdir('thirdparty')
 
 appletapi_lib = static_library('wapanel-appletapi', ['src/lib/appletapi.c'], install: true)
 install_headers('src/lib/appletapi.h', subdir: 'wapanel-appletapi')
@@ -67,5 +69,5 @@ executable(
 	sources,
 	dependencies: deps,
 	install: true,
-	include_directories : include_directories('thirdparty')
+	include_directories : wapanel_include_directories
 )

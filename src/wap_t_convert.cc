@@ -1,7 +1,7 @@
 #include "wap_t_convert.hh"
 #include "log.hh"
 #include "src/lib/appletapi.h"
-#include "toml11/toml/types.hpp"
+#include "toml/types.hpp"
 
 namespace wapanel::conv {
 

@@ -4,3 +4,6 @@ option('clock', type: 'boolean', value: true)
 option('separator', type: 'boolean', value: true)
 option('task-switcher', type: 'boolean', value: true)
 option('volume-control', type: 'boolean', value: true)
+
+# Use toml11 from system
+option('system_toml11', type: 'boolean', value: false)

@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-#include <xdgpp/xdg.hpp>
+#include <xdg.hpp>
 
 #define USED_CONFIG_DIR std::string(xdg::ConfigHomeDir().string() + "/wapanel")
 

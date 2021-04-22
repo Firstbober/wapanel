@@ -1,7 +1,7 @@
 #pragma once
 
 #include "lib/appletapi.h"
-#include <toml11/toml.hpp>
+#include <toml.hpp>
 #include <vector>
 
 namespace wapanel::conv {

@@ -9,7 +9,7 @@
 #include "../config_data.hh"
 #include "log.hh"
 
-#include <toml11/toml.hpp>
+#include <toml.hpp>
 
 namespace wapanel::conf {
 namespace fs = std::filesystem;
