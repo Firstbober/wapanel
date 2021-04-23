@@ -12,6 +12,6 @@ library('wapanel-applet-volume-control',
 	],
 	install: true,
 	include_directories: include_directories('../../lib'),
-	install_dir: 'lib/wapanel/applets',
+	install_dir: applet_install_dir,
 	link_with: [appletapi_lib, icon_cache_util]
 )

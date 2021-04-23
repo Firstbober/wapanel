@@ -35,6 +35,8 @@ appletapi_lib = static_library('wapanel-appletapi', ['src/lib/appletapi.c'], ins
 install_headers('src/lib/appletapi.h', subdir: 'wapanel-appletapi')
 pkgconfig.generate(appletapi_lib)
 
+applet_install_dir = get_option('libdir') / meson.project_name() / 'applets'
+
 subdir('src/applets')
 
 install_data('3RD_PARTY_LICENSES', install_dir : get_option('datadir') / meson.project_name())
