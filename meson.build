@@ -58,7 +58,8 @@ if get_option('buildtype').startswith('release')
   conf_data.set('BUILD_RELEASE', true)
 endif
 
-conf_data.set('data_dir', get_option('datadir'))
+conf_data.set('data_dir', get_option('prefix') / get_option('datadir'))
+conf_data.set('lib_dir', get_option('prefix') / get_option('libdir'))
 
 configure_file(input : 'config_data.hh.in',
                output : 'config_data.hh',

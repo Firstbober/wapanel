@@ -94,10 +94,6 @@ auto search_for_applets() -> void {
 	std::string applet_paths[] = APPLET_SEARCH_PATHS;
 	const char *home_dir;
 
-#ifndef BUILD_RELEASE
-	applet_paths[0] = "../lib/wapanel/applets";
-#endif
-
 	// Check if enviroment variable 'HOME' exists
 	// then use it as home directory and if this env-var
 	// doesn't exist then use user database entry and extract home dir.

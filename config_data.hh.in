@@ -1,4 +1,5 @@
 #pragma once
+#include <cstddef>
 #include <string>
 #include <xdg.hpp>
 
@@ -14,5 +15,6 @@
 	{ LOCAL_CONFIG_PATH, USER_CONFIG_PATH }
 
 #define APP_VERSION		"@app_version@"
-#define PREFIX_DATA_DIR "../@data_dir@"
-#define APP_DATA_DIR	"../@data_dir@/wapanel"
+#define PREFIX_DATA_DIR "@data_dir@"
+#define APP_DATA_DIR	"@data_dir@/wapanel"
+#define LIB_DIR         "@lib_dir@"

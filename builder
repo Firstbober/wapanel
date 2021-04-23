@@ -137,7 +137,7 @@ class Meson(BuildBackend):
                     else:
                         exec_path = [os.getcwd() + "/" + EXECUTABLE_OUTPUT + "/" +
                                      requested_binary_type + "/bin/" +
-                                     target["install_filename"][0].split("/")[:-1]]
+                                     target["install_filename"][0].split("/")[-1]]
 
                         if len(args) > 0:
                             exec_path += args

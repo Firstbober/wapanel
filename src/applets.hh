@@ -6,9 +6,10 @@
 #include <vector>
 
 #include "lib/appletapi.h"
+#include "../config_data.hh"
 
 #define APPLET_SEARCH_PATHS                                                                                            \
-	{ "", "./wapanel/applets", "/usr/lib/wapanel/applets", "~/.local/share/wapanel/applets" }
+	{ "", "./wapanel/applets", LIB_DIR "/wapanel/applets", "~/.local/share/wapanel/applets" }
 
 namespace wapanel::applets {
 
