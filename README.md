@@ -41,7 +41,7 @@ git clone --recurse-submodules https://github.com/Firstbober/wapanel.git
 ```sh
 mkdir build
 cd build
-meson ..
+meson .. # "meson .. -Dbuildtype=release" for release build
 sudo ninja install
 ```
 
