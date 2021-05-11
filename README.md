@@ -17,6 +17,16 @@ Documentation: https://firstbober.github.io/wapanel
 ## Maintaining
 I will be trying to fix incoming issues in issue tracker but not add new features, if you want some upstream then pull request are open.
 
+## Packaging status
+
+### Fedora
+
+Available in official [repo](https://src.fedoraproject.org/rpms/wapanel).
+
+```
+sudo dnf install wapanel
+```
+
 ## Building
 ### Dependencies
 - Meson *
