@@ -55,6 +55,7 @@ jobs:
 
     - name: Download and install dependencies
       run: |
+       sudo apt update
        sudo apt-get install -y meson libgtk-3-dev libgtk-layer-shell-dev libpulse-dev libpugixml-dev libwayland-dev gobject-introspection libgirepository1.0-dev gtk-doc-tools
 
     - name: Compile code
