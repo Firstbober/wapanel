@@ -5,6 +5,7 @@
 #include "search-engine/search_engine_mime.hh"
 #include <algorithm>
 #include <array>
+#include <cctype>
 #include <cstdio>
 #include <cstdlib>
 #include <gio/gdesktopappinfo.h>
@@ -35,6 +36,42 @@ namespace ui_comps {
 
 // Application list
 
+struct app_list_row_label_data {
+	std::string title;
+	std::string desc;
+	bool found_first;
+	bool found_second;
+};
+
+auto get_label_content_from_app_list_row(GtkListBoxRow *row, app_list_row_label_data *data) {
+	data->found_first = false;
+	data->found_second = false;
+
+	gtk_container_foreach(
+		GTK_CONTAINER(gtk_bin_get_child(GTK_BIN(row))),
+		+[](GtkWidget *w, void *data) {
+			if (GTK_IS_BOX(w)) {
+				gtk_container_foreach(
+					GTK_CONTAINER(w),
+					+[](GtkWidget *w, void *data) {
+						auto dn = (app_list_row_label_data *)data;
+
+						if (GTK_IS_LABEL(w)) {
+							if (dn->found_first == false) {
+								dn->title = gtk_label_get_text(GTK_LABEL(w));
+								dn->found_first = true;
+							} else {
+								dn->found_second = true;
+								dn->desc = gtk_label_get_text(GTK_LABEL(w));
+							}
+						}
+					},
+					data);
+			}
+		},
+		data);
+}
+
 application_list::application_list(int apid, GtkPopover *tl_popover)
 	: m_scroll_win(GTK_SCROLLED_WINDOW(gtk_scrolled_window_new(NULL, NULL)))
 	, m_viewport(GTK_VIEWPORT(gtk_viewport_new(NULL, NULL)))
@@ -63,6 +100,34 @@ application_list::application_list(int apid, GtkPopover *tl_popover)
 			gtk_popover_popdown(tl_popover);
 		}),
 		tl_popover);
+
+	gtk_list_box_set_sort_func(
+		m_app_list, GtkListBoxSortFunc([](GtkListBoxRow *r1, GtkListBoxRow *r2, void *data) -> int {
+			auto row1_data = new app_list_row_label_data;
+			get_label_content_from_app_list_row(r1, row1_data);
+
+			auto row2_data = new app_list_row_label_data;
+			get_label_content_from_app_list_row(r2, row2_data);
+
+			auto ret_val = 0;
+
+			std::transform(row1_data->title.begin(), row1_data->title.end(), row1_data->title.begin(), ::tolower);
+			std::transform(row2_data->title.begin(), row2_data->title.end(), row2_data->title.begin(), ::tolower);
+
+			if (row1_data->found_first && row2_data->found_first) {
+				if (row1_data->title > row2_data->title) {
+					ret_val = 1;
+				} else {
+					ret_val = -1;
+				}
+			}
+
+			delete row1_data;
+			delete row2_data;
+
+			return ret_val;
+		}),
+		NULL, NULL);
 
 	// Styling
 
@@ -228,21 +293,23 @@ list_area::list_area(int apid, GtkPopover *tl_popover)
 
 	this->m_search_changed_data = sc_d;
 
-	g_signal_connect(this->m_search_entry, "search-changed",
-					 G_CALLBACK(+[](GtkSearchEntry *entry, search_changed_data *data) {
-						 auto text = gtk_entry_get_text(GTK_ENTRY(entry));
+	g_signal_connect(
+		this->m_search_entry, "search-changed", G_CALLBACK(+[](GtkSearchEntry *entry, search_changed_data *data) {
+			auto text = gtk_entry_get_text(GTK_ENTRY(entry));
 
-						 if (strlen(text) == 0) {
-							 (*data->is_visible) = false;
-							 gtk_stack_set_visible_child_name(data->stack, "list-with-category");
-						 } else {
-							 gtk_list_box_invalidate_filter(data->apl->m_app_list);
-							 data->se->get_all_desktop_entries();
-							 (*data->is_visible) = true;
-							 gtk_stack_set_visible_child_name(data->stack, "search-list");
-						 }
-					 }),
-					 this->m_search_changed_data);
+			if (strlen(text) == 0) {
+				(*data->is_visible) = false;
+				gtk_stack_set_visible_child_name(data->stack, "list-with-category");
+			} else {
+				gtk_list_box_select_row(data->apl->m_app_list, gtk_list_box_get_row_at_y(data->apl->m_app_list, 0));
+				gtk_list_box_invalidate_filter(data->apl->m_app_list);
+				data->se->get_all_desktop_entries();
+				(*data->is_visible) = true;
+
+				gtk_stack_set_visible_child_name(data->stack, "search-list");
+			}
+		}),
+		this->m_search_changed_data);
 
 	g_signal_connect(this->m_search_entry, "stop-search",
 					 G_CALLBACK(+[](GtkSearchEntry *entry, search_changed_data *data) {
@@ -254,54 +321,21 @@ list_area::list_area(int apid, GtkPopover *tl_popover)
 		this->m_search_list->m_app_list,
 		[](GtkListBoxRow *r, void *d) -> int {
 			auto sentry = gtk_entry_get_text(GTK_ENTRY(d));
-			auto e2 = GTK_CONTAINER(gtk_bin_get_child(GTK_BIN(r)));
+			auto row_data = new app_list_row_label_data;
+			auto ret_val = false;
 
-			struct feach_subbox_data {
-				std::string title;
-				std::string desc;
-				bool is_first;
-			} * ffsbxd;
+			get_label_content_from_app_list_row(r, row_data);
 
-			ffsbxd = new feach_subbox_data;
-			ffsbxd->is_first = true;
-
-			// I lost my mind please help
-			gtk_container_foreach(
-				e2,
-				+[](GtkWidget *w, void *data) {
-					if (GTK_IS_BOX(w)) {
-						gtk_container_foreach(
-							GTK_CONTAINER(w),
-							+[](GtkWidget *w, void *data) {
-								auto dn = (feach_subbox_data *)data;
-
-								if (GTK_IS_LABEL(w)) {
-									if (dn->is_first) {
-										dn->title = gtk_label_get_text(GTK_LABEL(w));
-										dn->is_first = false;
-									} else {
-										dn->desc = gtk_label_get_text(GTK_LABEL(w));
-									}
-								}
-							},
-							data);
-					}
-				},
-				ffsbxd);
-
-			if (ffsbxd->is_first == false) {
-				if (ci_find_substr(ffsbxd->title, std::string(sentry)) != -1) {
-					delete ffsbxd;
-					return true;
-				}
-				if (ci_find_substr(ffsbxd->desc, std::string(sentry)) != -1) {
-					delete ffsbxd;
-					return true;
-				}
+			if (row_data->found_first) {
+				if (ci_find_substr(row_data->title, std::string(sentry)) != -1) { ret_val = true; }
 			}
 
-			delete ffsbxd;
-			return false;
+			if (row_data->found_second) {
+				if (ci_find_substr(row_data->desc, std::string(sentry)) != -1) { ret_val = true; }
+			}
+
+			delete row_data;
+			return ret_val;
 		},
 		this->m_search_entry, NULL);
 
