@@ -10,6 +10,14 @@ Documentation: https://firstbober.github.io/wapanel
 - Exposed API for writing custom applets
 - Custom themes with CSS
 
+## Built-in applets
+- Activator
+- App finder (or menu start)
+- Clock
+- Separator
+- Task switcher
+- Volume control
+
 ## Screenshot
 
 <img src="/wapanel-example.webp?raw=true" width="640">
