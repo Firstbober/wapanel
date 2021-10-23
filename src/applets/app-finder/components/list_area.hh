@@ -34,7 +34,14 @@ private:
 	GtkNotebook *m_list_container;
 	GtkStack *m_view_stack;
 
-	void *m_search_changed_data;
+	struct search_changed_data {
+		se::SearchEngine *se;
+		GtkStack *stack;
+		bool *is_visible;
+		application_list *apl;
+	};
+
+	search_changed_data *m_search_changed_data;
 	bool *m_search_container_visible = new bool(false);
 
 	GtkSearchEntry *m_search_entry;

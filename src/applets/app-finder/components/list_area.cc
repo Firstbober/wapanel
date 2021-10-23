@@ -219,13 +219,6 @@ list_area::list_area(int apid, GtkPopover *tl_popover)
 
 	// Register event for search
 
-	struct search_changed_data {
-		se::SearchEngine *se;
-		GtkStack *stack;
-		bool *is_visible;
-		application_list *apl;
-	};
-
 	auto sc_d = new search_changed_data;
 
 	sc_d->se = this->m_se;
@@ -233,7 +226,7 @@ list_area::list_area(int apid, GtkPopover *tl_popover)
 	sc_d->is_visible = this->m_search_container_visible;
 	sc_d->apl = this->m_search_list;
 
-	this->m_search_changed_data = (void *)sc_d;
+	this->m_search_changed_data = sc_d;
 
 	g_signal_connect(this->m_search_entry, "search-changed",
 					 G_CALLBACK(+[](GtkSearchEntry *entry, search_changed_data *data) {
@@ -441,7 +434,7 @@ list_area::list_area(int apid, GtkPopover *tl_popover)
 }
 list_area::~list_area() {
 	delete m_se;
-	free(this->m_search_changed_data);
+	delete this->m_search_changed_data;
 	delete m_search_container_visible;
 }
 
@@ -451,6 +444,5 @@ auto list_area::back_to_defaults() -> void {
 	gtk_stack_set_visible_child_name(this->m_view_stack, "list-with-category");
 	gtk_entry_set_text(GTK_ENTRY(this->m_search_entry), "");
 	(*this->m_search_container_visible) = false;
-	// this->m_search_list->clear();
 }
 };
