@@ -25,7 +25,7 @@ public:
 	auto add_app(AppEntry entry);
 
 	GtkListBox *m_app_list;
-	//auto clear() -> void;
+	// auto clear() -> void;
 };
 
 class list_area {
