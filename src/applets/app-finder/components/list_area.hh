@@ -15,7 +15,6 @@ class application_list {
 private:
 	GtkScrolledWindow *m_scroll_win;
 	GtkViewport *m_viewport;
-	GtkListBox *m_app_list;
 
 	std::vector<AppEntry> m_entries;
 
@@ -24,17 +23,22 @@ public:
 
 	auto get_widget() -> GtkWidget *;
 	auto add_app(AppEntry entry);
+
+	GtkListBox *m_app_list;
+	//auto clear() -> void;
 };
 
 class list_area {
 private:
 	GtkBox *m_root;
 	GtkNotebook *m_list_container;
-	GtkNotebook *m_search_container;
 	GtkStack *m_view_stack;
-	GtkSearchEntry *m_search_entry;
 
-	bool m_search_container_visible = false;
+	void *m_search_changed_data;
+	bool *m_search_container_visible = new bool(false);
+
+	GtkSearchEntry *m_search_entry;
+	application_list *m_search_list;
 
 	se::SearchEngine *m_se;
 
@@ -46,6 +50,7 @@ public:
 	~list_area();
 
 	auto get_widget() -> GtkWidget *;
+	auto back_to_defaults() -> void;
 };
 
 };

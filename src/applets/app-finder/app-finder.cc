@@ -157,6 +157,10 @@ app_finder::app_finder(wap_t_applet_config applet_config, int id)
 					 }),
 					 NULL);
 
+	g_signal_connect(m_finder_popover, "closed", G_CALLBACK(+[](GtkPopover *po, ui_comps::list_area *la) {
+		la->back_to_defaults();
+	}), m_list_area);
+
 	gtk_box_pack_start(m_finder_aligner, m_sidebar->get_widget(), false, true, 0);
 	gtk_box_pack_start(m_finder_aligner, gtk_separator_new(GTK_ORIENTATION_VERTICAL), false, true, 0);
 	gtk_box_pack_start(m_finder_aligner, m_list_area->get_widget(), true, true, 0);

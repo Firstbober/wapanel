@@ -139,7 +139,7 @@ auto SearchEngine::search(std::string text) -> void {
 	for (auto &&thread : m_threads) {
 		if (thread.joinable()) thread.join();
 	}
-	*/
+
 	m_threads.clear();
 
 	this->m_stopsearch = false;
@@ -154,12 +154,15 @@ auto SearchEngine::search(std::string text) -> void {
 	for (auto &&mount_point : m_mount_points) {
 		m_threads.push_back(std::thread(&SearchEngine::search_directory, this, to_find, mount_point, true));
 	}
+	*/
+
+	std::string to_find = "*" + text + "*";
 
 	for (auto &&app_dir : m_app_dirs) {
 		search_directory(to_find, app_dir, false);
 	}
 
-	std::cout << "searching " << text << std::endl;
+	std::cout << "searching " << to_find << std::endl;
 }
 
 auto SearchEngine::get_all_desktop_entries() -> void {
