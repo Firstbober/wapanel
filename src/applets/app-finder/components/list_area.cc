@@ -8,6 +8,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <gio/gdesktopappinfo.h>
+#include <memory>
 #include <string>
 #include <unistd.h>
 #include <utility>
@@ -38,13 +39,13 @@ application_list::application_list(int apid, GtkPopover *tl_popover)
 	: m_scroll_win(GTK_SCROLLED_WINDOW(gtk_scrolled_window_new(NULL, NULL)))
 	, m_viewport(GTK_VIEWPORT(gtk_viewport_new(NULL, NULL)))
 	, m_app_list(GTK_LIST_BOX(gtk_list_box_new())) {
-	gtk_list_box_set_selection_mode(m_app_list, GTK_SELECTION_NONE);
+	gtk_list_box_set_selection_mode(m_app_list, GTK_SELECTION_SINGLE);
 	gtk_list_box_set_activate_on_single_click(m_app_list, true);
 
 	gtk_container_add(GTK_CONTAINER(m_scroll_win), GTK_WIDGET(m_viewport));
 	gtk_container_add(GTK_CONTAINER(m_viewport), GTK_WIDGET(m_app_list));
 
-	gtk_widget_show_all(GTK_WIDGET(m_scroll_win));
+	// gtk_widget_show_all(GTK_WIDGET(m_scroll_win));
 
 	// Connect row-activated signal
 
@@ -163,7 +164,6 @@ std::array category_icon { "applications-utilities-symbolic", "applications-engi
 std::array category_name { "Accessories", "Development", "Education", "Games",	  "Graphics", "Multimedia",
 						   "Network",	  "Office",		 "Science",	  "Settings", "System",	  "Other" };
 
-
 bool replace(std::string &str, const std::string &from, const std::string &to) {
 	size_t start_pos = str.find(from);
 	if (start_pos == std::string::npos) return false;
@@ -171,26 +171,145 @@ bool replace(std::string &str, const std::string &from, const std::string &to) {
 	return true;
 }
 
+// https://stackoverflow.com/questions/3152241/case-insensitive-stdstring-find
+
+template <typename charT> struct my_equal {
+	my_equal(const std::locale &loc)
+		: loc_(loc) {}
+	bool operator()(charT ch1, charT ch2) { return std::toupper(ch1, loc_) == std::toupper(ch2, loc_); }
+
+private:
+	const std::locale &loc_;
+};
+
+template <typename T> int ci_find_substr(const T &str1, const T &str2, const std::locale &loc = std::locale()) {
+	typename T::const_iterator it
+		= std::search(str1.begin(), str1.end(), str2.begin(), str2.end(), my_equal<typename T::value_type>(loc));
+	if (it != str1.end())
+		return it - str1.begin();
+	else
+		return -1; // not found
+}
+
+// https://stackoverflow.com/questions/3152241/case-insensitive-stdstring-find
+
 list_area::list_area(int apid, GtkPopover *tl_popover)
 	: m_root(GTK_BOX(gtk_box_new(GTK_ORIENTATION_VERTICAL, 6)))
 	, m_list_container(GTK_NOTEBOOK(gtk_notebook_new()))
-	, m_search_container(GTK_NOTEBOOK(gtk_notebook_new()))
 	, m_view_stack(GTK_STACK(gtk_stack_new()))
 	, m_search_entry(GTK_SEARCH_ENTRY(gtk_search_entry_new()))
+	, m_search_list(new application_list(apid, tl_popover))
 	, m_se(new se::SearchEngine()) {
+	(*this->m_search_container_visible) = false;
 
 	// Initialize category notebook
 
 	gtk_notebook_set_tab_pos(this->m_list_container, GTK_POS_RIGHT);
 	gtk_stack_add_named(this->m_view_stack, GTK_WIDGET(this->m_list_container), "list-with-category");
+	gtk_stack_add_named(this->m_view_stack, GTK_WIDGET(this->m_search_list->get_widget()), "search-list");
 
 	gtk_stack_set_visible_child_name(this->m_view_stack, "list-with-category");
 
 	// Pack everything to m_root and show all
 
+	gtk_box_pack_end(this->m_root, GTK_WIDGET(this->m_search_entry), false, true, 0);
 	gtk_box_pack_end(this->m_root, GTK_WIDGET(this->m_view_stack), true, true, 0);
 
 	gtk_widget_show_all(GTK_WIDGET(this->m_root));
+
+	// Register event for search
+
+	auto sc_d = new search_changed_data;
+
+	sc_d->se = this->m_se;
+	sc_d->stack = this->m_view_stack;
+	sc_d->is_visible = this->m_search_container_visible;
+	sc_d->apl = this->m_search_list;
+
+	this->m_search_changed_data = sc_d;
+
+	g_signal_connect(this->m_search_entry, "search-changed",
+					 G_CALLBACK(+[](GtkSearchEntry *entry, search_changed_data *data) {
+						 auto text = gtk_entry_get_text(GTK_ENTRY(entry));
+
+						 if (strlen(text) == 0) {
+							 (*data->is_visible) = false;
+							 gtk_stack_set_visible_child_name(data->stack, "list-with-category");
+						 } else {
+							 gtk_list_box_invalidate_filter(data->apl->m_app_list);
+							 data->se->get_all_desktop_entries();
+							 (*data->is_visible) = true;
+							 gtk_stack_set_visible_child_name(data->stack, "search-list");
+						 }
+					 }),
+					 this->m_search_changed_data);
+
+	g_signal_connect(this->m_search_entry, "stop-search",
+					 G_CALLBACK(+[](GtkSearchEntry *entry, search_changed_data *data) {
+						 gtk_stack_set_visible_child_name(data->stack, "list-with-category");
+					 }),
+					 this->m_search_changed_data);
+
+	gtk_list_box_set_filter_func(
+		this->m_search_list->m_app_list,
+		[](GtkListBoxRow *r, void *d) -> int {
+			auto sentry = gtk_entry_get_text(GTK_ENTRY(d));
+			auto e2 = GTK_CONTAINER(gtk_bin_get_child(GTK_BIN(r)));
+
+			struct feach_subbox_data {
+				std::string title;
+				std::string desc;
+				bool is_first;
+			} * ffsbxd;
+
+			ffsbxd = new feach_subbox_data;
+			ffsbxd->is_first = true;
+
+			// I lost my mind please help
+			gtk_container_foreach(
+				e2,
+				+[](GtkWidget *w, void *data) {
+					if (GTK_IS_BOX(w)) {
+						gtk_container_foreach(
+							GTK_CONTAINER(w),
+							+[](GtkWidget *w, void *data) {
+								auto dn = (feach_subbox_data *)data;
+
+								if (GTK_IS_LABEL(w)) {
+									if (dn->is_first) {
+										dn->title = gtk_label_get_text(GTK_LABEL(w));
+										dn->is_first = false;
+									} else {
+										dn->desc = gtk_label_get_text(GTK_LABEL(w));
+									}
+								}
+							},
+							data);
+					}
+				},
+				ffsbxd);
+
+			if (ffsbxd->is_first == false) {
+				if (ci_find_substr(ffsbxd->title, std::string(sentry)) != -1) {
+					delete ffsbxd;
+					return true;
+				}
+				if (ci_find_substr(ffsbxd->desc, std::string(sentry)) != -1) {
+					delete ffsbxd;
+					return true;
+				}
+			}
+
+			delete ffsbxd;
+			return false;
+		},
+		this->m_search_entry, NULL);
+
+	g_signal_connect(tl_popover, "show", G_CALLBACK(+[](GtkWidget *w, void *data) {
+						 auto se = (GtkEntry *)data;
+						 gtk_widget_grab_focus(GTK_WIDGET(se));
+					 }),
+					 this->m_search_entry);
 
 	// Add SearchEngine handle and search for all desktop entries
 
@@ -225,6 +344,8 @@ list_area::list_area(int apid, GtkPopover *tl_popover)
 				replace(app_entry.exec, "%i", "");
 				replace(app_entry.exec, "%c", "");
 				replace(app_entry.exec, "%k", "");
+
+				this->m_search_list->add_app(app_entry);
 
 				const char *KcP_cats = g_desktop_app_info_get_categories(app_info);
 
@@ -311,7 +432,17 @@ list_area::list_area(int apid, GtkPopover *tl_popover)
 
 	log_info("app-finder/list-area created");
 }
-list_area::~list_area() { delete m_se; }
+list_area::~list_area() {
+	delete m_se;
+	delete this->m_search_changed_data;
+	delete m_search_container_visible;
+}
 
 auto list_area::get_widget() -> GtkWidget * { return GTK_WIDGET(m_root); }
+
+auto list_area::back_to_defaults() -> void {
+	gtk_stack_set_visible_child_name(this->m_view_stack, "list-with-category");
+	gtk_entry_set_text(GTK_ENTRY(this->m_search_entry), "");
+	(*this->m_search_container_visible) = false;
+}
 };

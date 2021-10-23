@@ -5,8 +5,8 @@
 #include <unordered_map>
 #include <vector>
 
-#include "lib/appletapi.h"
 #include "../config_data.hh"
+#include "lib/appletapi.h"
 
 #define APPLET_SEARCH_PATHS                                                                                            \
 	{ "", "./wapanel/applets", LIB_DIR "/wapanel/applets", "~/.local/share/wapanel/applets" }
