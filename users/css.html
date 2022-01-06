@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Styling &mdash; Wapanel  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Example theme - Transparency/Blur" href="themes.html" />
+    <link rel="prev" title="Applets" href="applets.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> Wapanel
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">For users:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="command_line.html">Command line parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_file.html">Configuration file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="applets.html">Applets</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Styling</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#basic-information">Basic information</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#gtk-css-reference">GTK CSS reference</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="themes.html">Example theme - Transparency/Blur</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">For developers:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../devs/writing_applet.html">How to write applets for Wapanel</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../devs/using_applet_config.html">Using wap_t_applet_config in your applet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../devs/aapi_reference.html">Applet API reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Wapanel</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Styling</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/users/css.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="styling">
+<h1>Styling<a class="headerlink" href="#styling" title="Permalink to this headline"></a></h1>
+<div class="section" id="basic-information">
+<h2>Basic information<a class="headerlink" href="#basic-information" title="Permalink to this headline"></a></h2>
+<p>Styling in Wapanel is made using GTK CSS.</p>
+<p>Style fileneeds to be located in <cite>~/.config/wapanel</cite>, <cite>$XDG_CONFIG_HOME/wapanel</cite> or besides executable.</p>
+<p>File should be named <cite>wapanel.css</cite></p>
+</div>
+<div class="section" id="gtk-css-reference">
+<h2>GTK CSS reference<a class="headerlink" href="#gtk-css-reference" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><p>General overview - <a class="reference external" href="https://developer.gnome.org/gtk3/stable/chap-css-overview.html">https://developer.gnome.org/gtk3/stable/chap-css-overview.html</a></p></li>
+<li><p>Color names - <a class="reference external" href="https://gitlab.gnome.org/GNOME/gtk/-/blob/master/gtk/theme/Adwaita/_colors-public.scss">https://gitlab.gnome.org/GNOME/gtk/-/blob/master/gtk/theme/Adwaita/_colors-public.scss</a></p></li>
+<li><p>Properties - <a class="reference external" href="https://developer.gnome.org/gtk3/stable/chap-css-properties.html">https://developer.gnome.org/gtk3/stable/chap-css-properties.html</a></p></li>
+</ul>
+<p>Also, on each GTK widget reference page should be list of CSS nodes.</p>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="applets.html" class="btn btn-neutral float-left" title="Applets" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="themes.html" class="btn btn-neutral float-right" title="Example theme - Transparency/Blur" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, Firstbober.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

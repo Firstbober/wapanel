@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>How to write applets for Wapanel &mdash; Wapanel  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Using wap_t_applet_config in your applet" href="using_applet_config.html" />
+    <link rel="prev" title="Example theme - Transparency/Blur" href="../users/themes.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> Wapanel
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">For users:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../users/command_line.html">Command line parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../users/config_file.html">Configuration file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../users/applets.html">Applets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../users/css.html">Styling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../users/themes.html">Example theme - Transparency/Blur</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">For developers:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">How to write applets for Wapanel</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_applet_config.html">Using wap_t_applet_config in your applet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aapi_reference.html">Applet API reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Wapanel</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>How to write applets for Wapanel</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/devs/writing_applet.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="how-to-write-applets-for-wapanel">
+<h1>How to write applets for Wapanel<a class="headerlink" href="#how-to-write-applets-for-wapanel" title="Permalink to this headline"></a></h1>
+<p>So you want to write applet for Wapanel, right?</p>
+<p>You will need at least basic knowledge of C or/and C++,
+understanding of Meson build system will be useful too.
+But C/C++ knowledge should be enough.</p>
+<p>Let’s start with creating directory for our applet
+in this guide I will name it <cite>example</cite>. Then create some basic files:</p>
+<ul class="simple">
+<li><p>meson.build</p></li>
+<li><p>example.c</p></li>
+</ul>
+<p>They will be our basis for further operations.</p>
+<p><strong>meson.build</strong> should look something like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">project</span><span class="p">(</span><span class="s1">&#39;example&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">)</span>
+
+<span class="n">library</span><span class="p">(</span>
+    <span class="s1">&#39;wapanel-applet-example&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;example.c&#39;</span><span class="p">,</span>
+    <span class="n">dependencies</span><span class="p">:</span> <span class="p">[</span>
+        <span class="n">dependency</span><span class="p">(</span><span class="s1">&#39;gtk+-3.0&#39;</span><span class="p">),</span>
+        <span class="n">dependency</span><span class="p">(</span><span class="s1">&#39;wapanel-appletapi&#39;</span><span class="p">)</span>
+    <span class="p">],</span>
+    <span class="n">install</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+    <span class="n">install_dir</span><span class="p">:</span> <span class="s1">&#39;lib/wapanel/applets&#39;</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>We have here our project name, source filename <strong>example.c</strong>, required dependencies
+<strong>gtk+3</strong> and <strong>wapanel-appletapi</strong> (these two will be installed if you have wapanel in your system).
+Our install directory is <cite>lib/wapanel/applets</cite> that meson resolve to <cite>/usr/lib/wapanel/applets</cite> -
+in this directory all applets are installed system-wide. You can also install applets to:</p>
+<ul class="simple">
+<li><p>~/.local/share/wapanel/applets</p></li>
+<li><p>besides binary in <strong>wapanel/applets</strong> directory</p></li>
+</ul>
+<p>Let’s take a look at <strong>example.c</strong></p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;wapanel-appletapi/appletapi.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;gtk/gtk.h&gt;</span><span class="cp"></span>
+
+<span class="c1">// Called to get handy info about this applet.</span>
+<span class="n">wap_t_applet_info</span> <span class="nf">wap_applet_info</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">wap_t_applet_info</span> <span class="n">info</span> <span class="o">=</span> <span class="p">{</span> <span class="p">.</span><span class="n">name</span> <span class="o">=</span> <span class="s">&quot;example&quot;</span><span class="p">,</span> <span class="p">.</span><span class="n">version</span> <span class="o">=</span> <span class="mi">1</span> <span class="p">};</span>
+    <span class="k">return</span> <span class="n">info</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// Called when some panel need a new instance of your applet.</span>
+<span class="n">GtkWidget</span> <span class="o">*</span><span class="nf">wap_applet_new_instance</span><span class="p">(</span><span class="n">wap_t_applet_config</span> <span class="n">applet_config</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">gtk_label_new</span><span class="p">(</span><span class="s">&quot;Hello, world!&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">// Called when requested to remove all existing instances. GtkWidget should already be disposed by panel.</span>
+<span class="kt">void</span> <span class="nf">wap_event_remove_instances</span><span class="p">()</span> <span class="p">{}</span>
+
+<span class="c1">// Called when panel exits.</span>
+<span class="kt">void</span> <span class="nf">wap_event_exit</span><span class="p">()</span> <span class="p">{}</span>
+</pre></div>
+</div>
+<p>There is slightly more code. Here is small explanation:</p>
+<p>Includes:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>#include &lt;wapanel-appletapi/appletapi.h&gt;</dt><dd><p>Include directive for applet API required for applets.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>#include &lt;gtk/gtk.h&gt;</dt><dd><p>Just basic GTK include. You will need this anyways.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Callbacks:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>wap_t_applet_info wap_applet_info()</dt><dd><p>This function sends information about your applet to panel.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>GtkWidget *wap_applet_new_instance(wap_t_applet_config applet_config)</dt><dd><p>Panel calls this to get brand new GtkWidget, you can do some fancy stuff — remember to clean it up later.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>void wap_event_remove_instances()</dt><dd><p>Here you can make cleaning of unspeakable things you done before.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>void wap_event_exit()</dt><dd><p>You probably never need to write any code here.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>When we have our source and build files we can make our project live!
+Make <strong>build</strong> directory, go to it and then call <cite>meson ..</cite> and <cite>ninja</cite>.
+Everything should build and you will be greeted with beautiful shared object file.
+Then you can put it in system path or local path as described above.</p>
+<p><strong>Congratulations! You just created your first applet!</strong></p>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../users/themes.html" class="btn btn-neutral float-left" title="Example theme - Transparency/Blur" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="using_applet_config.html" class="btn btn-neutral float-right" title="Using wap_t_applet_config in your applet" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, Firstbober.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

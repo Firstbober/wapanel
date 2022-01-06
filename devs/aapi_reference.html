@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Applet API reference &mdash; Wapanel  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Using wap_t_applet_config in your applet" href="using_applet_config.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> Wapanel
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">For users:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../users/command_line.html">Command line parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../users/config_file.html">Configuration file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../users/applets.html">Applets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../users/css.html">Styling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../users/themes.html">Example theme - Transparency/Blur</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">For developers:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="writing_applet.html">How to write applets for Wapanel</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_applet_config.html">Using wap_t_applet_config in your applet</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Applet API reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#functions">Functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#checking-key-existance">Checking key existance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#extracting-variable-from-key-directories">Extracting variable from key directories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#converting-variable-to-type">Converting variable to type</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#error-handling">Error handling</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#structs">Structs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#enums">Enums</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Wapanel</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Applet API reference</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/devs/aapi_reference.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="applet-api-reference">
+<h1>Applet API reference<a class="headerlink" href="#applet-api-reference" title="Permalink to this headline"></a></h1>
+<div class="section" id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline"></a></h2>
+<div class="section" id="checking-key-existance">
+<h3>Checking key existance<a class="headerlink" href="#checking-key-existance" title="Permalink to this headline"></a></h3>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv415wapi_key_existsP22_wap_t_config_variablePKc">
+<span id="_CPPv315wapi_key_existsP22_wap_t_config_variablePKc"></span><span id="_CPPv215wapi_key_existsP22_wap_t_config_variablePKc"></span><span id="wapi_key_exists___wap_t_config_variableP.cCP"></span><span class="target" id="appletapi_8h_1a91ab04f39c5fb4f25d7ff258afa8ebe7"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">wapi_key_exists</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv422_wap_t_config_variable" title="_wap_t_config_variable"><span class="n"><span class="pre">_wap_t_config_variable</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">table</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">key</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv415wapi_key_existsP22_wap_t_config_variablePKc" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Checks if specified key exists in passed table. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv417wapi_index_existsP22_wap_t_config_variable6size_t">
+<span id="_CPPv317wapi_index_existsP22_wap_t_config_variable6size_t"></span><span id="_CPPv217wapi_index_existsP22_wap_t_config_variable6size_t"></span><span id="wapi_index_exists___wap_t_config_variableP.s"></span><span class="target" id="appletapi_8h_1abff173e0eba928d41662319aeddd9471"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">wapi_index_exists</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv422_wap_t_config_variable" title="_wap_t_config_variable"><span class="n"><span class="pre">_wap_t_config_variable</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">array</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">index</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv417wapi_index_existsP22_wap_t_config_variable6size_t" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Checks if specified index exists inside passed array. </p>
+</dd></dl>
+
+</div>
+<div class="section" id="extracting-variable-from-key-directories">
+<h3>Extracting variable from key directories<a class="headerlink" href="#extracting-variable-from-key-directories" title="Permalink to this headline"></a></h3>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv423wapi_get_var_from_tableP22_wap_t_config_variablePKc">
+<span id="_CPPv323wapi_get_var_from_tableP22_wap_t_config_variablePKc"></span><span id="_CPPv223wapi_get_var_from_tableP22_wap_t_config_variablePKc"></span><span id="wapi_get_var_from_table___wap_t_config_variableP.cCP"></span><span class="target" id="appletapi_8h_1adb5f0f14728bf94734735c0ecc5fffb6"></span><a class="reference internal" href="#_CPPv422_wap_t_config_variable" title="_wap_t_config_variable"><span class="n"><span class="pre">_wap_t_config_variable</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">wapi_get_var_from_table</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv422_wap_t_config_variable" title="_wap_t_config_variable"><span class="n"><span class="pre">_wap_t_config_variable</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">table</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">key</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423wapi_get_var_from_tableP22_wap_t_config_variablePKc" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Extracts variable with specified key from table. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv423wapi_get_var_from_arrayP22_wap_t_config_variable6size_t">
+<span id="_CPPv323wapi_get_var_from_arrayP22_wap_t_config_variable6size_t"></span><span id="_CPPv223wapi_get_var_from_arrayP22_wap_t_config_variable6size_t"></span><span id="wapi_get_var_from_array___wap_t_config_variableP.s"></span><span class="target" id="appletapi_8h_1af1e9b0ee53458913aa39baf4c5dfc614"></span><a class="reference internal" href="#_CPPv422_wap_t_config_variable" title="_wap_t_config_variable"><span class="n"><span class="pre">_wap_t_config_variable</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">wapi_get_var_from_array</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv422_wap_t_config_variable" title="_wap_t_config_variable"><span class="n"><span class="pre">_wap_t_config_variable</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">array</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">index</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423wapi_get_var_from_arrayP22_wap_t_config_variable6size_t" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Extracts variable with specified index from array. </p>
+</dd></dl>
+
+</div>
+<div class="section" id="converting-variable-to-type">
+<h3>Converting variable to type<a class="headerlink" href="#converting-variable-to-type" title="Permalink to this headline"></a></h3>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv418wapi_var_as_stringP22_wap_t_config_variable">
+<span id="_CPPv318wapi_var_as_stringP22_wap_t_config_variable"></span><span id="_CPPv218wapi_var_as_stringP22_wap_t_config_variable"></span><span id="wapi_var_as_string___wap_t_config_variableP"></span><span class="target" id="appletapi_8h_1aaf7f18a7f7107d3d22871da16d798dea"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">wapi_var_as_string</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv422_wap_t_config_variable" title="_wap_t_config_variable"><span class="n"><span class="pre">_wap_t_config_variable</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">var</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418wapi_var_as_stringP22_wap_t_config_variable" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Converts variable to string. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv419wapi_var_as_integerP22_wap_t_config_variable">
+<span id="_CPPv319wapi_var_as_integerP22_wap_t_config_variable"></span><span id="_CPPv219wapi_var_as_integerP22_wap_t_config_variable"></span><span id="wapi_var_as_integer___wap_t_config_variableP"></span><span class="target" id="appletapi_8h_1ad6e2462c80a0656434e8597db30898aa"></span><span class="n"><span class="pre">int64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">wapi_var_as_integer</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv422_wap_t_config_variable" title="_wap_t_config_variable"><span class="n"><span class="pre">_wap_t_config_variable</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">var</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419wapi_var_as_integerP22_wap_t_config_variable" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Converts variable to integer. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv420wapi_var_as_floatingP22_wap_t_config_variable">
+<span id="_CPPv320wapi_var_as_floatingP22_wap_t_config_variable"></span><span id="_CPPv220wapi_var_as_floatingP22_wap_t_config_variable"></span><span id="wapi_var_as_floating___wap_t_config_variableP"></span><span class="target" id="appletapi_8h_1a84fc802db3789860ebccdc98581abceb"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">wapi_var_as_floating</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv422_wap_t_config_variable" title="_wap_t_config_variable"><span class="n"><span class="pre">_wap_t_config_variable</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">var</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv420wapi_var_as_floatingP22_wap_t_config_variable" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Converts variable to floating. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv419wapi_var_as_booleanP22_wap_t_config_variable">
+<span id="_CPPv319wapi_var_as_booleanP22_wap_t_config_variable"></span><span id="_CPPv219wapi_var_as_booleanP22_wap_t_config_variable"></span><span id="wapi_var_as_boolean___wap_t_config_variableP"></span><span class="target" id="appletapi_8h_1a9fec1aa53f8df90b74a213ed47c80b26"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">wapi_var_as_boolean</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv422_wap_t_config_variable" title="_wap_t_config_variable"><span class="n"><span class="pre">_wap_t_config_variable</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">var</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419wapi_var_as_booleanP22_wap_t_config_variable" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Converts variable to boolean. </p>
+</dd></dl>
+
+</div>
+<div class="section" id="error-handling">
+<h3>Error handling<a class="headerlink" href="#error-handling" title="Permalink to this headline"></a></h3>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv410wapi_errorv">
+<span id="_CPPv310wapi_errorv"></span><span id="_CPPv210wapi_errorv"></span><span id="wapi_error"></span><span class="target" id="appletapi_8h_1aa8ad1239118fa714b8e06e9d2cae3bdc"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">wapi_error</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410wapi_errorv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Check if errno is set to error, returns true if error is present. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv416wapi_error_printv">
+<span id="_CPPv316wapi_error_printv"></span><span id="_CPPv216wapi_error_printv"></span><span id="wapi_error_print"></span><span class="target" id="appletapi_8h_1a302209b4faa24d7f0f876b4acc051afc"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">wapi_error_print</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416wapi_error_printv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Prints error if it’s present. </p>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="structs">
+<h2>Structs<a class="headerlink" href="#structs" title="Permalink to this headline"></a></h2>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv422_wap_t_config_variable">
+<span id="_CPPv322_wap_t_config_variable"></span><span id="_CPPv222_wap_t_config_variable"></span><span id="_wap_t_config_variable"></span><span class="target" id="struct__wap__t__config__variable"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">_wap_t_config_variable</span></span></span><a class="headerlink" href="#_CPPv422_wap_t_config_variable" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Entire toml-based applet config. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N22_wap_t_config_variable3keyE">
+<span id="_CPPv3N22_wap_t_config_variable3keyE"></span><span id="_CPPv2N22_wap_t_config_variable3keyE"></span><span id="_wap_t_config_variable::key___wap_t_config_variable::key"></span><span class="target" id="struct__wap__t__config__variable_1a39342f244380a4978a45ed1c9c3db981"></span><span class="k"><span class="pre">union</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv422_wap_t_config_variable" title="_wap_t_config_variable"><span class="n"><span class="pre">_wap_t_config_variable</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="#_CPPv4N22_wap_t_config_variable3keyE" title="_wap_t_config_variable::key"><span class="n"><span class="pre">key</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">key</span></span></span><a class="headerlink" href="#_CPPv4N22_wap_t_config_variable3keyE" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N22_wap_t_config_variable4typeE">
+<span id="_CPPv3N22_wap_t_config_variable4typeE"></span><span id="_CPPv2N22_wap_t_config_variable4typeE"></span><span id="_wap_t_config_variable::type__wap_t_config_var_type"></span><span class="target" id="struct__wap__t__config__variable_1afa3b871436a32e17ded7126c27a22450"></span><a class="reference internal" href="#_CPPv421wap_t_config_var_type" title="wap_t_config_var_type"><span class="n"><span class="pre">wap_t_config_var_type</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">type</span></span></span><a class="headerlink" href="#_CPPv4N22_wap_t_config_variable4typeE" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N22_wap_t_config_variable7contentE">
+<span id="_CPPv3N22_wap_t_config_variable7contentE"></span><span id="_CPPv2N22_wap_t_config_variable7contentE"></span><span id="_wap_t_config_variable::content___wap_t_config_variable::content"></span><span class="target" id="struct__wap__t__config__variable_1a288045c63015b3b7cf78dc23e49eee5e"></span><span class="k"><span class="pre">union</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv422_wap_t_config_variable" title="_wap_t_config_variable"><span class="n"><span class="pre">_wap_t_config_variable</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="#_CPPv4N22_wap_t_config_variable7contentE" title="_wap_t_config_variable::content"><span class="n"><span class="pre">content</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">content</span></span></span><a class="headerlink" href="#_CPPv4N22_wap_t_config_variable7contentE" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<dl class="cpp union">
+<dt class="sig sig-object cpp">
+<span class="target" id="union__wap__t__config__variable_1_1content"></span><span class="k"><span class="pre">union</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">content</span></span></span><br /></dt>
+<dd><div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N22_wap_t_config_variable7content5valueE">
+<span id="_CPPv3N22_wap_t_config_variable7content5valueE"></span><span id="_CPPv2N22_wap_t_config_variable7content5valueE"></span><span id="_wap_t_config_variable::content::value___wap_t_config_variable::content::value"></span><span class="target" id="union__wap__t__config__variable_1_1content_1a391837b6e08998c137ba4721d477f9f5"></span><span class="k"><span class="pre">union</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv422_wap_t_config_variable" title="_wap_t_config_variable"><span class="n"><span class="pre">_wap_t_config_variable</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="#_CPPv4N22_wap_t_config_variable7contentE" title="_wap_t_config_variable::content"><span class="n"><span class="pre">content</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="#_CPPv4N22_wap_t_config_variable7content5valueE" title="_wap_t_config_variable::content::value"><span class="n"><span class="pre">value</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><a class="headerlink" href="#_CPPv4N22_wap_t_config_variable7content5valueE" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N22_wap_t_config_variable7content5arrayE">
+<span id="_CPPv3N22_wap_t_config_variable7content5arrayE"></span><span id="_CPPv2N22_wap_t_config_variable7content5arrayE"></span><span id="_wap_t_config_variable::content::array___wap_t_config_variable::content::array"></span><span class="target" id="union__wap__t__config__variable_1_1content_1a2c4d05124e8cab463a3ce42ee5f397f6"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv422_wap_t_config_variable" title="_wap_t_config_variable"><span class="n"><span class="pre">_wap_t_config_variable</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="#_CPPv4N22_wap_t_config_variable7contentE" title="_wap_t_config_variable::content"><span class="n"><span class="pre">content</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="#_CPPv4N22_wap_t_config_variable7content5arrayE" title="_wap_t_config_variable::content::array"><span class="n"><span class="pre">array</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">array</span></span></span><a class="headerlink" href="#_CPPv4N22_wap_t_config_variable7content5arrayE" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N22_wap_t_config_variable7content5tableE">
+<span id="_CPPv3N22_wap_t_config_variable7content5tableE"></span><span id="_CPPv2N22_wap_t_config_variable7content5tableE"></span><span id="_wap_t_config_variable::content::table___wap_t_config_variable::content::table"></span><span class="target" id="union__wap__t__config__variable_1_1content_1a019969316afd42712983a62db3a26332"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv422_wap_t_config_variable" title="_wap_t_config_variable"><span class="n"><span class="pre">_wap_t_config_variable</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="#_CPPv4N22_wap_t_config_variable7contentE" title="_wap_t_config_variable::content"><span class="n"><span class="pre">content</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="#_CPPv4N22_wap_t_config_variable7content5tableE" title="_wap_t_config_variable::content::table"><span class="n"><span class="pre">table</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">table</span></span></span><a class="headerlink" href="#_CPPv4N22_wap_t_config_variable7content5tableE" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp">
+<span class="target" id="struct__wap__t__config__variable_1_1content_1_1array"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">array</span></span></span><br /></dt>
+<dd><div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N22_wap_t_config_variable7content5array5_sizeE">
+<span id="_CPPv3N22_wap_t_config_variable7content5array5_sizeE"></span><span id="_CPPv2N22_wap_t_config_variable7content5array5_sizeE"></span><span id="_wap_t_config_variable::content::array::_size__unsigned-i"></span><span class="target" id="struct__wap__t__config__variable_1_1content_1_1array_1a1bdd644bc50c71d5dca50439c784d269"></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">_size</span></span></span><a class="headerlink" href="#_CPPv4N22_wap_t_config_variable7content5array5_sizeE" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N22_wap_t_config_variable7content5array8_contentE">
+<span id="_CPPv3N22_wap_t_config_variable7content5array8_contentE"></span><span id="_CPPv2N22_wap_t_config_variable7content5array8_contentE"></span><span id="_wap_t_config_variable::content::array::_content___wap_t_config_variableP"></span><span class="target" id="struct__wap__t__config__variable_1_1content_1_1array_1af5e0a5e7eb6b91591cededb0dc89705b"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv422_wap_t_config_variable" title="_wap_t_config_variable"><span class="n"><span class="pre">_wap_t_config_variable</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">_content</span></span></span><a class="headerlink" href="#_CPPv4N22_wap_t_config_variable7content5array8_contentE" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+</div>
+</dd></dl>
+
+<dl class="cpp struct">
+<dt class="sig sig-object cpp">
+<span class="target" id="struct__wap__t__config__variable_1_1content_1_1table"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">table</span></span></span><br /></dt>
+<dd><div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N22_wap_t_config_variable7content5table5_sizeE">
+<span id="_CPPv3N22_wap_t_config_variable7content5table5_sizeE"></span><span id="_CPPv2N22_wap_t_config_variable7content5table5_sizeE"></span><span id="_wap_t_config_variable::content::table::_size__unsigned-i"></span><span class="target" id="struct__wap__t__config__variable_1_1content_1_1table_1a0216df739e5db234eeb2fbfa556226f7"></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">_size</span></span></span><a class="headerlink" href="#_CPPv4N22_wap_t_config_variable7content5table5_sizeE" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N22_wap_t_config_variable7content5table8_contentE">
+<span id="_CPPv3N22_wap_t_config_variable7content5table8_contentE"></span><span id="_CPPv2N22_wap_t_config_variable7content5table8_contentE"></span><span id="_wap_t_config_variable::content::table::_content___wap_t_config_variableP"></span><span class="target" id="struct__wap__t__config__variable_1_1content_1_1table_1aca325db1af6aa9d7c7ca376a05fd6e79"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv422_wap_t_config_variable" title="_wap_t_config_variable"><span class="n"><span class="pre">_wap_t_config_variable</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">_content</span></span></span><a class="headerlink" href="#_CPPv4N22_wap_t_config_variable7content5table8_contentE" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+</div>
+</dd></dl>
+
+<dl class="cpp union">
+<dt class="sig sig-object cpp">
+<span class="target" id="union__wap__t__config__variable_1_1content_1_1value"></span><span class="k"><span class="pre">union</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><br /></dt>
+<dd><div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N22_wap_t_config_variable7content5value6stringE">
+<span id="_CPPv3N22_wap_t_config_variable7content5value6stringE"></span><span id="_CPPv2N22_wap_t_config_variable7content5value6stringE"></span><span id="_wap_t_config_variable::content::value::string__cCP"></span><span class="target" id="union__wap__t__config__variable_1_1content_1_1value_1a68a70e5e66037e15b51d09e6e8552efd"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">string</span></span></span><a class="headerlink" href="#_CPPv4N22_wap_t_config_variable7content5value6stringE" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N22_wap_t_config_variable7content5value7integerE">
+<span id="_CPPv3N22_wap_t_config_variable7content5value7integerE"></span><span id="_CPPv2N22_wap_t_config_variable7content5value7integerE"></span><span id="_wap_t_config_variable::content::value::integer__int64_t"></span><span class="target" id="union__wap__t__config__variable_1_1content_1_1value_1a0e0fc317f503b5893de55170163e59fa"></span><span class="n"><span class="pre">int64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">integer</span></span></span><a class="headerlink" href="#_CPPv4N22_wap_t_config_variable7content5value7integerE" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N22_wap_t_config_variable7content5value8floatingE">
+<span id="_CPPv3N22_wap_t_config_variable7content5value8floatingE"></span><span id="_CPPv2N22_wap_t_config_variable7content5value8floatingE"></span><span id="_wap_t_config_variable::content::value::floating__double"></span><span class="target" id="union__wap__t__config__variable_1_1content_1_1value_1ab795e03f4814cadf5642f1a9db688ccc"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">floating</span></span></span><a class="headerlink" href="#_CPPv4N22_wap_t_config_variable7content5value8floatingE" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N22_wap_t_config_variable7content5value7booleanE">
+<span id="_CPPv3N22_wap_t_config_variable7content5value7booleanE"></span><span id="_CPPv2N22_wap_t_config_variable7content5value7booleanE"></span><span id="_wap_t_config_variable::content::value::boolean__b"></span><span class="target" id="union__wap__t__config__variable_1_1content_1_1value_1af8f29f85b9519b71fe475f7325b598ea"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">boolean</span></span></span><a class="headerlink" href="#_CPPv4N22_wap_t_config_variable7content5value7booleanE" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="cpp union">
+<dt class="sig sig-object cpp">
+<span class="target" id="union__wap__t__config__variable_1_1key"></span><span class="k"><span class="pre">union</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">key</span></span></span><br /></dt>
+<dd><div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N22_wap_t_config_variable3key6stringE">
+<span id="_CPPv3N22_wap_t_config_variable3key6stringE"></span><span id="_CPPv2N22_wap_t_config_variable3key6stringE"></span><span id="_wap_t_config_variable::key::string__cCP"></span><span class="target" id="union__wap__t__config__variable_1_1key_1a14ee7327c17f2cac76931ff6a31ca5a0"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">string</span></span></span><a class="headerlink" href="#_CPPv4N22_wap_t_config_variable3key6stringE" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N22_wap_t_config_variable3key6numberE">
+<span id="_CPPv3N22_wap_t_config_variable3key6numberE"></span><span id="_CPPv2N22_wap_t_config_variable3key6numberE"></span><span id="_wap_t_config_variable::key::number__unsigned-i"></span><span class="target" id="union__wap__t__config__variable_1_1key_1ab9208583b4d1a95a1d8d69e5e1b74a09"></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">number</span></span></span><a class="headerlink" href="#_CPPv4N22_wap_t_config_variable3key6numberE" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv419wap_t_applet_config">
+<span id="_CPPv319wap_t_applet_config"></span><span id="_CPPv219wap_t_applet_config"></span><span id="wap_t_applet_config"></span><span class="target" id="structwap__t__applet__config"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">wap_t_applet_config</span></span></span><a class="headerlink" href="#_CPPv419wap_t_applet_config" title="Permalink to this definition"></a><br /></dt>
+<dd><div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N19wap_t_applet_config4rootE">
+<span id="_CPPv3N19wap_t_applet_config4rootE"></span><span id="_CPPv2N19wap_t_applet_config4rootE"></span><span id="wap_t_applet_config::root___wap_t_config_variable"></span><span class="target" id="structwap__t__applet__config_1a2bf07eb6f8eb0ed33a8dac672320823c"></span><a class="reference internal" href="#_CPPv422_wap_t_config_variable" title="_wap_t_config_variable"><span class="n"><span class="pre">_wap_t_config_variable</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">root</span></span></span><a class="headerlink" href="#_CPPv4N19wap_t_applet_config4rootE" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+</div>
+</dd></dl>
+
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv417wap_t_applet_info">
+<span id="_CPPv317wap_t_applet_info"></span><span id="_CPPv217wap_t_applet_info"></span><span id="wap_t_applet_info"></span><span class="target" id="structwap__t__applet__info"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">wap_t_applet_info</span></span></span><a class="headerlink" href="#_CPPv417wap_t_applet_info" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Basic informations about applet. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N17wap_t_applet_info4nameE">
+<span id="_CPPv3N17wap_t_applet_info4nameE"></span><span id="_CPPv2N17wap_t_applet_info4nameE"></span><span id="wap_t_applet_info::name__cCP"></span><span class="target" id="structwap__t__applet__info_1ac1e504daaca7dd3d836a9970c82a6b61"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">name</span></span></span><a class="headerlink" href="#_CPPv4N17wap_t_applet_info4nameE" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N17wap_t_applet_info7versionE">
+<span id="_CPPv3N17wap_t_applet_info7versionE"></span><span id="_CPPv2N17wap_t_applet_info7versionE"></span><span id="wap_t_applet_info::version__unsigned-i"></span><span class="target" id="structwap__t__applet__info_1a8390f0ae3c7d002fe6a467df127a7125"></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">version</span></span></span><a class="headerlink" href="#_CPPv4N17wap_t_applet_info7versionE" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="enums">
+<h2>Enums<a class="headerlink" href="#enums" title="Permalink to this headline"></a></h2>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv421wap_t_config_var_type">
+<span id="_CPPv321wap_t_config_var_type"></span><span id="_CPPv221wap_t_config_var_type"></span><span class="target" id="appletapi_8h_1a8a4fc62a2c2d48765a46c5b6a9cbb557"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">wap_t_config_var_type</span></span></span><a class="headerlink" href="#_CPPv421wap_t_config_var_type" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Variable types used in applet config struct. </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N21wap_t_config_var_type24WAP_CONF_VAR_TYPE_STRINGE">
+<span id="_CPPv3N21wap_t_config_var_type24WAP_CONF_VAR_TYPE_STRINGE"></span><span id="_CPPv2N21wap_t_config_var_type24WAP_CONF_VAR_TYPE_STRINGE"></span><span class="target" id="appletapi_8h_1a8a4fc62a2c2d48765a46c5b6a9cbb557ad658e76f0124fdf9dc2bd57630b51a3f"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">WAP_CONF_VAR_TYPE_STRING</span></span></span><a class="headerlink" href="#_CPPv4N21wap_t_config_var_type24WAP_CONF_VAR_TYPE_STRINGE" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N21wap_t_config_var_type25WAP_CONF_VAR_TYPE_INTEGERE">
+<span id="_CPPv3N21wap_t_config_var_type25WAP_CONF_VAR_TYPE_INTEGERE"></span><span id="_CPPv2N21wap_t_config_var_type25WAP_CONF_VAR_TYPE_INTEGERE"></span><span class="target" id="appletapi_8h_1a8a4fc62a2c2d48765a46c5b6a9cbb557a4496651890c06b68943bcaee76ca8d53"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">WAP_CONF_VAR_TYPE_INTEGER</span></span></span><a class="headerlink" href="#_CPPv4N21wap_t_config_var_type25WAP_CONF_VAR_TYPE_INTEGERE" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N21wap_t_config_var_type23WAP_CONF_VAR_TYPE_FLOATE">
+<span id="_CPPv3N21wap_t_config_var_type23WAP_CONF_VAR_TYPE_FLOATE"></span><span id="_CPPv2N21wap_t_config_var_type23WAP_CONF_VAR_TYPE_FLOATE"></span><span class="target" id="appletapi_8h_1a8a4fc62a2c2d48765a46c5b6a9cbb557aa361018a064df64e23423fac863d6918"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">WAP_CONF_VAR_TYPE_FLOAT</span></span></span><a class="headerlink" href="#_CPPv4N21wap_t_config_var_type23WAP_CONF_VAR_TYPE_FLOATE" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N21wap_t_config_var_type25WAP_CONF_VAR_TYPE_BOOLEANE">
+<span id="_CPPv3N21wap_t_config_var_type25WAP_CONF_VAR_TYPE_BOOLEANE"></span><span id="_CPPv2N21wap_t_config_var_type25WAP_CONF_VAR_TYPE_BOOLEANE"></span><span class="target" id="appletapi_8h_1a8a4fc62a2c2d48765a46c5b6a9cbb557ae638bef3cc2cfbcf0150480f5373d365"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">WAP_CONF_VAR_TYPE_BOOLEAN</span></span></span><a class="headerlink" href="#_CPPv4N21wap_t_config_var_type25WAP_CONF_VAR_TYPE_BOOLEANE" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N21wap_t_config_var_type23WAP_CONF_VAR_TYPE_ARRAYE">
+<span id="_CPPv3N21wap_t_config_var_type23WAP_CONF_VAR_TYPE_ARRAYE"></span><span id="_CPPv2N21wap_t_config_var_type23WAP_CONF_VAR_TYPE_ARRAYE"></span><span class="target" id="appletapi_8h_1a8a4fc62a2c2d48765a46c5b6a9cbb557a54970747fbe9c6d8cf12e3ccb96a8f61"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">WAP_CONF_VAR_TYPE_ARRAY</span></span></span><a class="headerlink" href="#_CPPv4N21wap_t_config_var_type23WAP_CONF_VAR_TYPE_ARRAYE" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N21wap_t_config_var_type23WAP_CONF_VAR_TYPE_TABLEE">
+<span id="_CPPv3N21wap_t_config_var_type23WAP_CONF_VAR_TYPE_TABLEE"></span><span id="_CPPv2N21wap_t_config_var_type23WAP_CONF_VAR_TYPE_TABLEE"></span><span class="target" id="appletapi_8h_1a8a4fc62a2c2d48765a46c5b6a9cbb557a2b08e989a77fc572dde4c5f61ca73982"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">WAP_CONF_VAR_TYPE_TABLE</span></span></span><a class="headerlink" href="#_CPPv4N21wap_t_config_var_type23WAP_CONF_VAR_TYPE_TABLEE" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv416wap_t_error_type">
+<span id="_CPPv316wap_t_error_type"></span><span id="_CPPv216wap_t_error_type"></span><span class="target" id="appletapi_8h_1a1253490305b237e857a33c3ad0ebe27e"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">wap_t_error_type</span></span></span><a class="headerlink" href="#_CPPv416wap_t_error_type" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Enum for errors. </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N16wap_t_error_type29WAP_ERR_VARIABLE_IS_NOT_TABLEE">
+<span id="_CPPv3N16wap_t_error_type29WAP_ERR_VARIABLE_IS_NOT_TABLEE"></span><span id="_CPPv2N16wap_t_error_type29WAP_ERR_VARIABLE_IS_NOT_TABLEE"></span><span class="target" id="appletapi_8h_1a1253490305b237e857a33c3ad0ebe27ea854cad78338d8813661ef02f9e118166"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">WAP_ERR_VARIABLE_IS_NOT_TABLE</span></span></span><a class="headerlink" href="#_CPPv4N16wap_t_error_type29WAP_ERR_VARIABLE_IS_NOT_TABLEE" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N16wap_t_error_type29WAP_ERR_VARIABLE_IS_NOT_ARRAYE">
+<span id="_CPPv3N16wap_t_error_type29WAP_ERR_VARIABLE_IS_NOT_ARRAYE"></span><span id="_CPPv2N16wap_t_error_type29WAP_ERR_VARIABLE_IS_NOT_ARRAYE"></span><span class="target" id="appletapi_8h_1a1253490305b237e857a33c3ad0ebe27eadd05530347debe7910fa262f4fb76299"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">WAP_ERR_VARIABLE_IS_NOT_ARRAY</span></span></span><a class="headerlink" href="#_CPPv4N16wap_t_error_type29WAP_ERR_VARIABLE_IS_NOT_ARRAYE" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N16wap_t_error_type19WAP_ERR_CANNOT_FINDE">
+<span id="_CPPv3N16wap_t_error_type19WAP_ERR_CANNOT_FINDE"></span><span id="_CPPv2N16wap_t_error_type19WAP_ERR_CANNOT_FINDE"></span><span class="target" id="appletapi_8h_1a1253490305b237e857a33c3ad0ebe27eab5b789cd5c67dc9fd6dd6ddfec66bd08"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">WAP_ERR_CANNOT_FIND</span></span></span><a class="headerlink" href="#_CPPv4N16wap_t_error_type19WAP_ERR_CANNOT_FINDE" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N16wap_t_error_type24WAP_ERR_INVALID_VAR_TYPEE">
+<span id="_CPPv3N16wap_t_error_type24WAP_ERR_INVALID_VAR_TYPEE"></span><span id="_CPPv2N16wap_t_error_type24WAP_ERR_INVALID_VAR_TYPEE"></span><span class="target" id="appletapi_8h_1a1253490305b237e857a33c3ad0ebe27eac25db81501d3ff2cd58418e24bf49774"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">WAP_ERR_INVALID_VAR_TYPE</span></span></span><a class="headerlink" href="#_CPPv4N16wap_t_error_type24WAP_ERR_INVALID_VAR_TYPEE" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="using_applet_config.html" class="btn btn-neutral float-left" title="Using wap_t_applet_config in your applet" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, Firstbober.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

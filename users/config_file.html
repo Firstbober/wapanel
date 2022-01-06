@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Configuration file &mdash; Wapanel  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Applets" href="applets.html" />
+    <link rel="prev" title="Command line parameters" href="command_line.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> Wapanel
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">For users:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="command_line.html">Command line parameters</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Configuration file</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#structure">Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#panel">Panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#applets">Applets</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="applets.html">Applets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="css.html">Styling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="themes.html">Example theme - Transparency/Blur</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">For developers:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../devs/writing_applet.html">How to write applets for Wapanel</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../devs/using_applet_config.html">Using wap_t_applet_config in your applet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../devs/aapi_reference.html">Applet API reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Wapanel</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Configuration file</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/users/config_file.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="configuration-file">
+<h1>Configuration file<a class="headerlink" href="#configuration-file" title="Permalink to this headline"></a></h1>
+<p>Wapanel uses a config file to store and configure panels and applets.
+It should sit beside binary file or in <strong>~/.config/</strong> as <em>wapanel.toml</em>.</p>
+<div class="section" id="structure">
+<h2>Structure<a class="headerlink" href="#structure" title="Permalink to this headline"></a></h2>
+<div class="highlight-toml notranslate"><div class="highlight"><pre><span></span>[[panel]]
+    position = &quot;bottom&quot;
+    height = 32
+</pre></div>
+</div>
+<p>This is the most basic configuration. We have here one panel with height of 32.
+We can add as many panels as we want. Nevertheless, if we don’t have any space left on the screen then it may crash ;).</p>
+<div class="highlight-toml notranslate"><div class="highlight"><pre><span></span>[[panel]]
+    position = &quot;bottom&quot;
+    height = 32
+    [[panel.applet]]
+        name = &quot;clock&quot;
+
+[[panel]]
+    position = &quot;top&quot;
+    height = 16
+</pre></div>
+</div>
+<p>Now we have two panels with one containing a <strong>clock</strong> applet. Every applet in config has a name that identifies it,
+but names can duplicate if we want to have multiple instances of specified applet.</p>
+<p>For more sophisticated information go to <a class="reference external" href="https://github.com/toml-lang/toml">TOML specification</a></p>
+</div>
+<div class="section" id="panel">
+<h2>Panel<a class="headerlink" href="#panel" title="Permalink to this headline"></a></h2>
+<div class="highlight-toml notranslate"><div class="highlight"><pre><span></span>[[panel]]
+    position = &quot;bottom&quot;
+    height = 32
+</pre></div>
+</div>
+<p>As it is described above, panel has only two unique options, without counting applet table.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 14%" />
+<col style="width: 42%" />
+<col style="width: 44%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>Parameter</p></td>
+<td><p>Description</p></td>
+<td><p>Content</p></td>
+</tr>
+<tr class="row-even"><td><p>position</p></td>
+<td><p>Position of panel on screen</p></td>
+<td><p>bottom or top</p></td>
+</tr>
+<tr class="row-odd"><td><p>height</p></td>
+<td><p>Height of panel</p></td>
+<td><p>from 0 to infinity basically</p></td>
+</tr>
+</tbody>
+</table>
+<p>CSS:</p>
+<p>.panel - panel window</p>
+<p>#panel-id - specific panel window</p>
+</div>
+<div class="section" id="applets">
+<h2>Applets<a class="headerlink" href="#applets" title="Permalink to this headline"></a></h2>
+<div class="highlight-toml notranslate"><div class="highlight"><pre><span></span>[[panel.applet]]
+    name = &quot;clock&quot;
+</pre></div>
+</div>
+<p>The only thing that is reserved for applet is name.
+Applet can use any other key for its data.
+It is the most common to define specific applet config after the <strong>name</strong> key as its increases readability.
+I think <strong>name</strong> is self-explanatory.</p>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="command_line.html" class="btn btn-neutral float-left" title="Command line parameters" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="applets.html" class="btn btn-neutral float-right" title="Applets" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, Firstbober.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Applets &mdash; Wapanel  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Styling" href="css.html" />
+    <link rel="prev" title="Configuration file" href="config_file.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> Wapanel
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">For users:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="command_line.html">Command line parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_file.html">Configuration file</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Applets</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#clock">Clock</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#separator">Separator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#task-switcher">Task switcher</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#activator">Activator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#volume-control">Volume control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#app-finder">App finder</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="css.html">Styling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="themes.html">Example theme - Transparency/Blur</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">For developers:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../devs/writing_applet.html">How to write applets for Wapanel</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../devs/using_applet_config.html">Using wap_t_applet_config in your applet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../devs/aapi_reference.html">Applet API reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Wapanel</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Applets</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/users/applets.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="applets">
+<h1>Applets<a class="headerlink" href="#applets" title="Permalink to this headline"></a></h1>
+<div class="section" id="clock">
+<h2>Clock<a class="headerlink" href="#clock" title="Permalink to this headline"></a></h2>
+<img alt="Clock" src="../_images/clock.webp" />
+<div class="highlight-toml notranslate"><div class="highlight"><pre><span></span>[[panel.applet]]
+    name = &quot;clock&quot;
+    format = &quot;%X&quot;
+    [panel.applet.font]
+        family = &quot;&quot;
+        style = &quot;normal&quot;
+        weight = &quot;bold&quot;
+        size = -1
+        strikethrough = false
+        underline = &quot;none&quot;
+        letter_spacing = -1
+</pre></div>
+</div>
+<p>-1 or “” means the default setting. Basically all of this is setted to default and applet will be alive without this config.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 7%" />
+<col style="width: 29%" />
+<col style="width: 63%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><strong>Parameter</strong></p></td>
+<td><p><strong>Description</strong></p></td>
+<td><p><strong>Content</strong></p></td>
+</tr>
+<tr class="row-even"><td><p>format</p></td>
+<td><p><a class="reference external" href="https://www.cplusplus.com/reference/ctime/strftime/">strftime</a> format string</p></td>
+<td><p>Any strftime-compliant string</p></td>
+</tr>
+<tr class="row-odd"><td><p>font.family</p></td>
+<td><p>A font familiy</p></td>
+<td><p>Any font in your pc e.g. ‘Comic Sans’</p></td>
+</tr>
+<tr class="row-even"><td><p>font.style</p></td>
+<td><p>Style of the font</p></td>
+<td><p>normal, oblique or italic</p></td>
+</tr>
+<tr class="row-odd"><td><p>font.weight</p></td>
+<td><p>Weight of the font</p></td>
+<td><p>thin, ultrathin, semilight, book, normal, medium, semibold, bold, ultrabold, heavy, ultraheavy</p></td>
+</tr>
+<tr class="row-even"><td><p>font.size</p></td>
+<td><p>Size of the font</p></td>
+<td><p>Any positive integer or -1 for default value</p></td>
+</tr>
+<tr class="row-odd"><td><p>font.strikethrough</p></td>
+<td><p>You know what that means.</p></td>
+<td><p>true or false</p></td>
+</tr>
+<tr class="row-even"><td><p>font.underline</p></td>
+<td><p>Underline.</p></td>
+<td><p>none, single, double, low, error</p></td>
+</tr>
+<tr class="row-odd"><td><p>font.letter_spacing</p></td>
+<td><p>Spacing between letters</p></td>
+<td><p>Any positive integer or -1 for default value</p></td>
+</tr>
+</tbody>
+</table>
+<p>GTK and CSS structure:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>GtkButton[(.|#)clock(-id)]
+| - GtkLabel
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>GtkPopover[(.|#)clock-popover(-id)]
+| - GtkCalendar
+</pre></div>
+</div>
+</div>
+<div class="section" id="separator">
+<h2>Separator<a class="headerlink" href="#separator" title="Permalink to this headline"></a></h2>
+<div class="highlight-toml notranslate"><div class="highlight"><pre><span></span>[[panel.applet]]
+name = &quot;separator&quot;
+stretch = true
+margin_start = 0
+margin_end = 0
+</pre></div>
+</div>
+<p>This is the default config of <strong>separator</strong> applet.
+All you need to know is, <cite>stretch</cite> extends applet to fill all of the panel,
+<cite>margin_start</cite> and <cite>margin_end</cite> changes margins of applet.</p>
+</div>
+<div class="section" id="task-switcher">
+<h2>Task switcher<a class="headerlink" href="#task-switcher" title="Permalink to this headline"></a></h2>
+<img alt="Task switcher" src="../_images/task-switcher.webp" />
+<div class="highlight-toml notranslate"><div class="highlight"><pre><span></span>[[panel.applet]]
+name = &quot;task-switcher&quot;
+    [panel.applet.mode.scroll]
+    fallback_icon = &quot;application-x-executable&quot;
+    expand = true
+    minimum_windows_per_row = 6
+    maximum_windows_per_row = 12
+        [panel.applet.mode.scroll.button]
+        icon_only = false
+        gap = 8
+        flat = false
+        icon_height = -1
+</pre></div>
+</div>
+<p>This text above is default settings. You can ommit all of this but <cite>name</cite> must be present.
+-1 means automatic option.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 24%" />
+<col style="width: 39%" />
+<col style="width: 37%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><strong>Parameter</strong></p></td>
+<td><p><strong>Description</strong></p></td>
+<td><p><strong>Content</strong></p></td>
+</tr>
+<tr class="row-even"><td><p>mode.scroll.fallback_icon</p></td>
+<td><p>Fallback icon if applet can’t find any.</p></td>
+<td><p>Text</p></td>
+</tr>
+<tr class="row-odd"><td><p>mode.scroll.expand</p></td>
+<td><p>If applet should expand to fill as much space as possible.</p></td>
+<td><p>true/false</p></td>
+</tr>
+<tr class="row-even"><td><p>mode.scroll.minimum_windows_per_row</p></td>
+<td><p>Minimum window buttons per task bar row.</p></td>
+<td><p>Integer</p></td>
+</tr>
+<tr class="row-odd"><td><p>mode.scroll.maximum_windows_per_row</p></td>
+<td><p>Maximum window buttons per task bar row.</p></td>
+<td><p>Integer</p></td>
+</tr>
+<tr class="row-even"><td><p>mode.scroll.button.icon_only</p></td>
+<td><p>If only icon should be presented on button.</p></td>
+<td><p>true/false</p></td>
+</tr>
+<tr class="row-odd"><td><p>mode.scroll.button.gap</p></td>
+<td><p>Gap between icon and window title.</p></td>
+<td><p>Integer</p></td>
+</tr>
+<tr class="row-even"><td><p>mode.scroll.button.flat</p></td>
+<td><p>If button should be without shadows.</p></td>
+<td><p>true/false</p></td>
+</tr>
+<tr class="row-odd"><td><p>mode.scroll.button.icon_height</p></td>
+<td><p>Height of icon.</p></td>
+<td><p>Integer</p></td>
+</tr>
+</tbody>
+</table>
+<p>GTK and CSS structure:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>GtkScrolledWindow[(.|#)task-switcher(-id)] // Window list
+| - GtkFlowBox
+| | - GtkFlowBoxChild
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>GtkFlowBoxChild  // Single window button
+| - GtkToggleButton
+| | - GtkBox
+| | | - GtkImage
+| | | - GtkLabel
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>GtkMenu[(.|#)task-switcher-context-menu(-id)]
+| ...
+</pre></div>
+</div>
+</div>
+<div class="section" id="activator">
+<h2>Activator<a class="headerlink" href="#activator" title="Permalink to this headline"></a></h2>
+<img alt="Activator" src="../_images/activator.webp" />
+<div class="highlight-toml notranslate"><div class="highlight"><pre><span></span>[[panel.applet]]
+    name = &quot;activator&quot;
+    flat = false
+    icon_height = -1
+
+    [[panel.applet.activator]]
+        type = &quot;application&quot;
+
+        name = &quot;Screenshooter&quot;
+        description = &quot;You know what this means&quot;
+        icon = &quot;application-x-executable&quot;
+
+        command = &quot;&lt;SOME SCREENSHOOTER APP&gt;&quot;
+        working_directory = &quot;&quot;
+
+    [[panel.applet.activator]]
+        type = &quot;hypertext&quot;
+
+        name = &quot;Wapanel repository&quot;
+        description = &quot;Shortcut to wapanel&#39;s repository&quot;
+        icon = &quot;application-x-executable&quot;
+
+        url = &quot;https://github.com/firstbober/wapanel&quot;
+</pre></div>
+</div>
+<p>This text above is default settings. You can ommit all of this but root <cite>name</cite> must be present.
+-1 means automatic option.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 29%" />
+<col style="width: 41%" />
+<col style="width: 29%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><strong>Parameter</strong></p></td>
+<td><p><strong>Description</strong></p></td>
+<td><p><strong>Content</strong></p></td>
+</tr>
+<tr class="row-even"><td><p>flat</p></td>
+<td><p>Should activator buttons be flat.</p></td>
+<td><p>true/false</p></td>
+</tr>
+<tr class="row-odd"><td><p>icon_height</p></td>
+<td><p>Height of the icon in activator.</p></td>
+<td><p>Integer</p></td>
+</tr>
+<tr class="row-even"><td><p>activator.type</p></td>
+<td><p>Type of activator.</p></td>
+<td><p>Text(application/hypertext)</p></td>
+</tr>
+<tr class="row-odd"><td><p>activator.name</p></td>
+<td><p>Name of activator.</p></td>
+<td><p>Text</p></td>
+</tr>
+<tr class="row-even"><td><p>activator.description</p></td>
+<td><p>Description of activator.</p></td>
+<td><p>Text</p></td>
+</tr>
+<tr class="row-odd"><td><p>activator.icon</p></td>
+<td><p>Icon of activator.</p></td>
+<td><p>Text</p></td>
+</tr>
+<tr class="row-even"><td><p>activator.command</p></td>
+<td><p>Command that activator should execute.</p></td>
+<td><p>Text</p></td>
+</tr>
+<tr class="row-odd"><td><p>activator.working_directory</p></td>
+<td><p>Working directory of executed command.</p></td>
+<td><p>Text</p></td>
+</tr>
+<tr class="row-even"><td><p>activator.url</p></td>
+<td><p>URL of website.</p></td>
+<td><p>Text</p></td>
+</tr>
+</tbody>
+</table>
+<p>GTK and CSS structure:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>GtkBox[(.|#)activator(-id)]
+| - GtkButton
+| | ...
+| - GtkMenuButton
+| | - GtkPopover[(.|#)activator-popover(-id)]
+| | | - GtkButton
+| | | | ...
+| | | ...
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>GtkButton
+| - GtkImage
+| - GtkLabel
+</pre></div>
+</div>
+</div>
+<div class="section" id="volume-control">
+<h2>Volume control<a class="headerlink" href="#volume-control" title="Permalink to this headline"></a></h2>
+<img alt="Volume control" src="../_images/volume-control.webp" />
+<div class="highlight-toml notranslate"><div class="highlight"><pre><span></span>[[panel.applet]]
+    name = &quot;volume-control&quot;
+    flat = false
+    icon_height = -1
+    sound_mixer = &quot;&quot;
+</pre></div>
+</div>
+<p>This text above is default settings. You can ommit all of this but root <cite>name</cite> must be present.
+-1 means automatic option.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 29%" />
+<col style="width: 41%" />
+<col style="width: 29%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><strong>Parameter</strong></p></td>
+<td><p><strong>Description</strong></p></td>
+<td><p><strong>Content</strong></p></td>
+</tr>
+<tr class="row-even"><td><p>flat</p></td>
+<td><p>Should activator buttons be flat.</p></td>
+<td><p>true/false</p></td>
+</tr>
+<tr class="row-odd"><td><p>icon_height</p></td>
+<td><p>Height of icon on panel.</p></td>
+<td><p>Integer</p></td>
+</tr>
+<tr class="row-even"><td><p>sound_mixer</p></td>
+<td><p>Command to execute using Sound Mixer.</p></td>
+<td><p>Text</p></td>
+</tr>
+</tbody>
+</table>
+<p>GTK and CSS structure:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>GtkMenuButton[(.|#)volume-control(-id)]
+| - GtkImage
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>GtkPopover[(.|#)volume-control-popover(-id)]
+| - GtkBox
+| | - GtkBox // Volume control
+| | - GtkBox // Volume control
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>GtkBox // Volume control
+| - GtkImage
+| - GtkScale
+| - GtkSwitch
+</pre></div>
+</div>
+</div>
+<div class="section" id="app-finder">
+<h2>App finder<a class="headerlink" href="#app-finder" title="Permalink to this headline"></a></h2>
+<img alt="App finder" src="../_images/app-finder.webp" />
+<div class="highlight-toml notranslate"><div class="highlight"><pre><span></span>[[panel.applet]]
+    name = &quot;app-finder&quot;
+
+    icon = &quot;&quot;
+    icon_height = -1
+    flat = false
+
+    popover_width = -1
+    popover_height = -1
+
+    user_manager = &quot;&quot;
+    settings = &quot;&quot;
+    file_manager = &quot;&quot;
+
+    [panel.applet.logout]
+        shutdown = &quot;&quot;
+        restart = &quot;&quot;
+        logout = &quot;&quot;
+        suspend = &quot;&quot;
+        hibernate = &quot;&quot;
+        lock = &quot;&quot;
+</pre></div>
+</div>
+<p>This text above is default settings. You can ommit all of this but root <cite>name</cite> must be present.
+-1 means automatic option.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 29%" />
+<col style="width: 41%" />
+<col style="width: 29%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><strong>Parameter</strong></p></td>
+<td><p><strong>Description</strong></p></td>
+<td><p><strong>Content</strong></p></td>
+</tr>
+<tr class="row-even"><td><p>flat</p></td>
+<td><p>Should activator buttons be flat.</p></td>
+<td><p>true/false</p></td>
+</tr>
+<tr class="row-odd"><td><p>icon_height</p></td>
+<td><p>Height of icon on panel.</p></td>
+<td><p>Integer</p></td>
+</tr>
+<tr class="row-even"><td><p>icon</p></td>
+<td><p>Icon of button.</p></td>
+<td><p>Text</p></td>
+</tr>
+<tr class="row-odd"><td><p>popover_width</p></td>
+<td><p>Width of app finder popover.</p></td>
+<td><p>Integer</p></td>
+</tr>
+<tr class="row-even"><td><p>popover_height</p></td>
+<td><p>Height of app finder popover.</p></td>
+<td><p>Integer</p></td>
+</tr>
+<tr class="row-odd"><td><p>user_manager</p></td>
+<td><p>Executable name of account settings.</p></td>
+<td><p>Text</p></td>
+</tr>
+<tr class="row-even"><td><p>settings</p></td>
+<td><p>Executable name of system settings.</p></td>
+<td><p>Text</p></td>
+</tr>
+<tr class="row-odd"><td><p>file_manager</p></td>
+<td><p>Executable name of file manager.</p></td>
+<td><p>Text</p></td>
+</tr>
+</tbody>
+</table>
+<p>Logout popover:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 48%" />
+<col style="width: 32%" />
+<col style="width: 20%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><strong>Parameter</strong></p></td>
+<td><p><strong>Description</strong></p></td>
+<td><p><strong>Content</strong></p></td>
+</tr>
+<tr class="row-even"><td><p>shutdown</p></td>
+<td><p>Shutdown command.</p></td>
+<td><p>Text</p></td>
+</tr>
+<tr class="row-odd"><td><p>restart</p></td>
+<td><p>Restart command.</p></td>
+<td><p>Text</p></td>
+</tr>
+<tr class="row-even"><td><p>logout</p></td>
+<td><p>Logout command.</p></td>
+<td><p>Text</p></td>
+</tr>
+<tr class="row-odd"><td><p>suspend</p></td>
+<td><p>Suspend command.</p></td>
+<td><p>Text</p></td>
+</tr>
+<tr class="row-even"><td><p>hibernate</p></td>
+<td><p>Hibernate command.</p></td>
+<td><p>Text</p></td>
+</tr>
+<tr class="row-odd"><td><p>lock</p></td>
+<td><p>Lock command.</p></td>
+<td><p>Text</p></td>
+</tr>
+</tbody>
+</table>
+<p>GTK and CSS structure:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>GtkMenuButton[(.|#)app-finder(-id)] // Button on panel
+| - GtkImage
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>GtkPopover[(.|#)app-finder-popover(-id)] // Popover after click
+| - GtkBox
+| |
+| | - GtkBox // Sidebar with file manager etc.
+| | |
+| | | - GtkButton // User settings button
+| | | | - GtkImage
+| | | |
+| | | - GtkBox // Container with action buttons
+| | | |
+| | | | - GtkButton // Settings button
+| | | | | - GtkImage
+| | | |
+| | | | - GtkButton // File manager button
+| | | | | - GtkImage
+| | | |
+| | | | - GtkButton // Logout button
+| | | | | - GtkImage
+| | | |
+| | |
+| |
+| | - GtkBox // App list and categories
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>GtkBox // App list and categories
+| - GtkStack
+| |
+| | - GtkNotebook[(.|#)app-finder-category-notebook(-id)]
+| | |
+| | | - GtkScrolledWindow[(.|#)app-finder-category-app-list(-id)]
+| | | | - GtkViewport
+| | | | - GtkListBox
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>GtkPopover[(.|#)app-finder-popover(-id)] // Popover popped after logout button
+| - GtkButton // Some action eg. logout
+| |
+| | - GtkBox
+| | | - GtkImage
+| | | - GtkLabel
+| | |
+| |
+| ... // More buttons
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="config_file.html" class="btn btn-neutral float-left" title="Configuration file" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="css.html" class="btn btn-neutral float-right" title="Styling" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, Firstbober.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

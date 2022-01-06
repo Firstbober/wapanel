@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Example theme - Transparency/Blur &mdash; Wapanel  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="How to write applets for Wapanel" href="../devs/writing_applet.html" />
+    <link rel="prev" title="Styling" href="css.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> Wapanel
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">For users:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="command_line.html">Command line parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_file.html">Configuration file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="applets.html">Applets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="css.html">Styling</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Example theme - Transparency/Blur</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">For developers:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../devs/writing_applet.html">How to write applets for Wapanel</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../devs/using_applet_config.html">Using wap_t_applet_config in your applet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../devs/aapi_reference.html">Applet API reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Wapanel</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Example theme - Transparency/Blur</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/users/themes.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="example-theme-transparency-blur">
+<h1>Example theme - Transparency/Blur<a class="headerlink" href="#example-theme-transparency-blur" title="Permalink to this headline"></a></h1>
+<p>Warning! Will break on dark themes due to usage of background-color with <cite>255</cite> everywhere.</p>
+<p>Also this should be considered as some working reference instead of full blown theme but it is usable as daily driver.</p>
+<p><strong>Fully transparent</strong>:</p>
+<a class="reference internal image-reference" href="../_images/example-theme-transparent.webp"><img alt="Transparent theme without blur" src="../_images/example-theme-transparent.webp" style="width: 640px;" /></a>
+<p><strong>With wayfire blur plugin</strong>:</p>
+<a class="reference internal image-reference" href="../_images/example-theme-transparent-blur.webp"><img alt="Transparent theme with blur" src="../_images/example-theme-transparent-blur.webp" style="width: 640px;" /></a>
+<p>As you can see, it works best with some kind of blur.</p>
+<div class="highlight-css notranslate"><div class="highlight"><pre><span></span><span class="p">.</span><span class="nc">panel</span> <span class="p">{</span>
+    <span class="k">background-color</span><span class="p">:</span> <span class="nb">rgba</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="p">.</span><span class="nc">task-switcher-context-menu</span><span class="o">,</span>
+<span class="nt">popover</span> <span class="p">{</span>
+    <span class="k">background-color</span><span class="p">:</span> <span class="nb">rgba</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">);</span>
+    <span class="k">border</span><span class="p">:</span> <span class="kc">none</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="p">.</span><span class="nc">app-finder-popover</span><span class="o">,</span>
+<span class="p">.</span><span class="nc">app-finder-logout-popover</span> <span class="p">{</span>
+    <span class="k">background-color</span><span class="p">:</span> <span class="nb">rgba</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">);</span>
+    <span class="k">border</span><span class="p">:</span> <span class="kc">none</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="p">.</span><span class="nc">clock-popover</span> <span class="p">{</span>
+    <span class="k">background-color</span><span class="p">:</span> <span class="nb">rgba</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">);</span>
+    <span class="k">border</span><span class="p">:</span> <span class="kc">none</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="p">.</span><span class="nc">clock-popover</span> <span class="nt">calendar</span> <span class="p">{</span>
+    <span class="k">background</span><span class="p">:</span> <span class="kc">transparent</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="p">.</span><span class="nc">clock-popover</span> <span class="nt">calendar</span> <span class="p">.</span><span class="nc">day</span> <span class="p">{</span>
+    <span class="k">background</span><span class="p">:</span> <span class="kc">red</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="p">.</span><span class="nc">app-finder-popover</span> <span class="nt">notebook</span> <span class="p">{</span>
+    <span class="k">border</span><span class="p">:</span> <span class="kc">none</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="p">.</span><span class="nc">task-switcher</span> <span class="nt">button</span> <span class="p">{</span>
+    <span class="k">background-image</span><span class="p">:</span> <span class="kc">none</span><span class="p">;</span>
+    <span class="k">background-color</span><span class="p">:</span> <span class="nb">rgba</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">);</span>
+    <span class="k">border</span><span class="p">:</span> <span class="kc">none</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="p">.</span><span class="nc">app-finder</span><span class="p">:</span><span class="nd">checked</span> <span class="p">{</span>
+    <span class="k">background-color</span><span class="p">:</span> <span class="nb">rgba</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">);</span>
+    <span class="k">border</span><span class="p">:</span> <span class="kc">none</span><span class="p">;</span>
+    <span class="k">border-radius</span><span class="p">:</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">background-image</span><span class="p">:</span> <span class="kc">none</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="p">.</span><span class="nc">app-finder-popover</span> <span class="nt">box</span> <span class="nt">box</span><span class="p">:</span><span class="nd">first-child</span> <span class="nt">button</span><span class="p">:</span><span class="nd">checked</span> <span class="p">{</span>
+    <span class="k">background-color</span><span class="p">:</span> <span class="nb">rgba</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">);</span>
+    <span class="k">border</span><span class="p">:</span> <span class="kc">none</span><span class="p">;</span>
+    <span class="k">background-image</span><span class="p">:</span> <span class="kc">none</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="p">.</span><span class="nc">app-finder-category-notebook</span><span class="o">,</span>
+<span class="p">.</span><span class="nc">app-finder-category-notebook</span> <span class="nt">tab</span><span class="o">,</span>
+<span class="p">.</span><span class="nc">app-finder-category-notebook</span> <span class="nt">tabs</span><span class="o">,</span>
+<span class="p">.</span><span class="nc">app-finder-category-notebook</span> <span class="nt">stack</span> <span class="p">{</span>
+    <span class="k">background-color</span><span class="p">:</span> <span class="nb">rgba</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="p">.</span><span class="nc">app-finder-category-notebook</span> <span class="nt">header</span> <span class="p">{</span>
+    <span class="k">background-color</span><span class="p">:</span> <span class="nb">rgba</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mf">0.35</span><span class="p">);</span>
+    <span class="k">border</span><span class="p">:</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="p">.</span><span class="nc">app-finder-popover</span> <span class="nt">entry</span> <span class="p">{</span>
+    <span class="k">background-color</span><span class="p">:</span> <span class="nb">rgba</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">);</span>
+    <span class="k">border</span><span class="p">:</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">border-radius</span><span class="p">:</span> <span class="mi">0</span><span class="kt">px</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="p">.</span><span class="nc">app-finder-category-app-list</span> <span class="nt">list</span> <span class="p">{</span>
+    <span class="k">background-color</span><span class="p">:</span> <span class="nb">rgba</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="css.html" class="btn btn-neutral float-left" title="Styling" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../devs/writing_applet.html" class="btn btn-neutral float-right" title="How to write applets for Wapanel" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, Firstbober.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

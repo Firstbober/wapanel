@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Using wap_t_applet_config in your applet &mdash; Wapanel  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Applet API reference" href="aapi_reference.html" />
+    <link rel="prev" title="How to write applets for Wapanel" href="writing_applet.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> Wapanel
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">For users:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../users/command_line.html">Command line parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../users/config_file.html">Configuration file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../users/applets.html">Applets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../users/css.html">Styling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../users/themes.html">Example theme - Transparency/Blur</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">For developers:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="writing_applet.html">How to write applets for Wapanel</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Using wap_t_applet_config in your applet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aapi_reference.html">Applet API reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Wapanel</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Using wap_t_applet_config in your applet</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/devs/using_applet_config.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="using-wap-t-applet-config-in-your-applet">
+<h1>Using wap_t_applet_config in your applet<a class="headerlink" href="#using-wap-t-applet-config-in-your-applet" title="Permalink to this headline"></a></h1>
+<p>You have probably seen <cite>wap_applet_new_instance</cite> function before as you was trying
+to make your first applet and saw <strong>wap_t_applet_config applet_config</strong>. Here is
+little tutorial how to use it to make your applet configurable.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="p">(</span><span class="n">wapi_key_exists</span><span class="p">(</span><span class="o">&amp;</span><span class="n">applet_config</span><span class="p">.</span><span class="n">root</span><span class="p">,</span> <span class="s">&quot;your_name&quot;</span><span class="p">))</span> <span class="p">{</span>
+    <span class="n">_wap_t_config_variable</span> <span class="o">*</span><span class="n">variable</span> <span class="o">=</span> \
+        <span class="n">wapi_get_var_from_table</span><span class="p">(</span><span class="o">&amp;</span><span class="n">applet_config</span><span class="p">.</span><span class="n">root</span><span class="p">,</span> <span class="s">&quot;your_name&quot;</span><span class="p">);</span>
+    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">name</span><span class="p">;</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">variable</span><span class="o">-&gt;</span><span class="n">type</span> <span class="o">==</span> <span class="n">WAP_CONF_VAR_TYPE_STRING</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">wapi_var_as_string</span><span class="p">(</span><span class="n">variable</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>As you can see, this is very simple code. Checking if key exists,
+checking variable type and packing it into our string. There is more
+<strong>wapi_var_as</strong> functions, go to AAPI reference for more.</p>
+<p>Some keys are reserved, they start with <cite>__</cite>. Here is a list of them:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 24%" />
+<col style="width: 76%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><strong>Name</strong></p></td>
+<td><p><strong>Description</strong></p></td>
+</tr>
+<tr class="row-even"><td><p>__panel_height</p></td>
+<td><p>Height of panel which applet is contained in</p></td>
+</tr>
+</tbody>
+</table>
+<p>Basically, there is nothing more for you to know. You can
+eventually use <strong>wapi_error</strong> and <strong>wapi_error_print</strong> to handle more errors,
+but if everything is checked before you will be safe.</p>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="writing_applet.html" class="btn btn-neutral float-left" title="How to write applets for Wapanel" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="aapi_reference.html" class="btn btn-neutral float-right" title="Applet API reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, Firstbober.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
