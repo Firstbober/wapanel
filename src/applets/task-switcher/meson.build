@@ -52,6 +52,7 @@ library('wapanel-applet-task-switcher',
 	dependencies: [
 		gtk3,
 		gio2,
+		gio2unix,
 		wl_protos
 	],
 	install: true,
