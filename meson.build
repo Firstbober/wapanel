@@ -12,11 +12,11 @@ pkgconfig      = import('pkgconfig')
 gtklayershell  = dependency('gtk-layer-shell-0', version: '>= 0.6', fallback: ['gtk-layer-shell', 'gtk_layer_shell'])
 gtk3           = dependency('gtk+-3.0')
 gio2           = dependency('gio-2.0')
+gio2unix       = dependency('gio-unix-2.0')
 
 deps = [
 	gtk3,
 	gio2,
-
 	gtklayershell,
 	dynlink
 ]

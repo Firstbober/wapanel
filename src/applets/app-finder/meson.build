@@ -12,6 +12,7 @@ library('wapanel-applet-app-finder',
 	],
 	dependencies: [
 		gtk3,
+		gio2unix,
 		dependency('threads'),
 		gtklayershell
 	],
