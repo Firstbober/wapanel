@@ -53,6 +53,7 @@ Asterisk indicates compile-time dependencies.
 ### Cloning
 ```sh
 git clone --recurse-submodules https://github.com/Firstbober/wapanel.git
+git submodule update --init --recursive
 ```
 
 ### Compiling and installation
