@@ -22,7 +22,7 @@ app_finder::app_finder(wap_t_applet_config applet_config, int id)
 	{
 		if (wapi_key_exists(&applet_config.root, "__panel_height")) {
 			var = wapi_get_var_from_table(&applet_config.root, "__panel_height");
-			m_config.__panel_height = wapi_var_as_integer(var);
+			if (var->type == WAP_CONF_VAR_TYPE_INTEGER) m_config.__panel_height = wapi_var_as_integer(var);
 		}
 
 		if (wapi_key_exists(&applet_config.root, "icon")) {
